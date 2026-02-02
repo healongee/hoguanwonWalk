@@ -1,59 +1,621 @@
-@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css);
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 body {
   font-family: 'Noto Sans KR', sans-serif;
-  background-color: rgb(150, 209, 148);
-  margin: 50px;
-
+  color: #333;
+  line-height: 1.6;
 }
 
-.background {
-  background-color: white;
-  height: auto;
-  width: 90%;
-  max-width: 450px;
-  padding: 10px;
+.container {
+  max-width: 1200px;
   margin: 0 auto;
-  border-radius: 5px;
-  box-shadow: 0px 40px 30px -20px rgba(0, 0, 0, 0.3);
-  text-align: center;
+  padding: 0 20px;
 }
 
-.form {
+/* 헤더 */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+}
+
+.header .container {
   display: flex;
-  padding: 30px;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
 }
 
-.login {
-  border: none;
-  border-bottom: 2px solid #D1D1D4;
-  background: none;
-  padding: 10px;
-  font-weight: 700;
-  transition: .2s;
-  width: 75%;
+.logo {
+  font-size: 28px;
+  font-weight: 800;
+  color: #8B4513;
+  letter-spacing: -1px;
 }
 
-.login:active,
-.login:focus,
-.login:hover {
-  outline: none;
-  border-bottom-color: rgb(68, 112, 67);
+.nav {
+  display: flex;
+  gap: 40px;
 }
 
-.btn {
-  border: none;
-  width: 75%;
-  background-color: rgb(68, 112, 67);
+.nav a {
+  text-decoration: none;
+  color: #555;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav a:hover {
+  color: #8B4513;
+}
+
+/* 히어로 섹션 */
+.hero {
+  background: linear-gradient(135deg, #FDF5E6 0%, #FAEBD7 50%, #F5DEB3 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 100px 20px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -30%;
+  width: 80%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(139, 69, 19, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: #8B4513;
   color: white;
-  padding: 15px 0;
-  font-weight: 600;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: .2s;
+  padding: 8px 24px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 24px;
 }
 
-.btn:hover {
-  background-color: rgb(49, 82, 48);
+.hero h1 {
+  font-size: 64px;
+  font-weight: 800;
+  color: #5D3A1A;
+  margin-bottom: 20px;
+  letter-spacing: -2px;
+}
+
+.hero-subtitle {
+  font-size: 24px;
+  color: #666;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.hero-subtitle strong {
+  color: #8B4513;
+}
+
+.hero-features {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.hero-features span {
+  background: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #555;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.btn-cta {
+  display: inline-block;
+  background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+  color: white;
+  padding: 20px 60px;
+  border-radius: 50px;
+  font-size: 20px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s;
+  box-shadow: 0 10px 30px rgba(139, 69, 19, 0.3);
+}
+
+.btn-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(139, 69, 19, 0.4);
+}
+
+/* 신뢰 배지 */
+.trust-badges {
+  background: #5D3A1A;
+  padding: 40px 20px;
+}
+
+.trust-badges .container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.badge-item {
+  text-align: center;
+  color: white;
+}
+
+.badge-number {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.badge-text {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* 효능 섹션 */
+.benefits {
+  padding: 100px 20px;
+  background: #fff;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 40px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.section-subtitle {
+  text-align: center;
+  font-size: 18px;
+  color: #777;
+  margin-bottom: 60px;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.benefit-card {
+  background: #FAFAFA;
+  padding: 40px 30px;
+  border-radius: 20px;
+  text-align: center;
+  transition: all 0.3s;
+  border: 1px solid #eee;
+}
+
+.benefit-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  border-color: #8B4513;
+}
+
+.benefit-icon {
+  font-size: 50px;
+  margin-bottom: 20px;
+}
+
+.benefit-card h3 {
+  font-size: 22px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.benefit-card p {
+  font-size: 15px;
+  color: #666;
+  line-height: 1.7;
+}
+
+/* 성분 섹션 */
+.ingredients {
+  padding: 100px 20px;
+  background: linear-gradient(180deg, #FDF5E6 0%, #fff 100%);
+}
+
+.ingredients-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.ingredient-item {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  border-left: 4px solid #8B4513;
+}
+
+.ingredient-name {
+  font-size: 24px;
+  font-weight: 700;
+  color: #8B4513;
+  margin-bottom: 10px;
+}
+
+.ingredient-desc {
+  font-size: 14px;
+  color: #666;
+}
+
+/* 후기 섹션 */
+.testimonials {
+  padding: 100px 20px;
+  background: #fff;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.testimonial-card {
+  background: #F9F9F9;
+  padding: 35px;
+  border-radius: 20px;
+  position: relative;
+}
+
+.testimonial-card::before {
+  content: '"';
+  position: absolute;
+  top: 20px;
+  left: 25px;
+  font-size: 60px;
+  color: #8B4513;
+  opacity: 0.2;
+  font-family: Georgia, serif;
+}
+
+.testimonial-rating {
+  color: #FFB800;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.testimonial-text {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.testimonial-author {
+  font-size: 14px;
+  color: #999;
+  font-weight: 500;
+}
+
+/* 상담 신청 섹션 */
+.consultation {
+  padding: 100px 20px;
+  background: linear-gradient(135deg, #5D3A1A 0%, #8B4513 100%);
+}
+
+.consultation-form-container {
+  background: white;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 50px 40px;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.consultation-form-container h2 {
+  text-align: center;
+  font-size: 32px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.form-subtitle {
+  text-align: center;
+  color: #777;
+  margin-bottom: 35px;
+  font-size: 15px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.required {
+  color: #E74C3C;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #E8E8E8;
+  border-radius: 10px;
+  font-size: 16px;
+  font-family: inherit;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #8B4513;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.form-group.half {
+  flex: 1;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 10px;
+}
+
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(139, 69, 19, 0.4);
+}
+
+.btn-submit:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.privacy-notice {
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+  margin-top: 20px;
+}
+
+/* 성공 메시지 */
+.success-message {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #27AE60 0%, #2ECC71 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 25px;
+  font-size: 40px;
+  color: white;
+}
+
+.success-message h3 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.success-message p {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.btn-reset {
+  background: #8B4513;
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-reset:hover {
+  background: #A0522D;
+}
+
+/* 푸터 */
+.footer {
+  background: #222;
+  color: #aaa;
+  padding: 60px 20px 30px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-bottom: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid #444;
+}
+
+.footer-logo {
+  font-size: 32px;
+  font-weight: 800;
+  color: #8B4513;
+}
+
+.footer-info p {
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-links a {
+  color: #aaa;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: white;
+}
+
+.footer-copyright {
+  text-align: center;
+  font-size: 13px;
+  color: #666;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .header .container {
+    height: 60px;
+  }
+  
+  .logo {
+    font-size: 22px;
+  }
+  
+  .nav {
+    gap: 20px;
+  }
+  
+  .nav a {
+    font-size: 14px;
+  }
+  
+  .hero {
+    padding: 80px 20px 40px;
+  }
+  
+  .hero h1 {
+    font-size: 40px;
+  }
+  
+  .hero-subtitle {
+    font-size: 18px;
+  }
+  
+  .hero-features {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .btn-cta {
+    padding: 15px 40px;
+    font-size: 16px;
+  }
+  
+  .badge-number {
+    font-size: 28px;
+  }
+  
+  .section-title {
+    font-size: 28px;
+  }
+  
+  .benefits, .ingredients, .testimonials, .consultation {
+    padding: 60px 20px;
+  }
+  
+  .consultation-form-container {
+    padding: 30px 25px;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 32px;
+  }
+  
+  .section-title {
+    font-size: 24px;
+  }
+  
+  .nav {
+    display: none;
+  }
 }

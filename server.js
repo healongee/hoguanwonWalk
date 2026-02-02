@@ -1,13 +1,20 @@
 const express = require('express')
 const session = require('express-session')
 const path = require('path');
+const cors = require('cors');
 const app = express()
 const port = 3001
 
-const db = require('./lib/db');
-const sessionOption = require('./lib/sessionOption');
+const db = require('./src/db');
+const sessionOption = require('./src/sessionOptions');
 const bodyParser = require("body-parser");
 const bcrypt = require('bcrypt');
+
+// CORS 설정
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+}));
 
 app.use(express.static(path.join(__dirname, '/build')));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -116,6 +123,47 @@ app.post("/signin", (req, res) => {  // 데이터 받아서 결과 전송
     
 });
 
+
+// 상담 신청 API
+app.post("/consultation", (req, res) => {
+    const { name, phone, age, sex, remarks } = req.body;
+    const sendData = { success: false };
+
+    if (name && phone) {
+        db.query(
+            'INSERT INTO info (name, phone, age, sex, remarks) VALUES (?, ?, ?, ?, ?)',
+            [name, phone, age || null, sex || null, remarks || null],
+            function (error, result) {
+                if (error) {
+                    console.error('상담 신청 저장 오류:', error);
+                    sendData.success = false;
+                    sendData.message = '저장 중 오류가 발생했습니다.';
+                    res.send(sendData);
+                } else {
+                    sendData.success = true;
+                    sendData.message = '상담 신청이 완료되었습니다.';
+                    res.send(sendData);
+                }
+            }
+        );
+    } else {
+        sendData.success = false;
+        sendData.message = '이름과 연락처는 필수 입력 항목입니다.';
+        res.send(sendData);
+    }
+});
+
+// 상담 신청 목록 조회 API (관리자용)
+app.get("/consultations", (req, res) => {
+    db.query('SELECT * FROM info ORDER BY name DESC', function (error, results) {
+        if (error) {
+            console.error('상담 목록 조회 오류:', error);
+            res.status(500).send({ error: '조회 중 오류가 발생했습니다.' });
+        } else {
+            res.send(results);
+        }
+    });
+});
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
