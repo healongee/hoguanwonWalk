@@ -61,6 +61,7 @@ function ConsultationForm() {
     phone: '',
     age: '',
     sex: '',
+    address: '',
     remarks: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -75,6 +76,86 @@ function ConsultationForm() {
     }));
   };
 
+  // 전화번호 포맷팅 (01099998888 -> 010-9999-8888)
+  const formatPhoneNumber = (value) => {
+    const numbers = value.replace(/\D/g, '');
+    if (numbers.length <= 3) return numbers;
+    if (numbers.startsWith('02')) {
+      if (numbers.length <= 5) return `${numbers.slice(0, 2)}-${numbers.slice(2)}`;
+      return `${numbers.slice(0, 2)}-${numbers.slice(2, -4)}-${numbers.slice(-4)}`;
+    }
+    if (numbers.length <= 7) return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
+    return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7, 11)}`;
+  };
+
+  const handlePhoneChange = (e) => {
+    const raw = e.target.value.replace(/\D/g, '');
+    const formatted = formatPhoneNumber(raw);
+    setFormData(prev => ({
+      ...prev,
+      phone: formatted
+    }));
+  };
+
+  // 디바이스 타입 감지 함수 (PC 또는 Mobile)
+  const detectDevice = () => {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    
+    // 모바일 기기 감지
+    const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase()) || width <= 768;
+    
+    return isMobile ? 'Mobile' : 'PC';
+  };
+
+  // 카카오 우편번호 검색 팝업 열기
+  const openPostcode = () => {
+    if (window.daum && window.daum.Postcode) {
+      new window.daum.Postcode({
+        oncomplete: function(data) {
+          let addr = ''; // 주소 변수
+          let extraAddr = ''; // 참고항목 변수
+
+          // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+          if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+            addr = data.roadAddress;
+          } else { // 사용자가 지번 주소를 선택했을 경우(J)
+            addr = data.jibunAddress;
+          }
+
+          // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+          if(data.userSelectedType === 'R'){
+            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+            if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+              extraAddr += data.bname;
+            }
+            // 건물명이 있고, 공동주택일 경우 추가한다.
+            if(data.buildingName !== '' && data.apartment === 'Y'){
+              extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+            }
+            // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+            if(extraAddr !== ''){
+              extraAddr = ' (' + extraAddr + ')';
+            }
+          }
+
+          // 우편번호와 주소 정보를 해당 필드에 넣는다.
+          const fullAddress = `[${data.zonecode}] ${addr}${extraAddr}`;
+          setFormData(prev => ({
+            ...prev,
+            address: fullAddress
+          }));
+        },
+        width: '100%',
+        height: '100%',
+        maxSuggestItems: 5
+      }).open();
+    } else {
+      alert('주소 검색 서비스를 불러올 수 없습니다. 페이지를 새로고침해주세요.');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -85,25 +166,37 @@ function ConsultationForm() {
 
     setIsSubmitting(true);
     
+    // 디바이스 타입 감지
+    const device = detectDevice();
+    
+    // API URL: 같은 망 내 접속 시 현재 호스트 사용
+    const apiUrl = `${window.location.protocol}//${window.location.hostname}:3001/consultation`;
+    
     try {
-      const response = await fetch('http://localhost:3001/consultation', {
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          device: device
+        }),
       });
       
       const result = await response.json();
       
       if (result.success) {
         setSubmitResult('success');
-        setFormData({ name: '', phone: '', age: '', sex: '', remarks: '' });
+        setFormData({ name: '', phone: '', age: '', sex: '', address: '', remarks: '' });
       } else {
         setSubmitResult('error');
+        alert(result.message || '상담 신청에 실패했습니다.');
       }
     } catch (error) {
       setSubmitResult('error');
+      alert('네트워크 오류가 발생했습니다. 서버 연결을 확인해주세요.');
+      console.error('상담 신청 오류:', error);
     }
     
     setIsSubmitting(false);
@@ -159,10 +252,11 @@ function ConsultationForm() {
               type="tel"
               name="phone"
               value={formData.phone}
-              onChange={handleChange}
+              onChange={handlePhoneChange}
               onFocus={() => setFocusedField('phone')}
               onBlur={() => setFocusedField(null)}
               placeholder="010-0000-0000"
+              maxLength={13}
               required
             />
           </div>
@@ -178,6 +272,8 @@ function ConsultationForm() {
                 onBlur={() => setFocusedField(null)}
               >
                 <option value="">선택해 주세요</option>
+                <option value="20대">20대</option>
+                <option value="30대">30대</option>
                 <option value="40대">40대</option>
                 <option value="50대">50대</option>
                 <option value="60대">60대</option>
@@ -198,6 +294,30 @@ function ConsultationForm() {
                 <option value="남성">남성</option>
                 <option value="여성">여성</option>
               </select>
+            </div>
+          </div>
+          
+          <div className={`form-group ${focusedField === 'address' ? 'focused' : ''}`}>
+            <label>주소</label>
+            <div className="address-input-group">
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                onFocus={() => setFocusedField('address')}
+                onBlur={() => setFocusedField(null)}
+                placeholder="주소를 검색해주세요"
+                readOnly
+                className="address-input"
+              />
+              <button
+                type="button"
+                onClick={openPostcode}
+                className="address-search-btn"
+              >
+                주소 검색
+              </button>
             </div>
           </div>
           
@@ -361,9 +481,9 @@ function App() {
                 </h1>
                 
                 <p className="hero-description animate-fade-in" style={{ animationDelay: '0.6s' }}>
-                  30년 전통 비법의 <strong>호관원 프리미엄</strong><br />
-                  <span className="highlight-text">관절 · 연골 건강</span>에 도움을 주는<br />
-                  엄선된 한방 원료로 만들었습니다.
+                  30년 전통의 <strong>호관원 프리미엄</strong><br />
+                  <span className="highlight-text">관절 건강을 원하는 분들을 위해</span><br />
+                  특별히 개발된 엄선된 한방 원료로 만들었습니다.
                 </p>
 
                 <div className="hero-phone animate-fade-in" style={{ animationDelay: '0.7s' }}>
@@ -570,7 +690,7 @@ function App() {
               </div>
               <div className="ingredient-info">
                 <h3>우슬</h3>
-                <p>뼈와 관절<br />건강 증진</p>
+                <p>활기찬<br />일상을 위한</p>
               </div>
             </div>
             <div className="ingredient-card" style={{ animationDelay: '0.4s' }}>
@@ -581,7 +701,7 @@ function App() {
               </div>
               <div className="ingredient-info">
                 <h3>당귀</h3>
-                <p>혈액 순환<br />개선</p>
+                <p>건강한 순환을<br />돕는 식품</p>
               </div>
             </div>
           </div>
