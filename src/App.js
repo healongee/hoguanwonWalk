@@ -1,5 +1,6 @@
 import './App.css';
 import { useState, useEffect, useRef } from 'react';
+import { supabase } from './supabase';
 
 // 스크롤 애니메이션 훅
 function useScrollAnimation() {
@@ -16,13 +17,14 @@ function useScrollAnimation() {
       { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    const element = ref.current;
+    if (element) {
+      observer.observe(element);
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (element) {
+        observer.unobserve(element);
       }
     };
   }, []);
@@ -165,37 +167,44 @@ function ConsultationForm() {
     }
 
     setIsSubmitting(true);
-    
-    // 디바이스 타입 감지
     const device = detectDevice();
+    const phoneClean = formData.phone.replace(/\D/g, '');
     
-    // API URL: 같은 망 내 접속 시 현재 호스트 사용
-    const apiUrl = `${window.location.protocol}//${window.location.hostname}:3001/consultation`;
-    
+    if (!supabase) {
+      setSubmitResult('error');
+      alert('Supabase가 설정되지 않았습니다. .env 파일을 확인하세요.');
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          device: device
-        }),
+      const { error } = await supabase.from('info').insert({
+        phone: phoneClean,
+        name: formData.name.trim(),
+        age: formData.age || null,
+        sex: formData.sex || null,
+        address: formData.address || null,
+        remarks: formData.remarks || null,
+        device: device,
+        ip: 'client',
+        ifflag: 'N',
       });
-      
-      const result = await response.json();
-      
-      if (result.success) {
+
+      if (error) {
+        if (error.code === '23505') {
+          alert('이미 등록된 연락처입니다.');
+        } else {
+          alert('상담 신청에 실패했습니다. 잠시 후 다시 시도해주세요.');
+        }
+        setSubmitResult('error');
+        console.error('상담 신청 오류:', error);
+      } else {
         setSubmitResult('success');
         setFormData({ name: '', phone: '', age: '', sex: '', address: '', remarks: '' });
-      } else {
-        setSubmitResult('error');
-        alert(result.message || '상담 신청에 실패했습니다.');
       }
     } catch (error) {
       setSubmitResult('error');
-      alert('네트워크 오류가 발생했습니다. 서버 연결을 확인해주세요.');
+      alert('상담 신청에 실패했습니다. 잠시 후 다시 시도해주세요.');
       console.error('상담 신청 오류:', error);
     }
     
@@ -489,7 +498,7 @@ function App() {
                 <div className="hero-phone animate-fade-in" style={{ animationDelay: '0.7s' }}>
                   <span className="phone-label">지금 바로 전화 상담</span>
                   <a href="tel:1588-0000" className="phone-number">
-                    <span className="phone-icon">📞</span>
+                    <span className="phone-icon">📞</span>햣 
                     1588-0000
                   </a>
                 </div>

@@ -1,0 +1,13 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "info",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "ifflag", "order": "ASCENDING" },
+        { "fieldPath": "regdt", "order": "ASCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

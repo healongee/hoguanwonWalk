@@ -1,0 +1,10 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /info/{phone} {
+      // 새 문서만 생성 허용 (전화번호 중복 시 update 시도 → 차단)
+      allow create: if !exists(/databases/$(database)/documents/info/$(phone));
+      allow update, read, delete: if false;
+    }
+  }
+}

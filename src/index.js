@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import './firebase'; // Firebase 초기화 (Analytics 등)
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
