@@ -1,4 +1,540 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700&display=swap');
+/* 원본 TOP.png 고정 버튼 */
+.fixed-top-button {
+  position: fixed;
+  top: 5%;
+  right: 1%;
+  z-index: 1100;
+  display: block;
+}
+
+.fixed-top-button img {
+  display: block;
+  width: 180px;
+  max-width: 40vw;
+}
+
+/* 비디오 히어로 섹션 (원본 PC 사이트 형태) */
+.hero-video-section {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-video-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.hero-video-text {
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+  color: #ffffff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.hero-line {
+  display: block;
+}
+
+.hero-line-large {
+  font-size: clamp(40px, 5vw, 72px);
+  font-weight: 800;
+}
+
+.hero-line-small {
+  font-size: clamp(16px, 2vw, 24px);
+  font-weight: 500;
+  text-align: right;
+  line-height: 1.6;
+}
+
+/* ===========================
+   Mobile 전용 레이아웃 (별도 버전)
+   =========================== */
+.hg-mobile-view .fixed-top-button img {
+  width: 120px;
+  max-width: 45vw;
+}
+
+.hg-mobile-view .hero-video-text {
+  align-items: center;
+  text-align: center;
+  padding: 0 18px;
+}
+
+.hg-mobile-view .hero-line-large {
+  font-size: 36px;
+}
+
+.hg-mobile-view .hero-line-small {
+  font-size: 14px;
+}
+
+.hg-mobile-view .hg-sec2-inner {
+  padding: 0 16px;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hg-mobile-view .hg-sec2-left,
+.hg-mobile-view .hg-sec2-right {
+  justify-content: center;
+}
+
+/* 모바일에서는 오버레이 이미지들이 겹치지 않게 크기 축소 + 중앙 기준 */
+.hg-mobile-view .hg-sec3-layer,
+.hg-mobile-view .hg-sec4-layer,
+.hg-mobile-view .hg-sec5-layer,
+.hg-mobile-view .hg-sec6-layer,
+.hg-mobile-view .hg-sec7-layer,
+.hg-mobile-view .hg-sec8-layer,
+.hg-mobile-view .hg-sec9-layer,
+.hg-mobile-view .hg-sec10-layer,
+.hg-mobile-view .hg-sec11-layer,
+.hg-mobile-view .hg-sec12-layer,
+.hg-mobile-view .hg-sec13-layer {
+  transform: translateX(-50%) scale(0.82);
+  transform-origin: center;
+  left: 50% !important;
+  right: auto !important;
+  max-width: 96vw;
+}
+
+.hg-mobile-view .hg-sec4-model {
+  bottom: 8%;
+}
+
+/* sec6 아이콘은 모바일에서 더 크게 간격 확보 */
+.hg-mobile-view .hg-sec6-icon.icon-1 { top: 58%; left: 18% !important; transform: translateX(-50%) scale(0.9); }
+.hg-mobile-view .hg-sec6-icon.icon-2 { top: 58%; left: 50% !important; transform: translateX(-50%) scale(0.9); }
+.hg-mobile-view .hg-sec6-icon.icon-3 { top: 72%; left: 18% !important; transform: translateX(-50%) scale(0.9); }
+.hg-mobile-view .hg-sec6-icon.icon-4 { top: 72%; left: 50% !important; transform: translateX(-50%) scale(0.9); }
+
+.hg-mobile-view .hg-sec10-graphs {
+  inset: 26% 8% auto 8%;
+  gap: 10px;
+}
+
+.hg-mobile-view .hg-sec10-graphs img {
+  width: 49%;
+}
+
+.hg-mobile-view .consultation-wrapper {
+  grid-template-columns: 1fr;
+}
+
+/* ===========================
+   hoguanwon.com sec2 ~ sec13 공통
+   =========================== */
+.hg-section {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.hg-sec-bg {
+  width: 100%;
+  display: block;
+}
+
+.hg-section [class^="hg-sec"] img {
+  max-width: 100%;
+  display: block;
+}
+
+/* sec2 레이아웃 */
+.hg-sec2 {
+  background: #000;
+}
+
+.hg-sec2-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.hg-sec2-left,
+.hg-sec2-right {
+  flex: 1;
+}
+
+.hg-sec2-left {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.hg-sec2-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* sec3 */
+.hg-sec3-layer {
+  position: absolute;
+}
+
+.hg-sec3-hand {
+  bottom: 0;
+  right: 10%;
+}
+
+.hg-sec3-sig {
+  bottom: 10%;
+  left: 10%;
+}
+
+.hg-sec3-text {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translateX(-50%) scale(1.5);
+  text-align: center;
+  color: #3b2c1b;
+  font-family: 'Caveat', 'Nanum Pen Script', cursive;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.6;
+  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.7);
+  white-space: nowrap;
+}
+
+.hg-sec3-text p+p {
+  margin-top: 6px;
+}
+
+/* sec4 */
+.hg-sec4-layer {
+  position: absolute;
+}
+
+.hg-sec4-title {
+  top: 10%;
+  left: 10%;
+  transform: scale(0.8);
+  transform-origin: top left;
+}
+
+.hg-sec4-title img {
+  max-width: 80%;
+}
+
+.hg-sec4-subtitle {
+  top: 22%;
+  left: 10%;
+}
+
+.hg-sec4-model {
+  display: none;
+  bottom: 0;
+  right: 5%;
+  max-width: 35%;
+}
+
+.hg-sec4-product {
+  bottom: 5%;
+  left: 15%;
+}
+
+/* sec5 */
+.hg-sec5-layer {
+  position: absolute;
+}
+
+.hg-sec5-title {
+  top: 10%;
+  left: 10%;
+}
+
+.hg-sec5-info {
+  top: 25%;
+  left: 10%;
+}
+
+.hg-sec5-img {
+  bottom: 10%;
+  left: 10%;
+}
+
+.hg-sec5-product {
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* sec6 */
+.hg-sec6-layer {
+  position: absolute;
+}
+
+.hg-sec6-title {
+  top: 10%;
+  left: 10%;
+}
+
+.hg-sec6-con {
+  top: 25%;
+  left: 10%;
+}
+
+.hg-sec6-icon.icon-1 {
+  top: 50%;
+  left: 10%;
+}
+
+.hg-sec6-icon.icon-2 {
+  top: 50%;
+  left: 28%;
+}
+
+.hg-sec6-icon.icon-3 {
+  top: 50%;
+  left: 46%;
+}
+
+.hg-sec6-icon.icon-4 {
+  top: 50%;
+  left: 64%;
+}
+
+.hg-sec6-icon {
+  transform: scale(0.75);
+  transform-origin: center center;
+}
+
+/* sec7 */
+.hg-sec7-layer {
+  position: absolute;
+}
+
+.hg-sec7-title {
+  top: 10%;
+  left: 10%;
+}
+
+.hg-sec7-img {
+  top: 25%;
+  left: 5%;
+}
+
+.hg-sec7-care {
+  top: 25%;
+  right: 5%;
+}
+
+.hg-sec7-s3 {
+  display: none;
+}
+
+/* sec8 */
+.hg-sec8-layer {
+  position: absolute;
+}
+
+.hg-sec8-title {
+  top: 10%;
+  left: 10%;
+}
+
+.hg-sec8-img {
+  top: 25%;
+  left: 8%;
+}
+
+.hg-sec8-right {
+  top: 25%;
+  right: 8%;
+}
+
+.hg-sec8-s4 {
+  display: none;
+}
+
+/* sec9 */
+.hg-sec9-layer {
+  position: absolute;
+}
+
+.hg-sec9-video {
+  position: absolute;
+}
+
+.hg-sec9-video.video-shoulder {
+  top: 65%;
+  left: 20%;
+  width: 24%;
+}
+
+.hg-sec9-video.video-elbow {
+  top: 40%;
+  left: 20%;
+  width: 24%;
+}
+
+.hg-sec9-video.video-wrist {
+  top: 65%;
+  right: 20%;
+  width: 24%;
+}
+
+.hg-sec9-video.video-knee {
+  top: 40%;
+  right: 20%;
+  width: 24%;
+}
+
+.hg-sec9-title {
+  top: 10%;
+  left: 10%;
+}
+
+.hg-sec9-graph1 {
+  top: 30%;
+  left: 10%;
+}
+
+.hg-sec9-graph2 {
+  top: 30%;
+  right: 10%;
+}
+
+.hg-sec9-s5 {
+  display: none;
+}
+
+/* sec10 */
+.hg-sec10-layer {
+  position: absolute;
+}
+
+.hg-sec10-msm {
+  top: 15%;
+  left: 10%;
+}
+
+.hg-sec10-bottom {
+  bottom: 15%;
+  left: 10%;
+}
+
+.hg-sec10-s6 {
+  display: none;
+}
+
+/* sec10 MSM + 그래프 내부 배치 */
+.hg-sec10-msm-inner {
+  position: relative;
+}
+
+.hg-sec10-graphs {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  width: 80%;
+}
+
+.hg-sec10-graphs img {
+  width: 48%;
+  box-shadow: var(--shadow-sm);
+  border-radius: 8px;
+  transform: scale(0.9);
+}
+
+/* sec11 */
+.hg-sec11-layer {
+  position: absolute;
+}
+
+.hg-sec11-title {
+  top: 10%;
+  left: 10%;
+}
+
+/* sec12 */
+.hg-sec12-layer {
+  position: absolute;
+}
+
+.hg-sec12-title {
+  top: 10%;
+  left: 10%;
+}
+
+.hg-sec12-info {
+  top: 22%;
+  left: 5%;
+  max-width: 55%;
+}
+
+.hg-sec12-logo {
+  top: 20%;
+  right: 5%;
+  max-width: 25%;
+}
+
+.hg-sec12-img.img-animated {
+  bottom: 0%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  text-align: center;
+}
+
+.hg-sec12-img.img-animated img {
+  max-width: 1440px;
+  width: 126vw;
+  display: inline-block;
+}
+
+/* sec13 */
+.hg-sec13-layer {
+  position: absolute;
+}
+
+.hg-sec13-logo {
+  top: 10%;
+  left: 10%;
+}
+
+.hg-sec13-model {
+  bottom: 0;
+  left: 5%;
+}
+
+.hg-sec13-phone {
+  top: 30%;
+  right: 10%;
+}
+
+.hg-sec13-writing {
+  top: 55%;
+  right: 10%;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
 :root {
   --primary: #2C5530;
@@ -54,46 +590,77 @@ body {
    애니메이션 키프레임
    =========================== */
 @keyframes fadeInUp {
-  from { 
-    opacity: 0; 
-    transform: translateY(40px); 
+  from {
+    opacity: 0;
+    transform: translateY(40px);
   }
-  to { 
-    opacity: 1; 
-    transform: translateY(0); 
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes scaleIn {
-  from { 
-    opacity: 0; 
-    transform: scale(0.95); 
+  from {
+    opacity: 0;
+    transform: scale(0.95);
   }
-  to { 
-    opacity: 1; 
-    transform: scale(1); 
+
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.05); opacity: 0.8; }
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
 }
 
 @keyframes gradientMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 @keyframes particleFloat {
@@ -101,8 +668,15 @@ body {
     transform: translateY(100vh) rotate(0deg);
     opacity: 0;
   }
-  10% { opacity: 0.6; }
-  90% { opacity: 0.6; }
+
+  10% {
+    opacity: 0.6;
+  }
+
+  90% {
+    opacity: 0.6;
+  }
+
   100% {
     transform: translateY(-100vh) rotate(720deg);
     opacity: 0;
@@ -110,8 +684,15 @@ body {
 }
 
 @keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 /* 애니메이션 클래스 */
@@ -436,7 +1017,7 @@ body {
   position: absolute;
   inset: 0;
   background: radial-gradient(ellipse at 70% 20%, rgba(44, 85, 48, 0.06) 0%, transparent 50%),
-              radial-gradient(ellipse at 30% 80%, rgba(212, 175, 55, 0.04) 0%, transparent 50%);
+    radial-gradient(ellipse at 30% 80%, rgba(212, 175, 55, 0.04) 0%, transparent 50%);
 }
 
 .hero-particles {
@@ -2001,112 +2582,112 @@ body {
   .container {
     padding: 0 24px;
   }
-  
+
   .top-banner {
     display: none;
   }
-  
+
   .header {
     top: 0;
   }
-  
+
   .hero-inner {
     grid-template-columns: 1fr;
     gap: 48px;
     text-align: center;
   }
-  
+
   .hero-text {
     max-width: 100%;
   }
-  
+
   .hero-phone {
     justify-content: center;
   }
-  
+
   .hero-cta-group {
     justify-content: center;
   }
-  
+
   .hero-visual {
     order: -1;
   }
-  
+
   .hero-stats {
     max-width: 400px;
     margin: 0 auto;
   }
-  
+
   .hero-product-badge {
     top: -10px;
     right: 20px;
     width: 80px;
     height: 80px;
   }
-  
+
   .product-badge-text {
     font-size: 12px;
   }
-  
+
   .cert-content {
     flex-direction: column;
     text-align: center;
   }
-  
+
   .cert-badges {
     justify-content: center;
   }
-  
+
   .badges-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 24px;
   }
-  
+
   .benefits-grid {
     gap: 24px;
   }
-  
+
   .ingredients-showcase {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .gift-content {
     grid-template-columns: 1fr;
     text-align: center;
   }
-  
+
   .gift-visual {
     order: -1;
   }
-  
+
   .testimonials-grid {
     grid-template-columns: 1fr;
     max-width: 500px;
     margin: 0 auto;
   }
-  
+
   .guarantee-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .consultation-wrapper {
     grid-template-columns: 1fr;
     gap: 48px;
   }
-  
+
   .consultation-info {
     text-align: center;
   }
-  
+
   .consultation-phone {
     display: inline-block;
   }
-  
+
   .footer-content {
     grid-template-columns: 1fr 1fr;
     gap: 40px;
   }
-  
+
   .footer-brand {
     grid-column: span 2;
   }
@@ -2119,348 +2700,349 @@ body {
   .section {
     padding: 80px 0;
   }
-  
+
   .header .container {
     height: 64px;
   }
-  
+
   .header.solid .container {
     height: 60px;
   }
-  
+
   .nav {
     display: none;
   }
-  
+
   .mobile-menu-btn {
     display: flex;
   }
-  
+
   .header.menu-open {
     background: white;
   }
-  
+
   .floating-phone {
     display: flex;
   }
-  
+
   .floating-cta {
     bottom: 88px;
   }
-  
+
   .hero {
     padding: 120px 0 80px;
     min-height: auto;
   }
-  
+
   .hero-badge {
     margin-bottom: 20px;
     font-size: 12px;
     padding: 8px 16px;
   }
-  
+
   .hero-title .title-small {
     font-size: 14px;
     margin-bottom: 8px;
   }
-  
+
   .hero-title .title-main {
     font-size: 32px;
   }
-  
+
   .hero-description {
     font-size: 15px;
     margin-bottom: 24px;
   }
-  
+
   .hero-phone {
     padding: 16px 20px;
     flex-direction: column;
     gap: 8px;
   }
-  
+
   .phone-number {
     font-size: 24px;
   }
-  
+
   .hero-cta-group {
     flex-direction: column;
     gap: 12px;
   }
-  
-  .btn-primary, .btn-secondary {
+
+  .btn-primary,
+  .btn-secondary {
     width: 100%;
     justify-content: center;
     padding: 16px 32px;
   }
-  
+
   .hero-stats {
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
     padding: 20px;
   }
-  
+
   .stat-item {
     padding: 14px 8px;
   }
-  
+
   .stat-icon {
     font-size: 24px;
     margin-bottom: 6px;
   }
-  
+
   .stat-number {
     font-size: 22px;
   }
-  
+
   .stat-label {
     font-size: 10px;
   }
-  
+
   .scroll-indicator {
     display: none;
   }
-  
+
   .certification-section {
     padding: 40px 0;
   }
-  
+
   .cert-text h3 {
     font-size: 20px;
   }
-  
+
   .cert-text p {
     font-size: 14px;
   }
-  
+
   .cert-badge {
     padding: 10px 16px;
   }
-  
+
   .cert-label {
     font-size: 13px;
   }
-  
+
   .badges-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
   }
-  
+
   .badge-item {
     padding: 16px 12px;
   }
-  
+
   .badge-icon {
     font-size: 28px;
     margin-bottom: 8px;
   }
-  
+
   .badge-number {
     font-size: 32px;
   }
-  
+
   .badge-text {
     font-size: 12px;
   }
-  
+
   .trust-badges {
     padding: 48px 0;
   }
-  
+
   .section-header {
     margin-bottom: 40px;
   }
-  
+
   .section-title {
     font-size: 26px;
   }
-  
+
   .section-subtitle {
     font-size: 14px;
   }
-  
+
   .benefits-grid {
     grid-template-columns: 1fr;
     gap: 20px;
   }
-  
+
   .benefit-card {
     padding: 32px 24px;
   }
-  
+
   .benefit-icon {
     width: 60px;
     height: 60px;
     font-size: 28px;
     margin-bottom: 20px;
   }
-  
+
   .benefit-card h3 {
     font-size: 19px;
   }
-  
+
   .ingredients-showcase {
     grid-template-columns: repeat(2, 1fr);
     gap: 14px;
   }
-  
+
   .ingredient-card {
     padding: 24px 16px;
   }
-  
+
   .visual-circle {
     width: 72px;
     height: 72px;
   }
-  
+
   .ingredient-emoji {
     font-size: 32px;
   }
-  
+
   .ingredient-info h3 {
     font-size: 15px;
   }
-  
+
   .ingredient-info p {
     font-size: 12px;
   }
-  
+
   .gift-section {
     padding: 60px 0;
   }
-  
+
   .gift-title {
     font-size: 26px;
   }
-  
+
   .gift-card {
     padding: 40px 32px;
   }
-  
+
   .gift-emoji {
     font-size: 60px;
   }
-  
+
   .gift-message {
     font-size: 17px;
   }
-  
+
   .testimonials-grid {
     gap: 20px;
   }
-  
+
   .testimonial-card {
     padding: 24px;
   }
-  
+
   .testimonial-text {
     font-size: 14px;
   }
-  
+
   .guarantee-section {
     padding: 60px 0;
   }
-  
+
   .guarantee-title {
     font-size: 22px;
     margin-bottom: 32px;
   }
-  
+
   .guarantee-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
   }
-  
+
   .guarantee-item {
     padding: 24px 16px;
   }
-  
+
   .guarantee-item-icon {
     font-size: 32px;
     margin-bottom: 12px;
   }
-  
+
   .guarantee-item h4 {
     font-size: 15px;
   }
-  
+
   .guarantee-item p {
     font-size: 12px;
   }
-  
+
   .consultation {
     padding: 80px 0;
   }
-  
+
   .consultation-title {
     font-size: 28px;
   }
-  
+
   .consultation-form-container {
     padding: 36px 24px;
     border-radius: 24px;
   }
-  
+
   .form-header-icon {
     font-size: 40px;
   }
-  
+
   .form-title {
     font-size: 22px;
   }
-  
+
   .form-row {
     flex-direction: column;
     gap: 0;
   }
-  
+
   .address-input-group {
     flex-direction: column;
     gap: 10px;
   }
-  
+
   .address-search-btn {
     width: 100%;
     padding: 16px;
   }
-  
+
   .phone-number-large {
     font-size: 28px;
   }
-  
+
   .footer-content {
     grid-template-columns: 1fr;
     gap: 40px;
     text-align: center;
   }
-  
+
   .footer-brand {
     grid-column: auto;
   }
-  
+
   .footer-logo {
     justify-content: center;
   }
-  
+
   .footer-desc {
     max-width: 100%;
   }
-  
+
   .footer-cert {
     justify-content: center;
   }
-  
+
   .floating-cta,
   .floating-phone {
     padding: 12px 20px;
     font-size: 13px;
     right: 16px;
   }
-  
+
   .floating-cta {
     bottom: 76px;
   }
-  
+
   .floating-phone {
     bottom: 16px;
   }
@@ -2470,44 +3052,44 @@ body {
   .hero-title .title-main {
     font-size: 28px;
   }
-  
+
   .section-title {
     font-size: 22px;
   }
-  
+
   .badge-number {
     font-size: 28px;
   }
-  
+
   .ingredients-showcase {
     gap: 10px;
   }
-  
+
   .ingredient-card {
     padding: 20px 12px;
   }
-  
+
   .visual-circle {
     width: 64px;
     height: 64px;
   }
-  
+
   .ingredient-emoji {
     font-size: 28px;
   }
-  
+
   .ingredient-info h3 {
     font-size: 14px;
   }
-  
+
   .guarantee-grid {
     gap: 12px;
   }
-  
+
   .guarantee-item {
     padding: 20px 12px;
   }
-  
+
   .consultation-form-container {
     padding: 28px 20px;
   }
@@ -2517,7 +3099,10 @@ body {
    애니메이션 감소 모드
    =========================== */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

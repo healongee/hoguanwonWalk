@@ -12,6 +12,7 @@
 CREATE EXTENSION IF NOT EXISTS pg_cron;
 CREATE EXTENSION IF NOT EXISTS pg_net;
 
+
 -- 2분마다 process-pending Edge Function 호출
 SELECT cron.schedule(
   'process-pending-consultations',

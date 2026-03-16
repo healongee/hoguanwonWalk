@@ -1,6 +1,30 @@
 import './App.css';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { supabase } from './supabase';
+
+function useIsMobile(breakpointPx = 768) {
+  const query = useMemo(() => `(max-width: ${breakpointPx}px)`, [breakpointPx]);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return false;
+    return window.matchMedia(query).matches;
+  });
+
+  useEffect(() => {
+    if (!window.matchMedia) return;
+    const mql = window.matchMedia(query);
+    const onChange = (e) => setIsMobile(e.matches);
+    onChange(mql);
+
+    if (mql.addEventListener) {
+      mql.addEventListener('change', onChange);
+      return () => mql.removeEventListener('change', onChange);
+    }
+    mql.addListener(onChange);
+    return () => mql.removeListener(onChange);
+  }, [query]);
+
+  return isMobile;
+}
 
 // 스크롤 애니메이션 훅
 function useScrollAnimation() {
@@ -38,19 +62,19 @@ function AnimatedCounter({ end, duration = 2000, suffix = '', isVisible }) {
 
   useEffect(() => {
     if (!isVisible) return;
-    
+
     let startTime;
     const animate = (currentTime) => {
       if (!startTime) startTime = currentTime;
       const progress = Math.min((currentTime - startTime) / duration, 1);
-      
+
       setCount(Math.floor(progress * end));
-      
+
       if (progress < 1) {
         requestAnimationFrame(animate);
       }
     };
-    
+
     requestAnimationFrame(animate);
   }, [end, duration, isVisible]);
 
@@ -103,10 +127,10 @@ function ConsultationForm() {
   const detectDevice = () => {
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
     const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-    
+
     // 모바일 기기 감지
     const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase()) || width <= 768;
-    
+
     return isMobile ? 'Mobile' : 'PC';
   };
 
@@ -114,7 +138,7 @@ function ConsultationForm() {
   const openPostcode = () => {
     if (window.daum && window.daum.Postcode) {
       new window.daum.Postcode({
-        oncomplete: function(data) {
+        oncomplete: function (data) {
           let addr = ''; // 주소 변수
           let extraAddr = ''; // 참고항목 변수
 
@@ -126,18 +150,18 @@ function ConsultationForm() {
           }
 
           // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
-          if(data.userSelectedType === 'R'){
+          if (data.userSelectedType === 'R') {
             // 법정동명이 있을 경우 추가한다. (법정리는 제외)
             // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-            if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+            if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
               extraAddr += data.bname;
             }
             // 건물명이 있고, 공동주택일 경우 추가한다.
-            if(data.buildingName !== '' && data.apartment === 'Y'){
+            if (data.buildingName !== '' && data.apartment === 'Y') {
               extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
             }
             // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-            if(extraAddr !== ''){
+            if (extraAddr !== '') {
               extraAddr = ' (' + extraAddr + ')';
             }
           }
@@ -160,7 +184,7 @@ function ConsultationForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.name || !formData.phone) {
       alert('이름과 연락처는 필수 입력 항목입니다.');
       return;
@@ -169,7 +193,7 @@ function ConsultationForm() {
     setIsSubmitting(true);
     const device = detectDevice();
     const phoneClean = formData.phone.replace(/\D/g, '');
-    
+
     if (!supabase) {
       setSubmitResult('error');
       alert('Supabase가 설정되지 않았습니다. .env 파일을 확인하세요.');
@@ -207,7 +231,7 @@ function ConsultationForm() {
       alert('상담 신청에 실패했습니다. 잠시 후 다시 시도해주세요.');
       console.error('상담 신청 오류:', error);
     }
-    
+
     setIsSubmitting(false);
   };
 
@@ -220,12 +244,12 @@ function ConsultationForm() {
       <p className="form-subtitle">
         친절한 상담원이 <strong>직접 전화</strong>로 안내해 드립니다
       </p>
-      
+
       <div className="form-trust-badges">
         <span>✓ 강압적 권유 없음</span>
         <span>✓ 부담 없는 상담</span>
       </div>
-      
+
       {submitResult === 'success' ? (
         <div className="success-message">
           <div className="success-icon">
@@ -254,7 +278,7 @@ function ConsultationForm() {
               required
             />
           </div>
-          
+
           <div className={`form-group ${focusedField === 'phone' ? 'focused' : ''}`}>
             <label>연락처 <span className="required">*</span></label>
             <input
@@ -269,13 +293,13 @@ function ConsultationForm() {
               required
             />
           </div>
-          
+
           <div className="form-row">
             <div className={`form-group half ${focusedField === 'age' ? 'focused' : ''}`}>
               <label>연령대</label>
-              <select 
-                name="age" 
-                value={formData.age} 
+              <select
+                name="age"
+                value={formData.age}
                 onChange={handleChange}
                 onFocus={() => setFocusedField('age')}
                 onBlur={() => setFocusedField(null)}
@@ -289,12 +313,12 @@ function ConsultationForm() {
                 <option value="70대 이상">70대 이상</option>
               </select>
             </div>
-            
+
             <div className={`form-group half ${focusedField === 'sex' ? 'focused' : ''}`}>
               <label>성별</label>
-              <select 
-                name="sex" 
-                value={formData.sex} 
+              <select
+                name="sex"
+                value={formData.sex}
                 onChange={handleChange}
                 onFocus={() => setFocusedField('sex')}
                 onBlur={() => setFocusedField(null)}
@@ -305,7 +329,7 @@ function ConsultationForm() {
               </select>
             </div>
           </div>
-          
+
           <div className={`form-group ${focusedField === 'address' ? 'focused' : ''}`}>
             <label>주소</label>
             <div className="address-input-group">
@@ -329,7 +353,7 @@ function ConsultationForm() {
               </button>
             </div>
           </div>
-          
+
           <div className={`form-group ${focusedField === 'remarks' ? 'focused' : ''}`}>
             <label>상담 내용 (선택)</label>
             <textarea
@@ -342,17 +366,47 @@ function ConsultationForm() {
               rows="3"
             />
           </div>
-          
+
           <button type="submit" className="btn-submit" disabled={isSubmitting}>
             <span className="btn-text">{isSubmitting ? '신청 중...' : '무료 상담 신청하기'}</span>
             <span className="btn-icon">→</span>
           </button>
-          
+
           <p className="privacy-notice">
             <span className="privacy-icon">🔒</span>
             입력하신 개인정보는 상담 목적으로만 사용되며,<br />
             제3자에게 절대 제공되지 않습니다.
           </p>
+          <ul className="agree_wrap" style={{ listStyle: 'none', padding: '15px', margin: '20px 0', background: '#f9f9f9', border: '1px solid #ddd', fontSize: '13px', color: '#666' }}>
+            <li style={{ marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <input type="checkbox" id="agree1-1" name="agree1-1" defaultChecked style={{ marginRight: '8px', width: '16px', height: '16px', accentColor: '#2C5530', cursor: 'pointer' }} />
+                <label htmlFor="agree1-1" style={{ cursor: 'pointer', lineHeight: '1.2' }}>개인정보 수집이용 동의(필수)</label>
+              </div>
+              <a href="/policy/index1.html" target="_blank" rel="noopener noreferrer" className="btn-example" style={{ textDecoration: 'none', color: '#888', cursor: 'pointer', whiteSpace: 'nowrap' }}>[약관보기]</a>
+            </li>
+            <li style={{ marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <input type="checkbox" id="agree1-2" name="agree1-2" defaultChecked style={{ marginRight: '8px', width: '16px', height: '16px', accentColor: '#2C5530', cursor: 'pointer' }} />
+                <label htmlFor="agree1-2" style={{ cursor: 'pointer', lineHeight: '1.2' }}>제 3자 정보 제공 동의(필수)</label>
+              </div>
+              <a href="/policy/index2.html" target="_blank" rel="noopener noreferrer" className="btn-example" style={{ textDecoration: 'none', color: '#888', cursor: 'pointer', whiteSpace: 'nowrap' }}>[약관보기]</a>
+            </li>
+            <li style={{ marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <input type="checkbox" id="agree1-3" name="agree1-3" defaultChecked style={{ marginRight: '8px', width: '16px', height: '16px', accentColor: '#2C5530', cursor: 'pointer' }} />
+                <label htmlFor="agree1-3" style={{ cursor: 'pointer', lineHeight: '1.2' }}>마케팅 정보 수신동의(선택)</label>
+              </div>
+              <a href="/policy/index3.html" target="_blank" rel="noopener noreferrer" className="btn-example" style={{ textDecoration: 'none', color: '#888', cursor: 'pointer', whiteSpace: 'nowrap' }}>[약관보기]</a>
+            </li>
+            <li style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <input type="checkbox" id="agree1-4" name="agree1-4" defaultChecked style={{ marginRight: '8px', width: '16px', height: '16px', accentColor: '#2C5530', cursor: 'pointer' }} />
+                <label htmlFor="agree1-4" style={{ cursor: 'pointer', lineHeight: '1.2' }}>개인정보 처리방침</label>
+              </div>
+              <a href="/policy/index4.html" target="_blank" rel="noopener noreferrer" className="btn-example" style={{ textDecoration: 'none', color: '#888', cursor: 'pointer', whiteSpace: 'nowrap' }}>[약관보기]</a>
+            </li>
+          </ul>
         </form>
       )}
     </div>
@@ -360,10 +414,13 @@ function ConsultationForm() {
 }
 
 function App() {
+  const isMobileView = useIsMobile(768);
   const [scrollY, setScrollY] = useState(0);
   const [headerSolid, setHeaderSolid] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
+  const [sec6Alt, setSec6Alt] = useState(false);
+  const [sec12Index, setSec12Index] = useState(0);
+
   // 스크롤 애니메이션 refs
   const [trustRef, trustVisible] = useScrollAnimation();
   const [certRef, certVisible] = useScrollAnimation();
@@ -384,6 +441,22 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // sec6 아이콘 교체 타이머 (2초 간격)
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSec6Alt((prev) => !prev);
+    }, 2000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // sec12 이미지 순환 타이머 (2초 간격, 1→2→3→1...)
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSec12Index((prev) => (prev + 1) % 3);
+    }, 2000);
+    return () => clearInterval(timer);
+  }, []);
+
   // 모바일 메뉴 토글
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -401,469 +474,409 @@ function App() {
   };
 
   return (
-    <div className="landing-page">
-      {/* 상단 띠 배너 */}
-      <div className="top-banner">
-        <div className="container">
-          <span className="banner-text">
-            🎁 <strong>지금 상담 신청하시면</strong> 특별 할인 혜택을 드립니다
-          </span>
-          <a href="#consultation" className="banner-cta">혜택 받기 →</a>
-        </div>
-      </div>
+    <div className={`landing-page ${isMobileView ? 'hg-mobile-view' : 'hg-pc-view'}`}>
+      {/* 언제든 상담 섹션으로 이동하는 고정 TOP 버튼 (원본 사이트 TOP.png 사용) */}
+      <a href="#consultation" className="fixed-top-button">
+        <img src="/hoguanwon.com/img/TOP.png" alt="무료 상담 바로가기" />
+      </a>
 
       {/* 헤더 */}
       <header className={`header ${headerSolid ? 'solid' : ''} ${mobileMenuOpen ? 'menu-open' : ''}`}>
         <div className="container">
-          <div className="logo">
-            <span className="logo-icon">H</span>
-            <span className="logo-text">호관원</span>
-          </div>
-          <nav className="nav">
-            <a href="#benefits">효능</a>
-            <a href="#ingredients">성분</a>
-            <a href="#testimonials">후기</a>
-            <a href="#consultation" className="nav-cta">상담신청</a>
-          </nav>
-          <button 
-            className={`mobile-menu-btn ${mobileMenuOpen ? 'active' : ''}`}
-            onClick={toggleMobileMenu}
-            aria-label="메뉴 열기"
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
+          {/* 상단 내비게이션/버튼 제거 (디자인 단순화) */}
         </div>
       </header>
 
-      {/* 모바일 메뉴 오버레이 */}
-      <div className={`mobile-menu-overlay ${mobileMenuOpen ? 'active' : ''}`} onClick={handleMenuClick}>
-        <nav className="mobile-nav" onClick={(e) => e.stopPropagation()}>
-          <a href="#benefits" onClick={handleMenuClick}>
-            <span className="mobile-nav-icon">🦴</span>
-            <span className="mobile-nav-text">효능</span>
-          </a>
-          <a href="#ingredients" onClick={handleMenuClick}>
-            <span className="mobile-nav-icon">🌿</span>
-            <span className="mobile-nav-text">성분</span>
-          </a>
-          <a href="#testimonials" onClick={handleMenuClick}>
-            <span className="mobile-nav-icon">💬</span>
-            <span className="mobile-nav-text">후기</span>
-          </a>
-          <a href="#consultation" onClick={handleMenuClick} className="mobile-nav-cta">
-            <span className="mobile-nav-icon">📞</span>
-            <span className="mobile-nav-text">무료 상담 신청</span>
-          </a>
-        </nav>
-      </div>
+      {/* 모바일 메뉴 오버레이 제거 */}
 
-      {/* 히어로 섹션 */}
-      <section className="hero">
-        <div className="hero-bg">
-          <div className="hero-gradient"></div>
-          <div className="hero-particles">
-            {[...Array(12)].map((_, i) => (
-              <div key={i} className="particle" style={{
-                left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 5}s`,
-                animationDuration: `${15 + Math.random() * 10}s`
-              }}></div>
-            ))}
-          </div>
-        </div>
-        
-        <div className="hero-content">
-          <div className="container">
-            <div className="hero-inner">
-              <div className="hero-text">
-                <div className="hero-badge animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                  <span className="badge-dot"></span>
-                  식약처 인증 건강기능식품
-                </div>
-                
-                <h1 className="hero-title animate-slide-up" style={{ animationDelay: '0.4s' }}>
-                  <span className="title-small">부모님께 드리는 건강 선물</span>
-                  <span className="title-main">아프지 마세요,</span>
-                  <span className="title-main accent">오래오래 함께해요</span>
-                </h1>
-                
-                <p className="hero-description animate-fade-in" style={{ animationDelay: '0.6s' }}>
-                  30년 전통의 <strong>호관원 프리미엄</strong><br />
-                  <span className="highlight-text">관절 건강을 원하는 분들을 위해</span><br />
-                  특별히 개발된 엄선된 한방 원료로 만들었습니다.
-                </p>
-
-                <div className="hero-phone animate-fade-in" style={{ animationDelay: '0.7s' }}>
-                  <span className="phone-label">지금 바로 전화 상담</span>
-                  <a href="tel:1588-0000" className="phone-number">
-                    <span className="phone-icon">📞</span>햣 
-                    1588-0000
-                  </a>
-                </div>
-                
-                <div className="hero-cta-group animate-fade-in" style={{ animationDelay: '0.8s' }}>
-                  <a href="#consultation" className="btn-primary">
-                    <span>무료 상담 신청</span>
-                    <span className="btn-arrow">→</span>
-                  </a>
-                  <a href="#benefits" className="btn-secondary">
-                    자세히 알아보기
-                  </a>
-                </div>
-              </div>
-              
-              <div className="hero-visual animate-scale-in" style={{ animationDelay: '0.5s' }}>
-                <div className="hero-image-container">
-                  <div className="hero-image-bg"></div>
-                  <div className="hero-product-badge">
-                    <span className="product-badge-text">효도 선물<br />1위</span>
-                  </div>
-                  <div className="hero-stats">
-                    <div className="stat-item">
-                      <div className="stat-icon">👨‍👩‍👧‍👦</div>
-                      <div className="stat-number">500만+</div>
-                      <div className="stat-label">가족이 선택</div>
-                    </div>
-                    <div className="stat-item">
-                      <div className="stat-icon">⭐</div>
-                      <div className="stat-number">98%</div>
-                      <div className="stat-label">만족도</div>
-                    </div>
-                    <div className="stat-item">
-                      <div className="stat-icon">🏆</div>
-                      <div className="stat-number">30년</div>
-                      <div className="stat-label">전통 비법</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div className="scroll-indicator">
-          <span>아래로 스크롤</span>
-          <div className="scroll-line"></div>
-        </div>
-      </section>
-
-      {/* 신뢰 배지 */}
-      <section className="trust-badges" ref={trustRef}>
-        <div className="container">
-          <div className={`badges-grid ${trustVisible ? 'animate-in' : ''}`}>
-            <div className="badge-item" style={{ animationDelay: '0s' }}>
-              <div className="badge-icon">👨‍👩‍👧‍👦</div>
-              <div className="badge-number">
-                <AnimatedCounter end={500} suffix="만+" isVisible={trustVisible} />
-              </div>
-              <div className="badge-text">가족이 선택한</div>
-            </div>
-            <div className="badge-item" style={{ animationDelay: '0.1s' }}>
-              <div className="badge-icon">💝</div>
-              <div className="badge-number">
-                <AnimatedCounter end={98} suffix="%" isVisible={trustVisible} />
-              </div>
-              <div className="badge-text">고객 만족도</div>
-            </div>
-            <div className="badge-item" style={{ animationDelay: '0.2s' }}>
-              <div className="badge-icon">📜</div>
-              <div className="badge-number">
-                <AnimatedCounter end={30} suffix="년" isVisible={trustVisible} />
-              </div>
-              <div className="badge-text">전통 비법</div>
-            </div>
-            <div className="badge-item" style={{ animationDelay: '0.3s' }}>
-              <div className="badge-icon">🏅</div>
-              <div className="badge-number">1위</div>
-              <div className="badge-text">관절 건강식품</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 인증 섹션 */}
-      <section className="certification-section" ref={certRef}>
-        <div className="container">
-          <div className={`cert-content ${certVisible ? 'animate-in' : ''}`}>
-            <div className="cert-text">
-              <h3>믿을 수 있는 <span className="accent">식약처 인증</span> 제품</h3>
-              <p>호관원은 식품의약품안전처로부터 기능성을 인정받은<br />건강기능식품입니다.</p>
-            </div>
-            <div className="cert-badges">
-              <div className="cert-badge">
-                <span className="cert-icon">✓</span>
-                <span className="cert-label">식약처 인증</span>
-              </div>
-              <div className="cert-badge">
-                <span className="cert-icon">✓</span>
-                <span className="cert-label">GMP 인증</span>
-              </div>
-              <div className="cert-badge">
-                <span className="cert-icon">✓</span>
-                <span className="cert-label">HACCP 인증</span>
-              </div>
-              <div className="cert-badge">
-                <span className="cert-icon">✓</span>
-                <span className="cert-label">특허 성분</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 효능 섹션 */}
-      <section id="benefits" className="section benefits" ref={benefitsRef}>
-        <div className="container">
-          <div className={`section-header ${benefitsVisible ? 'animate-in' : ''}`}>
-            <span className="section-tag">효능</span>
-            <h2 className="section-title">
-              이런 분들께<br />
-              <span className="title-accent">호관원을 추천</span>합니다
-            </h2>
-            <p className="section-subtitle">
-              관절 건강이 걱정되시는 분들을 위한<br />
-              맞춤형 건강 솔루션
-            </p>
-          </div>
-          
-          <div className={`benefits-grid ${benefitsVisible ? 'animate-in' : ''}`}>
-            <div className="benefit-card" style={{ animationDelay: '0.1s' }}>
-              <div className="benefit-icon">🚶</div>
-              <h3>계단 오르내리기가<br />힘드신 분</h3>
-              <p>무릎 관절의 연골 건강을 도와 계단 이용이 한결 편안해집니다.</p>
-            </div>
-            <div className="benefit-card" style={{ animationDelay: '0.2s' }}>
-              <div className="benefit-icon">🌅</div>
-              <h3>아침에 관절이<br />뻣뻣하신 분</h3>
-              <p>기상 시 느껴지는 관절 불편함을 줄여 상쾌한 아침을 맞이하세요.</p>
-            </div>
-            <div className="benefit-card" style={{ animationDelay: '0.3s' }}>
-              <div className="benefit-icon">⛰️</div>
-              <h3>등산이나 운동을<br />즐기시는 분</h3>
-              <p>활동적인 생활을 위한 관절 건강 관리에 도움이 됩니다.</p>
-            </div>
-            <div className="benefit-card" style={{ animationDelay: '0.4s' }}>
-              <div className="benefit-icon">💝</div>
-              <h3>부모님 건강이<br />걱정되시는 분</h3>
-              <p>사랑하는 부모님께 드리는 효도 선물로 최고의 선택입니다.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 성분 섹션 */}
-      <section id="ingredients" className="section ingredients" ref={ingredientsRef}>
-        <div className="container">
-          <div className={`section-header ${ingredientsVisible ? 'animate-in' : ''}`}>
-            <span className="section-tag">엄선된 성분</span>
-            <h2 className="section-title">
-              자연에서 찾은<br />
-              <span className="title-accent">프리미엄 원료</span>
-            </h2>
-            <p className="section-subtitle">
-              한의학 전통 비법과 현대 과학이 만나<br />
-              최적의 배합을 완성했습니다
-            </p>
-          </div>
-          
-          <div className={`ingredients-showcase ${ingredientsVisible ? 'animate-in' : ''}`}>
-            <div className="ingredient-card" style={{ animationDelay: '0.1s' }}>
-              <div className="ingredient-visual">
-                <div className="visual-circle">
-                  <span className="ingredient-emoji">🦌</span>
-                </div>
-              </div>
-              <div className="ingredient-info">
-                <h3>녹용</h3>
-                <p>관절 건강과<br />원기 회복에 탁월</p>
-              </div>
-            </div>
-            <div className="ingredient-card" style={{ animationDelay: '0.2s' }}>
-              <div className="ingredient-visual">
-                <div className="visual-circle">
-                  <span className="ingredient-emoji">🌱</span>
-                </div>
-              </div>
-              <div className="ingredient-info">
-                <h3>홍삼</h3>
-                <p>면역력 강화 및<br />피로 회복</p>
-              </div>
-            </div>
-            <div className="ingredient-card" style={{ animationDelay: '0.3s' }}>
-              <div className="ingredient-visual">
-                <div className="visual-circle">
-                  <span className="ingredient-emoji">🌾</span>
-                </div>
-              </div>
-              <div className="ingredient-info">
-                <h3>우슬</h3>
-                <p>활기찬<br />일상을 위한</p>
-              </div>
-            </div>
-            <div className="ingredient-card" style={{ animationDelay: '0.4s' }}>
-              <div className="ingredient-visual">
-                <div className="visual-circle">
-                  <span className="ingredient-emoji">🍃</span>
-                </div>
-              </div>
-              <div className="ingredient-info">
-                <h3>당귀</h3>
-                <p>건강한 순환을<br />돕는 식품</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className={`ingredients-notice ${ingredientsVisible ? 'animate-in' : ''}`}>
-            <p>
-              <strong>🔬 과학적 배합</strong><br />
-              각 성분의 효능을 극대화하는 황금 비율로 배합하였습니다
+      {/* 히어로 섹션 – 원본 사이트처럼 비디오 배너 사용 */}
+      <section className="hero-video-section">
+        <video
+          className="hero-video"
+          src="/hoguanwon.com/img/banner_video.mp4"
+          poster="/hoguanwon.com/img/poster.jpg"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+        <div className="hero-video-overlay">
+          <div className="hero-video-text">
+            <p className="hero-line hero-line-large">관절건강 대표주자</p>
+            <p className="hero-line hero-line-small">
+              제조원 (주)동진제약<br />
+              판매원 자연내림호관원(주)
             </p>
           </div>
         </div>
       </section>
 
-      {/* 효도 선물 섹션 */}
-      <section className="gift-section" ref={giftRef}>
-        <div className="container">
-          <div className={`gift-content ${giftVisible ? 'animate-in' : ''}`}>
-            <div className="gift-text">
-              <span className="gift-tag">🎁 효도 선물</span>
-              <h2 className="gift-title">
-                사랑하는 부모님께<br />
-                <span className="accent">건강을 선물</span>하세요
-              </h2>
-              <p className="gift-description">
-                "엄마, 아빠 오래오래 건강하세요"<br />
-                그 마음을 호관원에 담아 전해드립니다.
-              </p>
-              <ul className="gift-benefits">
-                <li>✓ 정성스러운 선물 포장 무료</li>
-                <li>✓ 감사 카드 동봉 가능</li>
-                <li>✓ 부모님 댁 직접 배송</li>
-              </ul>
-              <a href="#consultation" className="btn-gift">
-                효도 선물 상담받기
-              </a>
-            </div>
-            <div className="gift-visual">
-              <div className="gift-card">
-                <div className="gift-emoji">💝</div>
-                <p className="gift-message">
-                  "건강이 최고의 선물입니다"
-                </p>
-              </div>
-            </div>
+      {/* sec2 ~ sec13 이미지 섹션들 (원본 PC 사이트 배치 기반) */}
+
+      {/* sec2: 배경 + 좌측 타이틀 + 우측 모델 */}
+      <section className="hg-section hg-sec2">
+        <img
+          src="/hoguanwon.com/img/sec2_bg.jpg"
+          alt="호관원 배경화면"
+          className="hg-sec-bg"
+        />
+        <div className="hg-sec2-inner">
+          <div className="hg-sec2-left">
+            <img
+              src="/hoguanwon.com/img/sec2_left_info.png"
+              alt="호관원 타이틀 이미지"
+            />
+          </div>
+          <div className="hg-sec2-right">
+            <img
+              src="/hoguanwon.com/img/sec2_model.png"
+              alt="호관원 모델 이미지"
+            />
           </div>
         </div>
       </section>
 
-      {/* 후기 섹션 */}
-      <section id="testimonials" className="section testimonials" ref={testimonialsRef}>
-        <div className="container">
-          <div className={`section-header ${testimonialsVisible ? 'animate-in' : ''}`}>
-            <span className="section-tag">생생한 후기</span>
-            <h2 className="section-title">
-              호관원과 함께<br />
-              <span className="title-accent">건강을 되찾으신 분들</span>
-            </h2>
-            <p className="section-subtitle">
-              실제 고객님들의 진솔한 경험담입니다
-            </p>
-          </div>
-          
-          <div className={`testimonials-grid ${testimonialsVisible ? 'animate-in' : ''}`}>
-            <div className="testimonial-card" style={{ animationDelay: '0.1s' }}>
-              <div className="testimonial-header">
-                <div className="testimonial-avatar">김</div>
-                <div className="testimonial-meta">
-                  <div className="testimonial-author">김○순 님</div>
-                  <div className="testimonial-info">62세, 주부</div>
-                </div>
-                <div className="testimonial-rating">★★★★★</div>
-              </div>
-              <p className="testimonial-text">
-                3개월째 복용 중인데 계단 오르내리기가 정말 편해졌어요. 
-                <strong>아침에 일어날 때 뻣뻣했던 무릎</strong>이 많이 좋아졌습니다.
-                이제 손녀랑 산책도 다닐 수 있어요.
-              </p>
-              <div className="testimonial-verified">✓ 구매 인증 후기</div>
-            </div>
-            
-            <div className="testimonial-card" style={{ animationDelay: '0.2s' }}>
-              <div className="testimonial-header">
-                <div className="testimonial-avatar">박</div>
-                <div className="testimonial-meta">
-                  <div className="testimonial-author">박○철 님</div>
-                  <div className="testimonial-info">67세, 은퇴자</div>
-                </div>
-                <div className="testimonial-rating">★★★★★</div>
-              </div>
-              <p className="testimonial-text">
-                등산을 좋아하는데 무릎 때문에 포기했었어요. 
-                아들이 효도 선물로 보내줬는데, <strong>덕분에 다시 산에 다닐 수 있게</strong> 되었습니다!
-              </p>
-              <div className="testimonial-verified">✓ 구매 인증 후기</div>
-            </div>
-            
-            <div className="testimonial-card" style={{ animationDelay: '0.3s' }}>
-              <div className="testimonial-header">
-                <div className="testimonial-avatar">이</div>
-                <div className="testimonial-meta">
-                  <div className="testimonial-author">이○영 님</div>
-                  <div className="testimonial-info">45세, 직장인</div>
-                </div>
-                <div className="testimonial-rating">★★★★★</div>
-              </div>
-              <p className="testimonial-text">
-                <strong>부모님께 효도 선물</strong>로 드렸더니 정말 좋아하세요. 
-                어머니께서 "이게 뭐길래 이렇게 좋으냐"고 하시면서 
-                매일 꼬박꼬박 드시고 계세요.
-              </p>
-              <div className="testimonial-verified">✓ 구매 인증 후기</div>
-            </div>
-          </div>
-          
-          <div className={`testimonials-more ${testimonialsVisible ? 'animate-in' : ''}`}>
-            <p>외 <strong>12,847</strong>건의 만족 후기가 있습니다</p>
-          </div>
+      {/* sec3: 편지/손/시그 이미지 레이아웃 */}
+      <section className="hg-section hg-sec3">
+        <img
+          src="/hoguanwon.com/img/sec3_letter_form.png"
+          alt="호관원 편지 배경"
+          className="hg-sec-bg"
+        />
+        <div className="hg-sec3-text">
+          <p>당신이 환하게 웃을 수 있길</p>
+          <p>하루하루 활력이 가득하길</p>
+          <p>그리고</p>
+          <p>관절이 편안하기를...</p>
+        </div>
+        <div className="hg-sec3-layer hg-sec3-hand">
+          <img
+            src="/hoguanwon.com/img/sec3_hand.png"
+            alt="호관원 손 이미지"
+          />
+        </div>
+        <div className="hg-sec3-layer hg-sec3-sig">
+          <img
+            src="/hoguanwon.com/img/sec3_sig.png"
+            alt="호관원 서명 이미지"
+          />
         </div>
       </section>
 
-      {/* 안심 보장 섹션 */}
-      <section className="guarantee-section" ref={guaranteeRef}>
-        <div className="container">
-          <div className={`guarantee-content ${guaranteeVisible ? 'animate-in' : ''}`}>
-            <h3 className="guarantee-title">
-              <span className="guarantee-icon">🛡️</span>
-              호관원의 <span className="accent">안심 보장</span>
-            </h3>
-            <div className="guarantee-grid">
-              <div className="guarantee-item">
-                <div className="guarantee-item-icon">📦</div>
-                <h4>무료 배송</h4>
-                <p>전국 어디서나<br />무료 배송</p>
-              </div>
-              <div className="guarantee-item">
-                <div className="guarantee-item-icon">🔄</div>
-                <h4>100% 환불</h4>
-                <p>불만족 시<br />전액 환불 보장</p>
-              </div>
-              <div className="guarantee-item">
-                <div className="guarantee-item-icon">📞</div>
-                <h4>평생 상담</h4>
-                <p>전문 상담원의<br />친절한 안내</p>
-              </div>
-              <div className="guarantee-item">
-                <div className="guarantee-item-icon">🎁</div>
-                <h4>사은품 증정</h4>
-                <p>구매 고객<br />특별 사은품</p>
-              </div>
+      {/* sec4: 배경 + 타이틀 + 내용 + 모델 + 제품 */}
+      <section className="hg-section hg-sec4">
+        <img
+          src="/hoguanwon.com/img/sec4_bg.jpg"
+          alt="호관원 배경화면"
+          className="hg-sec-bg"
+        />
+        <div className="hg-sec4-layer hg-sec4-title">
+          <img
+            src="/hoguanwon.com/img/sec4_hoguanwon.png"
+            alt="호관원 타이틀 이미지"
+          />
+        </div>
+        <div className="hg-sec4-layer hg-sec4-subtitle">
+          <img
+            src="/hoguanwon.com/img/sec4_hoguanwon2.png"
+            alt="호관원 내용 이미지"
+          />
+        </div>
+        <div className="hg-sec4-layer hg-sec4-model">
+          <img
+            src="/hoguanwon.com/img/sec4_model.png"
+            alt="호관원 모델 이미지"
+          />
+        </div>
+        <div className="hg-sec4-layer hg-sec4-product">
+          <img
+            src="/hoguanwon.com/img/sec4_product.png"
+            alt="호관원 제품 이미지"
+          />
+        </div>
+      </section>
+
+      {/* sec5: 효능 관련 섹션 */}
+      <section className="hg-section hg-sec5">
+        <img
+          src="/hoguanwon.com/img/sec5_bg.jpg"
+          alt="호관원 배경화면"
+          className="hg-sec-bg"
+        />
+        <div className="hg-sec5-layer hg-sec5-title">
+          <img
+            src="/hoguanwon.com/img/sec5_title.png"
+            alt="호관원 타이틀 이미지"
+          />
+        </div>
+        <div className="hg-sec5-layer hg-sec5-info">
+          <img
+            src="/hoguanwon.com/img/sec5_info.png"
+            alt="호관원 효과 인포 이미지"
+          />
+        </div>
+        <div className="hg-sec5-layer hg-sec5-img">
+          <img
+            src="/hoguanwon.com/img/sec5_img.png"
+            alt="호관원 효과 이미지"
+          />
+        </div>
+        <div className="hg-sec5-layer hg-sec5-product">
+          <img
+            src="/hoguanwon.com/img/sec5_product.png"
+            alt="호관원 제품 이미지"
+          />
+        </div>
+      </section>
+
+      {/* sec6: MSM/관절 설명 섹션 */}
+      <section className="hg-section hg-sec6">
+        <img
+          src="/hoguanwon.com/img/sec6_bg.jpg"
+          alt="호관원 MSM 배경"
+          className="hg-sec-bg"
+        />
+        <div className="hg-sec6-layer hg-sec6-title">
+          <img
+            src="/hoguanwon.com/img/sec6_title.png"
+            alt="호관원 MSM 타이틀"
+          />
+        </div>
+        <div className="hg-sec6-layer hg-sec6-con">
+          <img
+            src="/hoguanwon.com/img/sec6_con.png"
+            alt="호관원 MSM 내용"
+          />
+        </div>
+        {/* 세부 아이콘/그래픽들 */}
+        <div className="hg-sec6-layer hg-sec6-icon icon-1">
+          <img
+            src={sec6Alt ? "/hoguanwon.com/img/sec6_005.png" : "/hoguanwon.com/img/sec6_001.png"}
+            alt="아이콘1"
+          />
+        </div>
+        <div className="hg-sec6-layer hg-sec6-icon icon-2">
+          <img
+            src={sec6Alt ? "/hoguanwon.com/img/sec6_006.png" : "/hoguanwon.com/img/sec6_002.png"}
+            alt="아이콘2"
+          />
+        </div>
+        <div className="hg-sec6-layer hg-sec6-icon icon-3">
+          <img
+            src={sec6Alt ? "/hoguanwon.com/img/sec6_007.png" : "/hoguanwon.com/img/sec6_003.png"}
+            alt="아이콘3"
+          />
+        </div>
+        <div className="hg-sec6-layer hg-sec6-icon icon-4">
+          <img
+            src={sec6Alt ? "/hoguanwon.com/img/sec6_008.png" : "/hoguanwon.com/img/sec6_004.png"}
+            alt="아이콘4"
+          />
+        </div>
+      </section>
+
+      {/* sec7: 이중케어/케어 이미지 섹션 */}
+      <section className="hg-section hg-sec7">
+        <img
+          src="/hoguanwon.com/img/sec7_bg.jpg"
+          alt="호관원 배경화면"
+          className="hg-sec-bg"
+        />
+        <div className="hg-sec7-layer hg-sec7-title">
+          <img
+            src="/hoguanwon.com/img/sec7_title.png"
+            alt="호관원 타이틀 이미지"
+          />
+        </div>
+        <div className="hg-sec7-layer hg-sec7-img">
+          <img
+            src="/hoguanwon.com/img/sec7_img.png"
+            alt="호관원 이미지"
+          />
+        </div>
+        <div className="hg-sec7-layer hg-sec7-care">
+          <img
+            src="/hoguanwon.com/img/sec7_care.png"
+            alt="호관원 이중케어 이미지"
+          />
+        </div>
+      </section>
+
+      {/* sec8: 인포/효과 섹션 */}
+      <section className="hg-section hg-sec8">
+        <img
+          src="/hoguanwon.com/img/sec8_bg.jpg"
+          alt="호관원 배경화면"
+          className="hg-sec-bg"
+        />
+        <div className="hg-sec8-layer hg-sec8-title">
+          <img
+            src="/hoguanwon.com/img/sec8_title.png"
+            alt="호관원 타이틀 이미지"
+          />
+        </div>
+        <div className="hg-sec8-layer hg-sec8-img">
+          <img
+            src="/hoguanwon.com/img/sec8_img.png"
+            alt="호관원 인포 이미지"
+          />
+        </div>
+        <div className="hg-sec8-layer hg-sec8-right">
+          <img
+            src="/hoguanwon.com/img/sec8_right_info.png"
+            alt="호관원 효과 이미지"
+          />
+        </div>
+      </section>
+
+      {/* sec9: 그래프/효과 섹션 */}
+      <section className="hg-section hg-sec9">
+        <img
+          src="/hoguanwon.com/img/sec9_bg.jpg"
+          alt="호관원 배경화면"
+          className="hg-sec-bg"
+        />
+        <div className="hg-sec9-layer hg-sec9-title">
+          <img
+            src="/hoguanwon.com/img/sec9_title.png"
+            alt="호관원 타이틀 이미지"
+          />
+        </div>
+        <div className="hg-sec9-video video-shoulder">
+          <video src="/hoguanwon.com/img/shoulder.webm" autoPlay muted loop playsInline style={{ width: '100%', display: 'block' }} />
+        </div>
+        <div className="hg-sec9-video video-elbow">
+          <video src="/hoguanwon.com/img/elbow.webm" autoPlay muted loop playsInline style={{ width: '100%', display: 'block' }} />
+        </div>
+        <div className="hg-sec9-video video-wrist">
+          <video src="/hoguanwon.com/img/wrist.webm" autoPlay muted loop playsInline style={{ width: '100%', display: 'block' }} />
+        </div>
+        <div className="hg-sec9-video video-knee">
+          <video src="/hoguanwon.com/img/knee.webm" autoPlay muted loop playsInline style={{ width: '100%', display: 'block' }} />
+        </div>
+      </section>
+
+      {/* sec10: MSM 이미지/비디오 섹션 */}
+      <section className="hg-section hg-sec10">
+        <img
+          src="/hoguanwon.com/img/sec10_bg.jpg"
+          alt="호관원 배경화면"
+          className="hg-sec-bg"
+        />
+        <div className="hg-sec10-layer hg-sec10-msm">
+          <div className="hg-sec10-msm-inner">
+            <img
+              src="/hoguanwon.com/img/sec10_msm.png"
+              alt="호관원 MSM 이미지"
+            />
+            <div className="hg-sec10-graphs">
+              <img
+                src="/hoguanwon.com/img/grhap_01.gif"
+                alt="호관원 그래프 이미지"
+              />
+              <img
+                src="/hoguanwon.com/img/grhap_02.gif"
+                alt="호관원 그래프 이미지2"
+              />
             </div>
           </div>
         </div>
+        <div className="hg-sec10-layer hg-sec10-bottom">
+          <img
+            src="/hoguanwon.com/img/sec10_bottom.png"
+            alt="호관원 설명 이미지"
+          />
+        </div>
       </section>
+
+      {/* sec11: 제품/타이틀 섹션 */}
+      <section className="hg-section hg-sec11">
+        <img
+          src="/hoguanwon.com/img/sec11_bg.jpg"
+          alt="호관원 배경화면"
+          className="hg-sec-bg"
+        />
+        <div className="hg-sec11-layer hg-sec11-title">
+          <img
+            src="/hoguanwon.com/img/sec11_title.png"
+            alt="호관원 타이틀 이미지"
+          />
+        </div>
+      </section>
+
+      {/* sec12: 인포/로고 섹션 */}
+      <section className="hg-section hg-sec12">
+        <img
+          src="/hoguanwon.com/img/sec12_bg.jpg"
+          alt="호관원 배경화면"
+          className="hg-sec-bg"
+        />
+        <div className="hg-sec12-layer hg-sec12-title">
+          <img
+            src="/hoguanwon.com/img/sec12_title.png"
+            alt="호관원 타이틀 이미지"
+          />
+        </div>
+        <div className="hg-sec12-layer hg-sec12-info">
+          <img
+            src="/hoguanwon.com/img/sec12_info.png"
+            alt="호관원 인포 이미지"
+          />
+        </div>
+        <div className="hg-sec12-layer hg-sec12-logo">
+          <img
+            src="/hoguanwon.com/img/sec12_logo.png"
+            alt="호관원 로고 이미지"
+          />
+        </div>
+        <div className="hg-sec12-layer hg-sec12-img img-animated">
+          <img
+            src={
+              sec12Index === 0
+                ? "/hoguanwon.com/img/sec12_img01.png"
+                : sec12Index === 1
+                  ? "/hoguanwon.com/img/sec12_img02.png"
+                  : "/hoguanwon.com/img/sec12_img03.png"
+            }
+            alt="호관원 이미지"
+          />
+        </div>
+      </section>
+
+      {/* sec13: 최하단 상담/전화 섹션 (비주얼만, 실제 폼은 React ConsultationForm 사용) */}
+      <section className="hg-section hg-sec13">
+        <img
+          src="/hoguanwon.com/img/sec13_bg.jpg"
+          alt="호관원 하단 배경"
+          className="hg-sec-bg"
+        />
+        <div className="hg-sec13-layer hg-sec13-logo">
+          <img
+            src="/hoguanwon.com/img/sec13_logo.png"
+            alt="호관원 로고"
+          />
+        </div>
+        <div className="hg-sec13-layer hg-sec13-model">
+          <img
+            src="/hoguanwon.com/img/sec13_model.png"
+            alt="호관원 모델"
+          />
+        </div>
+        <div className="hg-sec13-layer hg-sec13-phone">
+          <img
+            src="/hoguanwon.com/img/sec13_phone.png"
+            alt="호관원 상담 전화"
+          />
+        </div>
+        <div className="hg-sec13-layer hg-sec13-writing">
+          <img
+            src="/hoguanwon.com/img/sec13_writing.png"
+            alt="호관원 문구 이미지"
+          />
+        </div>
+      </section>
+
+      {/* trust-badges, 인증, 효능 섹션 제거 (원본 이미지 섹션만 사용) */}
 
       {/* 상담 신청 섹션 */}
       <section id="consultation" className="consultation" ref={consultationRef}>
@@ -915,7 +928,7 @@ function App() {
                 <span>HACCP</span>
               </div>
             </div>
-            
+
             <div className="footer-contact">
               <h4>고객센터</h4>
               <p className="contact-number">1588-0000</p>
@@ -923,7 +936,7 @@ function App() {
               <p>토·일·공휴일 휴무</p>
               <p className="contact-email">help@hogwanwon.com</p>
             </div>
-            
+
             <div className="footer-links">
               <h4>바로가기</h4>
               <a href="#benefits">효능</a>
@@ -932,7 +945,7 @@ function App() {
               <a href="#consultation">상담신청</a>
             </div>
           </div>
-          
+
           <div className="footer-bottom">
             <p className="company-info">
               (주)호관원 | 대표: 홍길동 | 사업자등록번호: 123-45-67890<br />
@@ -945,7 +958,7 @@ function App() {
           </div>
         </div>
       </footer>
-      
+
       {/* 플로팅 CTA 버튼 */}
       <a href="#consultation" className={`floating-cta ${scrollY > 500 ? 'visible' : ''}`}>
         <span className="floating-cta-icon">📞</span>

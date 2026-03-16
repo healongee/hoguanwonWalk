@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="imagetoolbar" content="no">
+    <title>호관원프리미엄골드</title>
+    <meta property="og:title" content="호관원프리미엄골드">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="http://hoguanwon.net/m/img/44.png">
+    <meta name="description" content="천하장사 이만기의 관절 건강기능식품, 관절 통증 감소">
+    <!-- css -->
+    <link rel="stylesheet" href="css/jquery.bxslider.css">
+    <link rel="stylesheet" href="css/default.css">
+    <link rel="stylesheet" href="css/renewal_240919.css">
+    <link href="https://vjs.zencdn.net/7.10.2/video-js.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullpage.js/dist/fullpage.min.css"> -->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/font.css">
+    <link rel="stylesheet" type="text/css" href="css/style_.css">
+    <link rel="stylesheet" type="text/css" href="css/swiper-bundle.css">
+	<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+
+    <!-- script -->
+    <script src="js/jquery-1.8.3.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.menu.js"></script>
+    <script src="js/wrest.js"></script>
+    <script src="js/jquery.bxslider.min.js"></script>
+	<script src="js/swiper-bundle.min.js"></script>
+	<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        var ua = window.navigator.userAgent;
+        if (/lgtelecom/i.test(ua) || /Android/i.test(ua) || /blackberry/i.test(ua) || /iPhone/i.test(ua) || /iPad/i.test(ua) || /samsung/i.test(ua) || /symbian/i.test(ua) || /sony/i.test(ua) || /SCH-/i.test(ua) || /SPH-/i.test(ua) || /nokia/i.test(ua) || /bada/i.test(ua) || /semc/i.test(ua) || /IEMobile/i.test(ua) || /Mobile/i.test(ua) || /PPC/i.test(ua) || /Windows CE/i.test(ua) || /Windows Phone/i.test(ua) || /webOS/i.test(ua) || /Opera Mini/i.test(ua) || /Opera Mobi/i.test(ua) || /POLARIS/i.test(ua) || /SonyEricsson/i.test(ua) || /symbos/i.test(ua)) {
+            //window.location.replace('/m/index.php'+window.location.search);
+            window.location.replace('/m/index.html'+window.location.search);
+        }
+    </script>
+
+<script>
+
+    var bSend_ing = false;
+    //매체코드
+    $.urlParam = function(name) {
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        if (results == null) {
+            return null;
+        } else {
+            return results[1] || 0;
+        }
+    }
+
+    var query = window.location.search;
+    var param = new URLSearchParams(query);
+    var n_keyword = param.get('n_keyword');
+
+    $(document).ready(function(){
+        $("input[name='n_keyword']").val(n_keyword);
+    });
+
+
+
+    //클릭시 디비연동
+    function input_db(num) {
+        if (!checkForm(num)) {
+            return;
+        }
+
+        // 모음,자음 차단
+        var chk = $("#name"+num).val();
+            if(chk.match(/([^가-힣\x20])/i)){
+                alert("이름을 정확히 입력해주세요");
+                $('#name'+num).focus();
+                return;
+            }
+        // 가운데 0,1 차단
+			if ($("#tel"+num+"-2").val() < 2000) {
+				alert("유효하지 않는 휴대폰번호입니다.");
+				$("#tel"+num+"-2").focus();
+				return false;
+			}
+
+        if (bSend_ing) {
+            alert("이미 신청하셨습니다.");
+            return;
+        }
+
+        // 마스터키
+        var ckey = "";
+        if ($.urlParam("ckey") != null)
+            ckey = $.urlParam("ckey");
+
+        // 매체코드
+        var pid = "";
+        if ($.urlParam("pid") != null) {
+            pid = $.urlParam("pid");
+        } else {
+            pid = "매체사정보 없음";
+        }
+
+        // 광고주키
+        var ak = "";
+        if ($.urlParam("ak") != null)
+            ak = $.urlParam("ak");
+
+        var check1 = "";
+        var inChkedCnt = $('input:checkbox[name=checkbox1]:checked').length;
+        $('input:checkbox[name=checkbox1]:checked').each(function(i) {
+            if (i == 0) {
+                check1 += $(this).val();
+            } else {
+                check1 = check1 + ',' + $(this).val();
+            }
+        });
+
+        // 광고주 센더
+        var sender = '';
+        if ($.urlParam('s_url') != null)
+            sender = $.urlParam('s_url');
+
+        var tel = $('#tel'+num+'-1').val()+$('#tel'+num+'-2').val()+$('#tel'+num+'-3').val();
+
+        var gender_chk = '';
+        if(num == 1){ //상단입력창
+            gender_chk = $('input:radio[name=radio1]:checked').val(); //성별
+        }else{	//하단입력창
+            gender_chk = $('input:radio[name=radio2]:checked').val(); //성별
+        }
+
+		bSend_ing = true;
+
+        $.ajax({
+            type:'GET',
+            async: false,
+            dataType: "json",
+            url : "https://com.daine.co.kr/hgw/in.jsp",
+            data: {
+				 "type" : "030",
+                 "referer" : document.referrer,
+                 "name" : $('#name'+num).val(),
+                 "age" : $('#age'+num).val(),
+                 "phone" : tel,
+				 //"gender" : $("input:radio[name='radio1']:checked").val(),
+                 "gender" : gender_chk,
+                 "memo" : $('#comment' + num).val()
+            },
+            success: function(data){
+				if (data.result == "0000") {
+					alert("신청이 정상 처리되었습니다");
+	                location.href="https://hoguanwon.com";
+				} else {
+					alert("신청이 정상 처리되었습니다");
+					bSend_ing = false;
+				}
+            },
+            error: function(xhr,b,c) {
+                console.log(xhr);
+                console.log('실패 - ', xhr+b+c);
+				bSend_ing = false;
+            }
+        });
+    }
+    function go_link() {
+        $('html, body').stop().animate({
+            scrollTop: $("#db_wrap").offset().top
+        });
+    }
+</script>
+
+<script src="../common/common.js"></script>
+</head>
+<body oncontextmenu="return false">
+    <form id="frm" name="frm" method="POST">
+        <input type="hidden" id="datakind" name="datakind" value="">
+        <input type="hidden" id="ad_key" name="ad_key" value="">
+        <input type="hidden" id="referrer" name="referrer" value="">
+        <input type="hidden" id="data1" name="data1" value="">
+        <input type="hidden" id="data2" name="data2" value="">
+        <input type="hidden" id="data3" name="data3" value="">
+        <input type="hidden" id="data4" name="data4" value="">
+        <input type="hidden" id="data5" name="data5" value="">
+        <input type="hidden" id="data6" name="data6" value="">
+        <input type="hidden" id="data7" name="data7" value="">
+        <input type="hidden" id="data8" name="data8" value="">
+        <input type="hidden" id="data9" name="data9" value="">
+        <input type="hidden" id="data10" name="data10" value="">
+        <input type="hidden" id="data11" name="data11" value="">
+        <input type="hidden" id="data12" name="data12" value="">
+        <input type="hidden" id="data13" name="data13" value="">
+        <input type="hidden" id="data14" name="data14" value="">
+        <input type="hidden" id="data15" name="data15" value="">
+        <input type="hidden" id="data16" name="data16" value="">
+        <input type="hidden" id="data17" name="data17" value="">
+        <input type="hidden" id="data18" name="data18" value="">
+        <input type="hidden" id="data19" name="data19" value="">
+        <input type="hidden" id="data20" name="data20" value="">
+        <input type="hidden" id="data21" name="data21" value="">
+        <input type="hidden" id="data22" name="data22" value="">
+        <input type="hidden" id="data23" name="data23" value="">
+        <input type="hidden" id="data24" name="data24" value="">
+        <input type="hidden" id="data25" name="data25" value="">
+        <input type="hidden" id="data26" name="data26" value="">
+        <input type="hidden" id="data27" name="data27" value="">
+        <input type="hidden" id="data28" name="data28" value="">
+        <input type="hidden" id="data29" name="data29" value="">
+        <input type="hidden" id="data30" name="data30" value="">
+        <input type="hidden" id="n_keyword" name="n_keyword" value="">
+    </form>
+
+<!-- 팝업시작 -->
+<!-- 	<div id="popup_1" class="popup_num"> -->
+<!--         <div class="popup1"> -->
+<!-- 			<img src="/images/pop/albumin.jpg"> -->
+<!--             <p class="close"> -->
+<!--                 <label for="chkbox"> -->
+<!--                     <input type="checkbox" name="chkbox1" id="chkbox1" onclick="closeByToday(1)"> -->
+<!--                     24시간 동안 다시 열람하지 않습니다. -->
+<!--                 </label> -->
+<!--                 <button class="closeBtn1" onclick="layerClose(1);">닫기</button> -->
+<!--             </p> -->
+<!--         </div> -->
+<!--     </div> -->
+	
+<!-- 	<div id="popup_2" class="popup_num" style="display: none;"> -->
+<!-- 		<div class="popup"> -->
+<!-- 			<img src="/images/pop/taxi3_img.jpg"> -->
+<!-- 			<p class="close"> -->
+<!-- 				<label for="chkbox2"> -->
+<!-- 					<input type="checkbox" name="chkbox2" id="chkbox2"> -->
+<!-- 					24시간 동안 다시 열람하지 않습니다. -->
+<!-- 				</label> -->
+<!-- 				<button class="closeBtn2" onclick="layerClose(2);">닫기</button> -->
+<!-- 			</p> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+
+	<style>
+		.popup_num{top: 4px; left: 5px; display: block; position: absolute; z-index: 99999; width: 24%;}
+		#popup_1.popup_num{left: 10px;}
+		#popup_2.popup_num{left: 405px;}
+		#popup_4.popup_num{width:320px; top: 40px; left: 40px;}
+		.popup_num [class^="popup"]{position: absolute; border: 1px solid #e9e9e9; background: #fff;}
+		.popup_num [class^="close"] {padding: 10px 0;background: #000;color: #fff; text-align: right;padding-right: 10px; margin-top: -5px;}
+		.popup_num [class^="close"] label { margin-right: 5px; padding: 2px 5px 4px 10px;border: 0; background: #393939; color: #fff;}
+		.popup_num [class^="close"] button {margin-right: 5px;padding: 5px 10px;border: 0;background: #393939;color: #fff;font-family: "Noto Sans KR", sans-serif;font-size: 14px;}
+	</style>
+
+	<script>
+		function checkPopupVisibility(popupId) {
+			const lastClosed = localStorage.getItem(`popupClosed_${popupId}`);
+			if (lastClosed) {
+				const now = new Date();
+				const closeTime = new Date(lastClosed);
+				const diff = now - closeTime;
+				const hours = diff / (1000 * 60 * 60);
+				if (hours < 24) {
+					document.getElementById(`popup_${popupId}`).style.display = 'none';
+					return;
+				}
+			}
+			document.getElementById(`popup_${popupId}`).style.display = 'block';
+		}
+
+		function layerClose(popupId) {
+			const checkbox = document.getElementById(`chkbox${popupId}`);
+			if (checkbox.checked) {
+				localStorage.setItem(`popupClosed_${popupId}`, new Date().toString());
+			}
+			document.getElementById(`popup_${popupId}`).style.display = 'none';
+		}
+
+		window.onload = function() {
+			checkPopupVisibility(1);
+			checkPopupVisibility(2);
+			checkPopupVisibility(3);
+			checkPopupVisibility(4);
+		};
+	</script>
+
+<!-- 팝업 끝 -->
+
+	<!-- 픽스 버튼 시작 -->
+	
+	<div class="fixed_top go-db">
+		<a href="index.html#dbSection">
+			<img src="img/TOP.png" alt="">
+		</a>
+	</div>	
+	
+	<style>
+		.fixed_top{position:fixed; top:5%; right:1%; width:177px; z-index:10;}
+		.fixed_top a{display:block;}
+		.fixed_top a img{display:block; width:100%;}
+	</style>
+	
+	<script>
+	  document.querySelector('.go-db').addEventListener('click', function(e){
+		e.preventDefault();
+
+		const target = document.querySelector('.db_top');
+		if(!target) return;
+
+		target.scrollIntoView({
+		  behavior: 'smooth',
+		  block: 'start'
+		});
+	  });
+	</script>
+	
+	<!-- 픽스 버튼 제어는 최하단 풀페이지 제어에서 확인 가능 -->
+	<!-- 픽스 버튼 끝 -->
+
+    <div id="wrapper">
+		<section class="section section1">
+			<video src="img/banner_video.mp4" autoplay muted loop playsinline poster="img/poster.jpg"></video>
+			<div class="banner_text">
+				<span style="font-size: 100px;">관절건강 대표주자</span>
+				<span style="font-size: 24px; text-align: right;">제조원 (주)동진제약<br>판매원 자연내림호관원(주)</span>
+			</div>
+		</section>
+		<section class="section section2">
+			<img src="img/sec2_bg.jpg" alt="호관원 배경화면">
+			<div class="on_contents_01" data-aos="fade-up">
+				<img src="img/sec2_left_info.png" alt="호관원 타이틀 이미지">
+			</div>
+			<div class="on_contents_02">
+				<img src="img/sec2_model.png" alt="호관원 모델 이미지">
+			</div>
+			<div class="on_contents_03 fill-text">
+                <p>
+                    <span class="base">당신이 환하게 웃을 수 있길</span>
+                    <span class="fill">당신이 환하게 웃을 수 있길</span>
+                </p>
+                <p>
+                    <span class="base">하루하루 활력이 가득하길</span>
+                    <span class="fill">하루하루 활력이 가득하길</span>
+                </p>
+                <p>
+                    <span class="base">그리고</span>
+                    <span class="fill">그리고</span>
+                </p>
+                <p>
+                    <span class="base">관절이 편안하기를...</span>
+                    <span class="fill">관절이 편안하기를...</span>
+                </p>
+            </div>
+            <script>
+			  const container = document.querySelector('.on_contents_03');
+			  let isActive = false;
+
+			  function onScroll(){
+				const rect = container.getBoundingClientRect();
+				const vh = window.innerHeight;
+
+				// 🔑 트리거 기준선 (화면 60%)
+				const triggerLine = vh * 0.6;
+
+				// 기준선 도달 여부
+				if(rect.top < triggerLine && !isActive){
+				  container.classList.add('is-active');
+				  isActive = true;
+				}
+
+				// 다시 위로 올라갔을 때
+				if(rect.top > triggerLine && isActive){
+				  container.classList.remove('is-active');
+				  isActive = false;
+				}
+			  }
+
+			  window.addEventListener('scroll', onScroll);
+			</script>
+
+
+			<div class="on_contents_04">
+				<img src="img/sec3_sig.png" alt="호관원 편지 이름 이미지">
+			</div>
+			<div class="on_contents_05">
+				<img src="img/sec3_hand.png" alt="호관원 손 이미지">
+			</div>
+			<div class="on_contents_06">
+				<img src="img/sec3_letter_form.png" alt="호관원 손 이미지">
+			</div>
+		</section>
+		<section class="section section3">
+			<img src="img/sec4_bg.jpg" alt="호관원 배경화면">
+			<div class="on_contents_07" data-aos="fade-up">
+				<img src="img/sec4_hoguanwon.png" alt="호관원 타이틀 이미지">
+			</div>
+			<div class="on_contents_08" data-aos="fade-up">
+				<img src="img/sec4_hoguanwon2.png" alt="호관원 내용 이미지">
+			</div>
+			<div class="on_contents_09">
+				<img src="img/sec4_model.png" alt="호관원 편지 모델 이미지">
+			</div>
+			<div class="on_contents_10">
+				<img src="img/sec4_product.png" alt="호관원 제품 이미지">
+			</div>
+		</section>
+		<section class="section section4">
+			<img src="img/sec5_bg.jpg" alt="호관원 배경화면 이미지">
+			<div class="on_contents_11">
+				<img src="img/sec5_img.png" alt="호관원 효과 이미지">
+			</div>
+			<div class="on_contents_12">
+				<img src="img/sec5_info.png" alt="호관원 인포 이미지">
+			</div>
+			<div class="on_contents_13" data-aos="fade-up">
+				<img src="img/sec5_product.png" alt="호관원 제품 이미지">
+			</div>
+			<div class="on_contents_14">
+				<img src="img/sec5_s1.png" alt="호관원 목차 이미지">
+			</div>
+			<div class="on_contents_15">
+				<img src="img/sec5_title.png" alt="호관원 타이틀 이미지">
+			</div>
+		</section>
+		<section class="section section5">
+			<img src="img/sec6_bg.jpg" alt="호관원 배경화면 이미지">
+			<div class="on_contents_16">
+				<img src="img/sec6_s2.png" alt="호관원 목차 이미지">
+			</div>
+			<div class="on_contents_19">
+				<img src="img/sec6_con.png" alt="호관원 목차 이미지">
+			</div>
+			<div class="on_contents_17">
+				<img src="img/sec6_title.png" alt="호관원 타이틀 이미지">
+			</div>
+			<div class="on_contents_18">
+			  <!-- 메인 슬라이더 -->
+				<div class="swiper on18-main">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide">
+							<img src="img/sec6_001.png" alt="">
+						</div>
+
+						<div class="swiper-slide">
+							<img src="img/sec6_002.png" alt="">
+						</div>
+
+						<div class="swiper-slide">
+							<img src="img/sec6_003.png" alt="">
+						</div>
+
+						<div class="swiper-slide">
+							<img src="img/sec6_004.png" alt="">
+						</div>
+						
+						<div class="swiper-slide">
+							<img src="img/sec6_005.png" alt="">
+						</div>
+
+						<div class="swiper-slide">
+							<img src="img/sec6_006.png" alt="">
+						</div>
+
+						<div class="swiper-slide">
+							<img src="img/sec6_007.png" alt="">
+						</div>
+
+						<div class="swiper-slide">
+							<img src="img/sec6_008.png" alt="">
+						</div>
+					</div>
+				</div>
+			</div>
+			<script>
+				const main = new Swiper('.on18-main', {
+					loop: true,
+					slidesPerView: 4,      // ✅ 추가: 한 화면에 4개
+					spaceBetween: 10,      // ✅ (선택) 간격
+					autoplay: { delay: 3000, disableOnInteraction: false },
+				});
+			</script>	
+		</section>
+		<section class="section section6">
+			<img src="img/sec7_bg.jpg" alt="호관원 배경화면 이미지">
+			<div class="on_contents_19">
+				<img src="img/sec7_care.png" alt="호관원 이중케어 이미지">
+			</div>
+			<div class="on_contents_20">
+				<img src="img/sec7_img.png" alt="호관원 원료 이미지">
+			</div>
+			<div class="on_contents_21">
+				<img src="img/sec7_info.png" alt="호관원 인포 이미지">
+			</div>
+			<div class="on_contents_22">
+				<img src="img/sec7_s3.png" alt="호관원 목차 이미지">
+			</div>
+			<div class="on_contents_23">
+				<img src="img/sec7_title.png" alt="호관원 타이틀 이미지">
+			</div>
+		</section>
+		<section class="section section7">
+			<img src="img/sec8_bg.jpg" alt="호관원 배경화면 이미지">
+			<div class="on_contents_24" data-aos="fade-up">
+				<img src="img/sec8_right_info.png" alt="호관원 인포 이미지">
+			</div>
+			<div class="on_contents_25">
+				<img src="img/sec8_s4.png" alt="호관원 목차 이미지">
+			</div>
+			<div class="on_contents_26">
+				<img src="img/sec8_title.png" alt="호관원 타이틀 이미지">
+			</div>
+			<div class="on_contents_27">
+				<img src="img/sec8_img.png" alt="호관원 제품 이미지">
+			</div>
+		</section>
+		<section class="section section8">
+			<img src="img/sec9_bg.jpg" alt="호관원 배경화면 이미지">
+			<div class="on_contents_27">
+				<img src="img/sec9_s5.png" alt="호관원 목차 이미지">
+			</div>
+			<div class="on_contents_28">
+				<img src="img/sec9_title.png" alt="호관원 타이틀 이미지">
+			</div>
+			<div class="contents8_wrap">
+				<div class="contents_29">
+					<video src="img/knee.webm" autoplay muted loop playsinline></video>
+					<video src="img/elbow.webm" autoplay muted loop playsinline></video>
+				</div>
+				<div class="contents_30">
+					<video src="img/shoulder.webm" autoplay muted loop playsinline></video>
+					<video src="img/wrist.webm" autoplay muted loop playsinline></video>
+				</div>
+			</div>
+		</section>
+		<section class="section section9">
+			<img src="img/sec10_bg.jpg" alt="호관원 배경화면 이미지">
+			<div class="on_contents_31">
+				<img src="img/sec10_s6.png" alt="호관원 이미지">
+			</div>
+			<div class="on_contents_32">
+				<img src="img/sec10_msm.png" alt="호관원 msm 이미지">
+			</div>
+			<div class="on_contents_33">
+				<img src="img/grhap_01.gif" alt="호관원 그래프 이미지">
+			</div>
+			<div class="on_contents_34">
+				<img src="img/grhap_02.gif" alt="호관원 그래프 이미지2">
+			</div>
+			<div class="on_contents_35">
+				<img src="img/sec10_bottom.png" alt="호관원 타이틀 이미지">
+			</div>
+		</section>
+		<section class="section section10">
+			<img src="img/sec11_bg.jpg" alt="호관원 배경화면 이미지">
+			<div class="on_contents_36" data-aos="fade-up">
+				<img src="img/sec11_title.png" alt="호관원 이미지">
+			</div>
+		</section>
+		<section class="section section11">
+			<img src="img/sec12_bg.jpg" alt="호관원 배경화면 이미지">
+			<div class="on_contents_37">
+				<img src="img/sec12_title.png" alt="호관원 타이틀 이미지">
+			</div>
+			<div class="on_contents_38">
+			  <div class="swiper on38-swiper">
+				<div class="swiper-wrapper">
+				  <div class="swiper-slide">
+					<img src="img/sec12_img01.png" alt="">
+				  </div>
+				  <div class="swiper-slide">
+					<img src="img/sec12_img02.png" alt="">
+				  </div>
+				  <div class="swiper-slide">
+					<img src="img/sec12_img03.png" alt="">
+				  </div>
+				</div>
+			  </div>
+			</div>
+			<script>
+			  const on38 = new Swiper('.on38-swiper', {
+				slidesPerView: 1,   // ✅ 한 장씩
+				loop: true,
+				speed: 600,
+				autoplay: {
+				  delay: 3000,
+				  disableOnInteraction: false,
+				},
+			  });
+			</script>
+			<div class="on_contents_39">
+				<img src="img/sec12_info.png" alt="호관원 설명 이미지">
+			</div>
+			<div class="on_contents_40">
+				<img src="img/sec12_logo.png" alt="호관원 로고 이미지">
+			</div>
+		</section>
+		
+		<div class="section section12" id="dbSection">
+			<div class="section12_bg">
+				<img src="img/sec13_bg.jpg" alt="">
+			</div>
+			<div class="section12_wrap">
+				<div class="back">
+					<div class="db_top">
+						<div class="on_title fade_inDown">
+							<img src="img/sec13_writing.png" alt="">
+							<img src="img/sec13_logo.png" alt="">
+							<img src="img/sec13_phone.png" alt="">
+						</div>
+						<div class="contents01">
+							<img src="img/sec13_model.png" alt="">
+						</div>
+					</div>
+					<div class="db_wrap">
+						<ul class="db_list">
+							<li class="db_flex_wrap">
+								<div>
+									<span>성함<span style="color:#eb0000; font-size:18px;">*</span></span>
+									<input type="text" name="name1" id="name1" onkeyup="onlyKorean(this);" maxlength="5">
+								</div>
+								<div>
+									<span>연락처<span style="color:#eb0000; font-size:18px;">*</span></span>
+									<ul class="tel_wrap">
+										<li>
+											<select name="tel1-1" id="tel1-1" class="tel"> 
+												<option value="010">010</option>
+												<option value="011">011</option>
+												<option value="016">016</option>
+												<option value="017">017</option>
+												<option value="018">018</option>
+												<option value="019">019</option>
+											</select>
+										</li>
+										<li>
+											<input type="tel" name="tel1-2" id="tel1-2" onkeydown="return onlyNumber(event)" onkeyup="removeChar(event)" maxlength="4" class="tel">
+										</li>
+										<li>
+											<input type="tel" name="tel1-3" id="tel1-3" onkeydown="return onlyNumber(event)" onkeyup="removeChar(event)" maxlength="4" class="tel">
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li class="db_flex_wrap">
+								<div>
+									<span>나이<span style="color:#eb0000; font-size:18px;">*</span></span>
+									<input type="text" name="age1" id="age1" maxlength="2" required onkeydown="return onlyNumber(event)" onkeyup="removeChar(event)"> 
+								</div>
+								<div class="gender_wrap">
+									<span>성별<span style="color:#eb0000; font-size:18px;">*</span></span>
+									<div>
+										<input type="radio" name="radio1" class="radio1" value="남" id="man" checked=""><label for="man">남</label>
+										<input type="radio" name="radio1" class="radio1" value="여" id="woman" ><label for="woman">여</label>
+									</div>
+								</div>
+							</li>
+							<li class="db_other_wrap">
+								<div>
+									<span>문의내용<span style="color:#eb0000; font-size:18px;">*</span></span>
+									<input type="text" name="comment1" id="comment1" class="textarea"  required itemname="문의내용" style="height: 120px;">
+								</div>
+								<ul class="agree_wrap">
+									<li>
+										<input type="checkbox" id="agree1-1" name="agree1-1" checked="checked">
+										<label for="agree1-1">개인정보 수집이용 동의(필수)</label>
+										<a onclick="policy1();" class="btn-example">[약관보기]</a>
+									</li>
+									<li>
+										<input type="checkbox" id="agree1-2" name="agree1-2" checked="checked">
+										<label for="agree1-2">제 3자 정보 제공 동의(필수)</label>
+										<a onclick="policy2();" class="btn-example">[약관보기]</a>
+									</li>
+									<li>
+										<input type="checkbox" id="agree1-3" name="agree1-3" checked="checked">
+										<label for="agree1-3">마케팅 정보 수신동의(선택)</label>
+										<a onclick="policy3();" class="btn-example">[약관보기]</a>
+									</li>
+									<li>
+										<input type="checkbox" id="agree1-4" name="agree1-4" checked="checked">
+										<label for="agree1-4">개인정보 처리방침</label>
+										<a onclick="policy4();" class="btn-example">[약관보기]</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<div class="logo_db_btn_wrap">
+							<a class="db_btn" onclick="input_db(1)">무료상담 신청하기</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<footer class="footer">
+			<div class="footer_wrap">
+				<div class="footer_top">
+					<img src="img/footer_logo.png" alt="">
+				</div>
+				<div class="footer_bottom">
+					<div class="footer_info">
+						주식회사 새로움   대전광역시 서구 대덕대로 325, 421(월평동, 스타케이트)   대표 박준규<br>
+						전화번호 1661-3352   사업자등록번호 448-81-01442   개인정보관리책임자 박준규<br>
+						전화권유판매업신고증 제2018-대전서구-0023호   건강기능식품광고심의필 251210151
+					</div>
+					<div class="footer_copy">
+						Copyrights (C) 2026 호관원.All Rights Reserved.
+					</div>
+				</div>
+			</div>	
+		</footer>
+			
+		<!-- **기존 풀페이지 스크립트**
+		<script>
+			var fixedTop = document.querySelector('.fixed_top');
+			new fullpage('#fullpage', {
+				// 옵션 설정
+				sectionsColor: ['#f2f2f2', '#4BBFC3', '#7BAABE', 'whitesmoke'],
+				anchors: ['1Page', '2Page', '3Page', '4Page', '5Page', '6Page', '7Page', '8Page', '9Page', '10Page', 'footer'],
+				menu: '#menu',
+				sectionSelector: '.section',
+				scrollOverflow: true,
+				navigation: true,
+				scrollingSpeed: 1000,
+				afterLoad: function(origin, destination, direction) {
+					// destination.index는 현재 활성화된 섹션의 인덱스입니다.
+					// 0부터 시작하므로 #10Page가 두 번째 섹션이면 destination.index는 1입니다.
+					
+					// #10Page 섹션에 도달했을 때
+					if (destination.anchor === "10Page") {
+						fixedTop.style.display = 'none';  // fixed_top 숨기기
+					}
+					// #footer 섹션에 도달했을 때
+					else if (destination.anchor === "1Page") {
+						fixedTop.style.display = 'none';  // fixed_top 숨기기
+					}else if (destination.anchor === "footer") {
+						fixedTop.style.display = 'none';  // fixed_top 숨기기
+					} else {
+						fixedTop.style.display = 'block'; // 다른 섹션에서는 fixed_top 보이기
+					}
+				}
+			});
+		</script> -->
+</div>
+<script>
+  AOS.init();
+</script>
+</body>
+</html>

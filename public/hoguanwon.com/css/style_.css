@@ -1,0 +1,80 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+a{
+	text-decoration: none;
+}
+ul,ol,dl{
+	list-style: none;
+}
+img, video{
+	display: block;
+	width: 100%;
+}
+
+body{
+	font-family: "Noto Sans KR", sans-serif;
+	margin: 0 auto;
+	/*min-width:1400px;*/
+}
+#wrapper{
+	width: 100%;
+	margin: 0 auto;
+}
+.section{
+	overflow: hidden;
+	position: relative;
+}
+
+
+.section1{
+	height: 860px;
+}
+.section1 .main_banner{}
+.section1 .main_banner .banner_text{}
+.section1 .main_banner .banner_text span{}
+
+
+.section2{}
+.section2 .section2_wrap{
+	position: relative;
+}
+.section2 .section2_wrap .section2_1{}
+.section2 .section2_wrap .section2_1 .section2_1_text{
+	width: 35%;
+    left: 10%;
+	top: 20%;
+    position: absolute;
+}
+.section2 .section2_wrap .section2_1 .section2_1_img{
+	width: 46%;
+	top: 2%;
+    position: absolute;
+    right: 0%;
+}
+.section2-1 .section2_2{
+	position: relative;
+}
+.section2-1 .section2_2 .secton2_2_back{
+	position: absolute;
+    top: -260px;
+	z-index: 1;
+}
+.section2-1 .section2_2 .section2_2_wrap{}
+.section2-1 .section2_2 .section2_2_wrap .letter{
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+	position: absolute;
+    z-index: 2;
+    transform: translate(38%, 20%);
+	gap:50px;
+}
+.section2-1 .section2_2 .section2_2_wrap .letter img:first-child{
+	width: 76%;
+}
+.section2-1 .section2_2 .section2_2_wrap .letter img:last-child{
+	width: 50%;
+}
+.section2-1 .section2_2_hand{}
