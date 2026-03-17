@@ -177,13 +177,13 @@
 }
 
 .hg-mobile-view .hg-sec4-subtitle {
-  top: 29%;
+  top: 31%;
   left: 50% !important;
-  transform: translateX(-50%) scale(0.8) !important;
+  transform: translateX(-50%) scale(1.45) !important;
 }
 
 .hg-mobile-view .hg-sec4-subtitle img {
-  max-width: 90vw;
+  max-width: 96vw;
 }
 
 .hg-mobile-view .hg-sec4-model {
@@ -210,14 +210,14 @@
 }
 
 .hg-mobile-view .hg-sec6-icon img {
-  width: min(17vw, 72px);
+  width: min(23vw, 92px);
   max-width: none;
 }
 
-.hg-mobile-view .hg-sec6-icon.icon-1 { left: 6% !important; }
-.hg-mobile-view .hg-sec6-icon.icon-2 { left: 27% !important; }
-.hg-mobile-view .hg-sec6-icon.icon-3 { left: 48% !important; }
-.hg-mobile-view .hg-sec6-icon.icon-4 { left: 69% !important; }
+.hg-mobile-view .hg-sec6-icon.icon-1 { left: 1% !important; }
+.hg-mobile-view .hg-sec6-icon.icon-2 { left: 26% !important; }
+.hg-mobile-view .hg-sec6-icon.icon-3 { left: 51% !important; }
+.hg-mobile-view .hg-sec6-icon.icon-4 { left: 76% !important; }
 
 /* 모바일 전반 레이아웃 정리 */
 .hg-mobile-view .hg-sec5-title {
@@ -266,6 +266,11 @@
   transform: translateX(-50%) scale(0.76) !important;
 }
 
+.hg-mobile-view .hg-sec8-title {
+  top: 9%;
+  transform: translateX(-50%) scale(1.14) !important;
+}
+
 .hg-mobile-view .hg-sec7-img,
 .hg-mobile-view .hg-sec7-care,
 .hg-mobile-view .hg-sec8-img,
@@ -289,7 +294,7 @@
 .hg-mobile-view .hg-sec7-care {
   top: 30%;
   left: 78% !important;
-  width: min(26vw, 96px);
+  width: min(17vw, 64px);
   max-width: none;
   z-index: 2;
   transform: translateX(-50%) scale(1) !important;
@@ -426,7 +431,7 @@
   }
 
   .hg-mobile-view .hg-sec6-icon img {
-    width: min(16vw, 62px);
+    width: min(21vw, 78px);
   }
 
   .hg-mobile-view .hg-sec9-graph2 {
@@ -436,7 +441,7 @@
   .hg-mobile-view .hg-sec7-care {
     top: 31%;
     left: 79% !important;
-    width: min(24vw, 84px);
+    width: min(16vw, 56px);
   }
 
   .hg-mobile-view .hg-sec8-right {
@@ -448,7 +453,7 @@
 
 .hg-mobile-view .hg-sec10-graphs {
   top: auto;
-  bottom: 15%;
+  bottom: 6%;
   left: 12%;
   right: 12%;
   width: auto;
