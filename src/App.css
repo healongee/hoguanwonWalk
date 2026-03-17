@@ -233,9 +233,15 @@
 }
 
 .hg-mobile-view .hg-sec5-img {
-  top: 46%;
+  top: 42%;
   left: 50% !important;
-  transform: translateX(-50%) scale(0.8) !important;
+  width: min(94vw, 420px);
+  transform: translateX(-50%) scale(1) !important;
+}
+
+.hg-mobile-view .hg-sec5-img img {
+  width: 100%;
+  max-width: none;
 }
 
 .hg-mobile-view .hg-sec5-product {
@@ -568,8 +574,8 @@
   color: #3b2c1b;
   font-family: 'Caveat', 'Nanum Pen Script', cursive;
   font-weight: 700;
-  font-size: 22px;
-  line-height: 1.6;
+  font-size: 30px;
+  line-height: 1.7;
   text-shadow: 0 1px 4px rgba(255, 255, 255, 0.7);
   white-space: nowrap;
 }
@@ -2833,6 +2839,10 @@ body {
 .footer-links a:hover {
   color: white;
   transform: translateX(4px);
+}
+
+.hg-pc-view .footer-links {
+  display: none;
 }
 
 .footer-bottom {
