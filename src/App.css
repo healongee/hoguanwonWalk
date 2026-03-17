@@ -77,6 +77,16 @@
   padding: 0 18px;
 }
 
+.hg-mobile-view .hero-video-section {
+  height: 56vh;
+  min-height: 320px;
+  max-height: 480px;
+}
+
+.hg-mobile-view .hero-video {
+  object-position: center top;
+}
+
 .hg-mobile-view .hero-line-large {
   font-size: 36px;
 }
@@ -94,6 +104,29 @@
 .hg-mobile-view .hg-sec2-left,
 .hg-mobile-view .hg-sec2-right {
   justify-content: center;
+}
+
+.hg-mobile-view .hg-sec3-text {
+  top: 20%;
+  width: min(66vw, 220px);
+  transform: translateX(-50%) scale(0.92);
+  transform-origin: top center;
+  font-size: clamp(13px, 3.2vw, 15px);
+  line-height: 1.35;
+  white-space: normal;
+}
+
+.hg-mobile-view .hg-sec3-text p + p {
+  margin-top: 1px;
+}
+
+@media (max-width: 360px) {
+  .hg-mobile-view .hg-sec3-text {
+    top: 19%;
+    width: min(64vw, 200px);
+    font-size: 12px;
+    line-height: 1.3;
+  }
 }
 
 /* 모바일에서는 오버레이 이미지들이 겹치지 않게 크기 축소 + 중앙 기준 */
@@ -115,15 +148,194 @@
   max-width: 96vw;
 }
 
+.hg-mobile-view .hg-sec4-title {
+  top: 8%;
+  left: 50% !important;
+  transform: translateX(-50%) scale(0.68) !important;
+}
+
+.hg-mobile-view .hg-sec4-title img {
+  max-width: 78vw;
+}
+
+.hg-mobile-view .hg-sec4-subtitle {
+  top: 29%;
+  left: 50% !important;
+  transform: translateX(-50%) scale(0.74) !important;
+}
+
+.hg-mobile-view .hg-sec4-subtitle img {
+  max-width: 84vw;
+}
+
 .hg-mobile-view .hg-sec4-model {
   bottom: 8%;
 }
 
-/* sec6 아이콘은 모바일에서 더 크게 간격 확보 */
-.hg-mobile-view .hg-sec6-icon.icon-1 { top: 58%; left: 18% !important; transform: translateX(-50%) scale(0.9); }
-.hg-mobile-view .hg-sec6-icon.icon-2 { top: 58%; left: 50% !important; transform: translateX(-50%) scale(0.9); }
-.hg-mobile-view .hg-sec6-icon.icon-3 { top: 72%; left: 18% !important; transform: translateX(-50%) scale(0.9); }
-.hg-mobile-view .hg-sec6-icon.icon-4 { top: 72%; left: 50% !important; transform: translateX(-50%) scale(0.9); }
+/* sec6 아이콘은 모바일에서 서로 떨어져 보이도록 간격 조정 */
+.hg-mobile-view .hg-sec6-icon.icon-1 { top: 58%; left: 14% !important; transform: translateX(-50%) scale(0.82) !important; }
+.hg-mobile-view .hg-sec6-icon.icon-2 { top: 58%; left: 56% !important; transform: translateX(-50%) scale(0.82) !important; }
+.hg-mobile-view .hg-sec6-icon.icon-3 { top: 76%; left: 14% !important; transform: translateX(-50%) scale(0.82) !important; }
+.hg-mobile-view .hg-sec6-icon.icon-4 { top: 76%; left: 56% !important; transform: translateX(-50%) scale(0.82) !important; }
+
+/* 모바일 전반 레이아웃 정리 */
+.hg-mobile-view .hg-sec5-title {
+  top: 8%;
+}
+
+.hg-mobile-view .hg-sec5-info {
+  top: 21%;
+  transform: translateX(-50%) scale(0.76) !important;
+}
+
+.hg-mobile-view .hg-sec5-img {
+  top: 46%;
+  left: 50% !important;
+  transform: translateX(-50%) scale(0.8) !important;
+}
+
+.hg-mobile-view .hg-sec5-product {
+  bottom: 4%;
+  transform: translateX(-50%) scale(0.84) !important;
+}
+
+.hg-mobile-view .hg-sec6-title {
+  top: 9%;
+}
+
+.hg-mobile-view .hg-sec6-con {
+  top: 23%;
+  transform: translateX(-50%) scale(0.78) !important;
+}
+
+.hg-mobile-view .hg-sec7-title,
+.hg-mobile-view .hg-sec8-title,
+.hg-mobile-view .hg-sec9-title,
+.hg-mobile-view .hg-sec11-title,
+.hg-mobile-view .hg-sec12-title,
+.hg-mobile-view .hg-sec13-logo {
+  top: 7%;
+  transform: translateX(-50%) scale(0.76) !important;
+}
+
+.hg-mobile-view .hg-sec7-img,
+.hg-mobile-view .hg-sec7-care,
+.hg-mobile-view .hg-sec8-img,
+.hg-mobile-view .hg-sec8-right {
+  left: 50% !important;
+  right: auto !important;
+}
+
+.hg-mobile-view .hg-sec7-img {
+  top: 24%;
+  transform: translateX(-50%) scale(0.78) !important;
+}
+
+.hg-mobile-view .hg-sec7-care {
+  top: 53%;
+  transform: translateX(-50%) scale(0.78) !important;
+}
+
+.hg-mobile-view .hg-sec8-img {
+  top: 24%;
+  transform: translateX(-50%) scale(0.78) !important;
+}
+
+.hg-mobile-view .hg-sec8-right {
+  top: 55%;
+  transform: translateX(-50%) scale(0.76) !important;
+}
+
+.hg-mobile-view .hg-sec9-graph1 {
+  top: 25%;
+  left: 50% !important;
+  transform: translateX(-50%) scale(0.74) !important;
+}
+
+.hg-mobile-view .hg-sec9-graph2 {
+  top: 53%;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) scale(0.74) !important;
+}
+
+.hg-mobile-view .hg-sec9-video.video-shoulder,
+.hg-mobile-view .hg-sec9-video.video-elbow,
+.hg-mobile-view .hg-sec9-video.video-wrist,
+.hg-mobile-view .hg-sec9-video.video-knee {
+  width: 30%;
+}
+
+.hg-mobile-view .hg-sec9-video.video-elbow { top: 42%; left: 14%; }
+.hg-mobile-view .hg-sec9-video.video-knee { top: 42%; right: 14%; }
+.hg-mobile-view .hg-sec9-video.video-shoulder { top: 70%; left: 14%; }
+.hg-mobile-view .hg-sec9-video.video-wrist { top: 70%; right: 14%; }
+
+.hg-mobile-view .hg-sec10-msm {
+  top: 12%;
+  transform: translateX(-50%) scale(0.78) !important;
+}
+
+.hg-mobile-view .hg-sec10-bottom {
+  bottom: 10%;
+  transform: translateX(-50%) scale(0.78) !important;
+}
+
+.hg-mobile-view .hg-sec12-info {
+  top: 21%;
+  left: 50% !important;
+  max-width: 84%;
+  transform: translateX(-50%) scale(0.76) !important;
+}
+
+.hg-mobile-view .hg-sec12-logo {
+  top: 40%;
+  left: 50% !important;
+  right: auto !important;
+  max-width: 30%;
+  transform: translateX(-50%) scale(0.82) !important;
+}
+
+.hg-mobile-view .hg-sec12-img.img-animated {
+  bottom: -3%;
+  width: 96%;
+}
+
+.hg-mobile-view .hg-sec13-model {
+  bottom: -1%;
+  left: 6% !important;
+  transform: scale(0.82) !important;
+  transform-origin: bottom left;
+}
+
+.hg-mobile-view .hg-sec13-phone {
+  top: 31%;
+  right: 6% !important;
+  transform: scale(0.8) !important;
+  transform-origin: top right;
+}
+
+.hg-mobile-view .hg-sec13-writing {
+  top: 57%;
+  right: 7% !important;
+  transform: scale(0.8) !important;
+  transform-origin: top right;
+}
+
+@media (max-width: 360px) {
+  .hg-mobile-view .hg-sec6-icon.icon-1,
+  .hg-mobile-view .hg-sec6-icon.icon-2,
+  .hg-mobile-view .hg-sec6-icon.icon-3,
+  .hg-mobile-view .hg-sec6-icon.icon-4 {
+    transform: translateX(-50%) scale(0.75) !important;
+  }
+
+  .hg-mobile-view .hg-sec7-care,
+  .hg-mobile-view .hg-sec8-right,
+  .hg-mobile-view .hg-sec9-graph2 {
+    top: 56%;
+  }
+}
 
 .hg-mobile-view .hg-sec10-graphs {
   inset: 26% 8% auto 8%;
