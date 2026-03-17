@@ -179,22 +179,45 @@
 .hg-mobile-view .hg-sec4-subtitle {
   top: 29%;
   left: 50% !important;
-  transform: translateX(-50%) scale(0.74) !important;
+  transform: translateX(-50%) scale(0.8) !important;
 }
 
 .hg-mobile-view .hg-sec4-subtitle img {
-  max-width: 84vw;
+  max-width: 90vw;
 }
 
 .hg-mobile-view .hg-sec4-model {
   bottom: 8%;
 }
 
-/* sec6 아이콘은 모바일에서 서로 떨어져 보이도록 간격 조정 */
-.hg-mobile-view .hg-sec6-icon.icon-1 { top: 58%; left: 14% !important; transform: translateX(-50%) scale(0.82) !important; }
-.hg-mobile-view .hg-sec6-icon.icon-2 { top: 58%; left: 56% !important; transform: translateX(-50%) scale(0.82) !important; }
-.hg-mobile-view .hg-sec6-icon.icon-3 { top: 76%; left: 14% !important; transform: translateX(-50%) scale(0.82) !important; }
-.hg-mobile-view .hg-sec6-icon.icon-4 { top: 76%; left: 56% !important; transform: translateX(-50%) scale(0.82) !important; }
+.hg-mobile-view .hg-sec3-sig {
+  bottom: 10%;
+  left: 24% !important;
+  transform: translateX(-50%) scale(0.82) !important;
+}
+
+.hg-mobile-view .hg-sec3-sig img {
+  width: min(34vw, 150px);
+}
+
+/* sec6 아이콘은 모바일에서 좌측 하단부터 가로로 순서 배치 */
+.hg-mobile-view .hg-sec6-icon {
+  top: auto !important;
+  bottom: 5.5%;
+  transform: none !important;
+  transform-origin: bottom left;
+  max-width: none;
+}
+
+.hg-mobile-view .hg-sec6-icon img {
+  width: min(17vw, 72px);
+  max-width: none;
+}
+
+.hg-mobile-view .hg-sec6-icon.icon-1 { left: 6% !important; }
+.hg-mobile-view .hg-sec6-icon.icon-2 { left: 27% !important; }
+.hg-mobile-view .hg-sec6-icon.icon-3 { left: 48% !important; }
+.hg-mobile-view .hg-sec6-icon.icon-4 { left: 69% !important; }
 
 /* 모바일 전반 레이아웃 정리 */
 .hg-mobile-view .hg-sec5-title {
@@ -345,7 +368,11 @@
   .hg-mobile-view .hg-sec6-icon.icon-2,
   .hg-mobile-view .hg-sec6-icon.icon-3,
   .hg-mobile-view .hg-sec6-icon.icon-4 {
-    transform: translateX(-50%) scale(0.75) !important;
+    bottom: 4.5%;
+  }
+
+  .hg-mobile-view .hg-sec6-icon img {
+    width: min(16vw, 62px);
   }
 
   .hg-mobile-view .hg-sec7-care,

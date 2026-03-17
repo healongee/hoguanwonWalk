@@ -441,12 +441,13 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // sec6 아이콘 교체 타이머 (2초 간격)
+  // sec6 아이콘은 2초 후 한 번만 교체
   useEffect(() => {
-    const timer = setInterval(() => {
-      setSec6Alt((prev) => !prev);
+    const timer = setTimeout(() => {
+      setSec6Alt(true);
     }, 2000);
-    return () => clearInterval(timer);
+
+    return () => clearTimeout(timer);
   }, []);
 
   // sec12 이미지 순환 타이머 (2초 간격, 1→2→3→1...)
