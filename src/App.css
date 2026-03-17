@@ -388,6 +388,14 @@
   width: 96%;
 }
 
+.hg-mobile-view .hg-sec12-img.img-animated img {
+  width: 100%;
+}
+
+.hg-mobile-view .hg-sec12-img.img-animated img.sec12-frame-1 {
+  width: 50%;
+}
+
 .hg-mobile-view .hg-sec13-model {
   bottom: -1%;
   left: 6% !important;
@@ -403,7 +411,7 @@
 }
 
 .hg-mobile-view .hg-sec13-writing {
-  top: 57%;
+  top: 64%;
   right: 7% !important;
   transform: scale(0.8) !important;
   transform-origin: top right;
@@ -439,12 +447,18 @@
 }
 
 .hg-mobile-view .hg-sec10-graphs {
-  inset: 26% 8% auto 8%;
-  gap: 10px;
+  top: auto;
+  bottom: 15%;
+  left: 12%;
+  right: 12%;
+  width: auto;
+  transform: none;
+  justify-content: space-between;
+  gap: 0;
 }
 
 .hg-mobile-view .hg-sec10-graphs img {
-  width: 49%;
+  width: 42%;
 }
 
 .hg-mobile-view .consultation-wrapper {

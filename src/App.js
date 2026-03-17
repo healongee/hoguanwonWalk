@@ -832,6 +832,7 @@ function App() {
         </div>
         <div className="hg-sec12-layer hg-sec12-img img-animated">
           <img
+            className={`sec12-frame sec12-frame-${sec12Index}`}
             src={
               sec12Index === 0
                 ? "/hoguanwon.com/img/sec12_img01.png"
