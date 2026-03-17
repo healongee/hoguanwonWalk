@@ -239,8 +239,14 @@
 }
 
 .hg-mobile-view .hg-sec5-product {
-  bottom: 4%;
-  transform: translateX(-50%) scale(0.84) !important;
+  bottom: 3%;
+  width: min(24vw, 108px);
+  transform: translateX(-50%) scale(1) !important;
+}
+
+.hg-mobile-view .hg-sec5-product img {
+  width: 100%;
+  max-width: none;
 }
 
 .hg-mobile-view .hg-sec6-title {
@@ -327,10 +333,10 @@
 }
 
 .hg-mobile-view .hg-sec8-right {
-  top: 34%;
+  top: 32%;
   left: auto !important;
   right: 4% !important;
-  width: min(28vw, 126px);
+  width: min(42vw, 190px);
   max-width: none;
   transform: none !important;
 }
@@ -429,10 +435,11 @@
 }
 
 .hg-mobile-view .hg-sec13-writing {
-  top: 64%;
-  right: 7% !important;
+  top: auto;
+  bottom: 6%;
+  right: 5% !important;
   transform: scale(0.8) !important;
-  transform-origin: top right;
+  transform-origin: bottom right;
 }
 
 @media (max-width: 360px) {
@@ -458,9 +465,9 @@
   }
 
   .hg-mobile-view .hg-sec8-right {
-    top: 35%;
+    top: 33%;
     right: 3% !important;
-    width: min(27vw, 112px);
+    width: min(38vw, 152px);
   }
 }
 
