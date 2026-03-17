@@ -245,8 +245,15 @@
 }
 
 .hg-mobile-view .hg-sec6-con {
-  top: 23%;
-  transform: translateX(-50%) scale(0.78) !important;
+  top: 21%;
+  width: min(92vw, 520px);
+  max-width: none;
+  transform: translateX(-50%) scale(1.18) !important;
+}
+
+.hg-mobile-view .hg-sec6-con img {
+  width: 100%;
+  max-width: none;
 }
 
 .hg-mobile-view .hg-sec7-title,
@@ -268,23 +275,56 @@
 }
 
 .hg-mobile-view .hg-sec7-img {
-  top: 24%;
-  transform: translateX(-50%) scale(0.78) !important;
+  top: 27%;
+  width: min(115vw, 520px);
+  max-width: none;
+  transform: translateX(-50%) scale(1) !important;
+}
+
+.hg-mobile-view .hg-sec7-img img {
+  width: 100%;
+  max-width: none;
 }
 
 .hg-mobile-view .hg-sec7-care {
-  top: 53%;
-  transform: translateX(-50%) scale(0.78) !important;
+  top: 30%;
+  left: 78% !important;
+  width: min(26vw, 96px);
+  max-width: none;
+  z-index: 2;
+  transform: translateX(-50%) scale(1) !important;
+}
+
+.hg-mobile-view .hg-sec7-care img {
+  width: 100%;
+  max-width: none;
 }
 
 .hg-mobile-view .hg-sec8-img {
-  top: 24%;
-  transform: translateX(-50%) scale(0.78) !important;
+  top: 28%;
+  left: 4% !important;
+  width: min(52vw, 230px);
+  max-width: none;
+  transform: none !important;
+}
+
+.hg-mobile-view .hg-sec8-img img {
+  width: 100%;
+  max-width: none;
 }
 
 .hg-mobile-view .hg-sec8-right {
-  top: 55%;
-  transform: translateX(-50%) scale(0.76) !important;
+  top: 34%;
+  left: auto !important;
+  right: 4% !important;
+  width: min(28vw, 126px);
+  max-width: none;
+  transform: none !important;
+}
+
+.hg-mobile-view .hg-sec8-right img {
+  width: 100%;
+  max-width: none;
 }
 
 .hg-mobile-view .hg-sec9-graph1 {
@@ -313,8 +353,14 @@
 .hg-mobile-view .hg-sec9-video.video-wrist { top: 70%; right: 14%; }
 
 .hg-mobile-view .hg-sec10-msm {
-  top: 12%;
-  transform: translateX(-50%) scale(0.78) !important;
+  top: 7%;
+  width: min(118vw, 540px);
+  max-width: none;
+  transform: translateX(-50%) scale(1) !important;
+}
+
+.hg-mobile-view .hg-sec10-msm-inner {
+  width: 100%;
 }
 
 .hg-mobile-view .hg-sec10-bottom {
@@ -375,10 +421,20 @@
     width: min(16vw, 62px);
   }
 
-  .hg-mobile-view .hg-sec7-care,
-  .hg-mobile-view .hg-sec8-right,
   .hg-mobile-view .hg-sec9-graph2 {
     top: 56%;
+  }
+
+  .hg-mobile-view .hg-sec7-care {
+    top: 31%;
+    left: 79% !important;
+    width: min(24vw, 84px);
+  }
+
+  .hg-mobile-view .hg-sec8-right {
+    top: 35%;
+    right: 3% !important;
+    width: min(27vw, 112px);
   }
 }
 
