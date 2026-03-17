@@ -221,12 +221,15 @@
 
 /* 모바일 전반 레이아웃 정리 */
 .hg-mobile-view .hg-sec5-title {
-  top: 8%;
+  top: 12%;
+  left: 50% !important;
+  transform: translateX(-50%) scale(0.92) !important;
 }
 
 .hg-mobile-view .hg-sec5-info {
-  top: 21%;
-  transform: translateX(-50%) scale(0.76) !important;
+  top: 25%;
+  left: 50% !important;
+  transform: translateX(-50%) scale(0.88) !important;
 }
 
 .hg-mobile-view .hg-sec5-img {
@@ -264,6 +267,11 @@
 .hg-mobile-view .hg-sec13-logo {
   top: 7%;
   transform: translateX(-50%) scale(0.76) !important;
+}
+
+.hg-mobile-view .hg-sec9-title {
+  top: 10%;
+  transform: translateX(-50%) scale(1.52) !important;
 }
 
 .hg-mobile-view .hg-sec8-title {
@@ -399,7 +407,7 @@
 }
 
 .hg-mobile-view .hg-sec12-img.img-animated img.sec12-frame-1 {
-  width: 50%;
+  width: 100%;
 }
 
 .hg-mobile-view .hg-sec12-img.img-animated img.sec12-frame-2 {
