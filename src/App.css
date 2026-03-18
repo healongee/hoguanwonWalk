@@ -2452,7 +2452,8 @@ body {
 .consultation-phone .phone-label {
   display: block;
   font-size: 13px;
-  opacity: 0.8;
+  color: white;
+  opacity: 1;
   margin-bottom: 8px;
 }
 
@@ -2871,6 +2872,7 @@ body {
    플로팅 CTA
    =========================== */
 .floating-cta {
+  display: none;
   position: fixed;
   bottom: 100px;
   right: 24px;

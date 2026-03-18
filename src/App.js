@@ -900,8 +900,8 @@ function App() {
               </p>
               <div className="consultation-phone">
                 <span className="phone-label">전화 상담</span>
-                <a href="tel:1588-0000" className="phone-number-large">
-                  1588-0000
+                <a href="tel:1661-3352" className="phone-number-large">
+                  1661-3352
                 </a>
                 <span className="phone-time">평일 09:00 - 18:00</span>
               </div>
@@ -933,7 +933,7 @@ function App() {
 
             <div className="footer-contact">
               <h4>고객센터</h4>
-              <p className="contact-number">1588-0000</p>
+              <p className="contact-number">1661-3352</p>
               <p>평일 09:00 - 18:00</p>
               <p>토·일·공휴일 휴무</p>
               <p className="contact-email">help@hogwanwon.com</p>
@@ -968,7 +968,7 @@ function App() {
       </a>
 
       {/* 플로팅 전화 버튼 (모바일) */}
-      <a href="tel:1588-0000" className={`floating-phone ${scrollY > 500 ? 'visible' : ''}`}>
+      <a href="tel:1661-3352" className={`floating-phone ${scrollY > 500 ? 'visible' : ''}`}>
         <span className="phone-icon-float">📞</span>
         <span className="phone-text-float">전화하기</span>
       </a>
