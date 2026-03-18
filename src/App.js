@@ -911,62 +911,6 @@ function App() {
         </div>
       </section>
 
-      {/* 푸터 */}
-      <footer className="footer">
-        <div className="container">
-          <div className="footer-content">
-            <div className="footer-brand">
-              <div className="footer-logo">
-                <span className="logo-icon">H</span>
-                <span className="logo-text">호관원</span>
-              </div>
-              <p className="footer-desc">
-                30년 전통의 프리미엄 관절 건강 식품<br />
-                가족의 건강을 생각하는 마음으로 만듭니다.
-              </p>
-              <div className="footer-cert">
-                <span>식약처 인증</span>
-                <span>GMP 인증</span>
-                <span>HACCP</span>
-              </div>
-            </div>
-
-            <div className="footer-contact">
-              <h4>고객센터</h4>
-              <p className="contact-number">1661-3352</p>
-              <p>평일 09:00 - 18:00</p>
-              <p>토·일·공휴일 휴무</p>
-              <p className="contact-email">help@hogwanwon.com</p>
-            </div>
-
-            <div className="footer-links">
-              <h4>바로가기</h4>
-              <a href="#benefits">효능</a>
-              <a href="#ingredients">성분</a>
-              <a href="#testimonials">후기</a>
-              <a href="#consultation">상담신청</a>
-            </div>
-          </div>
-
-          <div className="footer-bottom">
-            <p className="company-info">
-              (주)호관원 | 대표: 홍길동 | 사업자등록번호: 123-45-67890<br />
-              서울특별시 강남구 테헤란로 123, 5층
-            </p>
-            <p className="footer-notice">
-              본 제품은 질병의 예방 및 치료를 위한 의약품이 아닙니다.
-            </p>
-            <p className="copyright">© 2024 호관원. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
-
-      {/* 플로팅 CTA 버튼 */}
-      <a href="#consultation" className={`floating-cta ${scrollY > 500 ? 'visible' : ''}`}>
-        <span className="floating-cta-icon">📞</span>
-        <span>무료 상담</span>
-      </a>
-
       {/* 플로팅 전화 버튼 (모바일) */}
       <a href="tel:1661-3352" className={`floating-phone ${scrollY > 500 ? 'visible' : ''}`}>
         <span className="phone-icon-float">📞</span>
