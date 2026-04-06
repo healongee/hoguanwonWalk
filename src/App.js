@@ -212,6 +212,8 @@ function ConsultationForm() {
         device: device,
         ip: 'client',
         ifflag: 'N',
+        blacklist: 'N',
+        dbflag: 'h1',
       });
 
       if (error) {
