@@ -854,6 +854,12 @@ function App() {
           alt="호관원 하단 배경"
           className="hg-sec-bg"
         />
+        <div className="hg-sec13-layer hg-sec13-banner">
+          <img
+            src="/hoguanwon.com/img/sec13_promo_banner.jpg"
+            alt="호관원 프로모션 배너"
+          />
+        </div>
         <div className="hg-sec13-layer hg-sec13-logo">
           <img
             src="/hoguanwon.com/img/sec13_logo.png"
