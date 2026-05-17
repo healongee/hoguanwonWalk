@@ -2,6 +2,8 @@ import './App.css';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { supabase } from './supabase';
 
+const REWARD_API_BASE_URL = process.env.REACT_APP_REWARD_API_BASE_URL || 'https://prod.xarvis.kr';
+
 function useIsMobile(breakpointPx = 768) {
   const query = useMemo(() => `(max-width: ${breakpointPx}px)`, [breakpointPx]);
   const [isMobile, setIsMobile] = useState(() => {
@@ -113,6 +115,41 @@ function ConsultationForm() {
 
     return entries.length ? `[돈버는미션] ${entries.join('&')}` : '';
   }, [missionParams]);
+  const hasMissionParams = Boolean(missionParams.uid && missionParams.cid && missionParams.adid);
+
+  const sendMissionReward = async () => {
+    if (!hasMissionParams) {
+      return;
+    }
+
+    const response = await fetch(`${REWARD_API_BASE_URL}/rewards/custom`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        uid: missionParams.uid,
+        cid: missionParams.cid,
+        adid: missionParams.adid,
+      }),
+    });
+
+    if (response.status !== 201) {
+      let message = `돈버는 미션 참여 완료 요청 실패 (${response.status})`;
+      try {
+        const text = await response.text();
+        const data = text ? JSON.parse(text) : null;
+        if (data?.message) {
+          message = data.message;
+        } else if (text) {
+          message = text;
+        }
+      } catch (_) {
+        // 기본 상태 코드 메시지를 사용합니다.
+      }
+      throw new Error(message);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -246,6 +283,11 @@ function ConsultationForm() {
         setSubmitResult('error');
         console.error('상담 신청 오류:', error);
       } else {
+        try {
+          await sendMissionReward();
+        } catch (rewardError) {
+          console.error('돈버는 미션 참여 완료 요청 오류:', rewardError);
+        }
         setSubmitResult('success');
         setFormData({ name: '', phone: '', age: '', sex: '', address: '', remarks: '' });
       }
