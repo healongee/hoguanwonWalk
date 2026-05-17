@@ -93,6 +93,26 @@ function ConsultationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitResult, setSubmitResult] = useState(null);
   const [focusedField, setFocusedField] = useState(null);
+  const missionParams = useMemo(() => {
+    if (typeof window === 'undefined') {
+      return { uid: '', cid: '', adid: '' };
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    return {
+      uid: params.get('uid') || '',
+      cid: params.get('cid') || '',
+      adid: params.get('adid') || '',
+    };
+  }, []);
+
+  const missionTrackingNote = useMemo(() => {
+    const entries = Object.entries(missionParams)
+      .filter(([, value]) => value)
+      .map(([key, value]) => `${key}=${value}`);
+
+    return entries.length ? `[돈버는미션] ${entries.join('&')}` : '';
+  }, [missionParams]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -193,6 +213,7 @@ function ConsultationForm() {
     setIsSubmitting(true);
     const device = detectDevice();
     const phoneClean = formData.phone.replace(/\D/g, '');
+    const remarks = [formData.remarks.trim(), missionTrackingNote].filter(Boolean).join('\n');
 
     if (!supabase) {
       setSubmitResult('error');
@@ -208,7 +229,7 @@ function ConsultationForm() {
         age: formData.age || null,
         sex: formData.sex || null,
         address: formData.address || null,
-        remarks: formData.remarks || null,
+        remarks: remarks || null,
         device: device,
         ip: 'client',
         ifflag: 'N',
