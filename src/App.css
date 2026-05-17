@@ -433,18 +433,6 @@
   transform-origin: bottom left;
 }
 
-.hg-mobile-view .hg-between-banner {
-  padding: 12px 12px 0;
-  background: #fff;
-}
-
-.hg-mobile-view .hg-between-banner img {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
-}
-
 .hg-mobile-view .hg-sec13-phone {
   top: 31%;
   right: 6% !important;
@@ -896,17 +884,6 @@
 .hg-sec13-model {
   bottom: 0;
   left: 5%;
-}
-
-.hg-between-banner {
-  padding: 20px 24px 0;
-  background: #fff;
-}
-
-.hg-between-banner img {
-  display: block;
-  width: min(100%, 960px);
-  margin: 0 auto;
 }
 
 .hg-sec13-phone {

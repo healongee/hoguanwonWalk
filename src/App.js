@@ -880,13 +880,6 @@ function App() {
         </div>
       </section>
 
-      <div className="hg-between-banner">
-        <img
-          src="/hoguanwon.com/img/sec13_promo_banner.jpg"
-          alt="호관원 프로모션 배너"
-        />
-      </div>
-
       {/* trust-badges, 인증, 효능 섹션 제거 (원본 이미지 섹션만 사용) */}
 
       {/* 상담 신청 섹션 */}
