@@ -271,7 +271,7 @@ function ConsultationForm() {
         ip: 'client',
         ifflag: 'N',
         blacklist: 'N',
-        dbflag: 'h1',
+        dbflag: 'wa',
       });
 
       if (error) {
