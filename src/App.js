@@ -592,85 +592,13 @@ function App() {
         />
       </section>
 
-      {/* sec7: 이중케어/케어 이미지 섹션 */}
-      <section className="hg-section hg-sec7">
-        <img
-          src="/hoguanwon.com/img/sec7_bg.jpg"
-          alt="호관원 배경화면"
-          className="hg-sec-bg"
-        />
-        <div className="hg-sec7-layer hg-sec7-title">
-          <img
-            src="/hoguanwon.com/img/sec7_title.png"
-            alt="호관원 타이틀 이미지"
-          />
-        </div>
-        <div className="hg-sec7-layer hg-sec7-img">
-          <img
-            src="/hoguanwon.com/img/sec7_img.png"
-            alt="호관원 이미지"
-          />
-        </div>
-        <div className="hg-sec7-layer hg-sec7-care">
-          <img
-            src="/hoguanwon.com/img/sec7_care.png"
-            alt="호관원 이중케어 이미지"
-          />
-        </div>
-      </section>
-
-      {/* sec8: 인포/효과 섹션 */}
-      <section className="hg-section hg-sec8">
-        <img
-          src="/hoguanwon.com/img/sec8_bg.jpg"
-          alt="호관원 배경화면"
-          className="hg-sec-bg"
-        />
-        <div className="hg-sec8-layer hg-sec8-title">
-          <img
-            src="/hoguanwon.com/img/sec8_title.png"
-            alt="호관원 타이틀 이미지"
-          />
-        </div>
-        <div className="hg-sec8-layer hg-sec8-img">
-          <img
-            src="/hoguanwon.com/img/sec8_img.png"
-            alt="호관원 인포 이미지"
-          />
-        </div>
-        <div className="hg-sec8-layer hg-sec8-right">
-          <img
-            src="/hoguanwon.com/img/sec8_right_info.png"
-            alt="호관원 효과 이미지"
-          />
-        </div>
-      </section>
-
-      {/* sec9: 그래프/효과 섹션 */}
+      {/* sec9 */}
       <section className="hg-section hg-sec9">
         <img
-          src="/hoguanwon.com/img/sec9_bg.jpg"
-          alt="호관원 배경화면"
-          className="hg-sec-bg"
+          src="/hoguanwon.com/img/hoguanwon_walk_6.png"
+          alt="호관원 프리미엄 골드 효과 후기"
+          className="hg-section-image"
         />
-        <div className="hg-sec9-layer hg-sec9-title">
-          <img
-            src="/hoguanwon.com/img/sec9_title.png"
-            alt="호관원 타이틀 이미지"
-          />
-        </div>
-        <div className="hg-sec9-video video-shoulder">
-          <video src="/hoguanwon.com/img/shoulder.webm" autoPlay muted loop playsInline style={{ width: '100%', display: 'block' }} />
-        </div>
-        <div className="hg-sec9-video video-elbow">
-          <video src="/hoguanwon.com/img/elbow.webm" autoPlay muted loop playsInline style={{ width: '100%', display: 'block' }} />
-        </div>
-        <div className="hg-sec9-video video-wrist">
-          <video src="/hoguanwon.com/img/wrist.webm" autoPlay muted loop playsInline style={{ width: '100%', display: 'block' }} />
-        </div>
-        <div className="hg-sec9-video video-knee">
-          <video src="/hoguanwon.com/img/knee.webm" autoPlay muted loop playsInline style={{ width: '100%', display: 'block' }} />
-        </div>
       </section>
 
       {/* sec10: MSM 이미지/비디오 섹션 */}
