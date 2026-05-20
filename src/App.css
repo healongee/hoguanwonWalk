@@ -43,32 +43,7 @@
   z-index: 1;
 }
 
-.hg-mobile-view .hg-sec3-text {
-  top: 20%;
-  width: min(70vw, 236px);
-  transform: translateX(-50%) scale(0.92);
-  transform-origin: top center;
-  font-size: clamp(14px, 3.5vw, 17px);
-  line-height: 1.4;
-  white-space: normal;
-}
-
-.hg-mobile-view .hg-sec3-text p + p {
-  margin-top: 1px;
-}
-
-@media (max-width: 360px) {
-  .hg-mobile-view .hg-sec3-text {
-    top: 19%;
-    width: min(68vw, 214px);
-    font-size: 13px;
-    line-height: 1.35;
-  }
-}
-
 /* 모바일에서는 오버레이 이미지들이 겹치지 않게 크기 축소 + 중앙 기준 */
-.hg-mobile-view .hg-sec3-layer,
-.hg-mobile-view .hg-sec4-layer,
 .hg-mobile-view .hg-sec5-layer,
 .hg-mobile-view .hg-sec6-layer,
 .hg-mobile-view .hg-sec7-layer,
@@ -83,40 +58,6 @@
   left: 50% !important;
   right: auto !important;
   max-width: 96vw;
-}
-
-.hg-mobile-view .hg-sec4-title {
-  top: 8%;
-  left: 50% !important;
-  transform: translateX(-50%) scale(0.68) !important;
-}
-
-.hg-mobile-view .hg-sec4-title img {
-  max-width: 78vw;
-}
-
-.hg-mobile-view .hg-sec4-subtitle {
-  top: 31%;
-  left: 50% !important;
-  transform: translateX(-50%) scale(1.45) !important;
-}
-
-.hg-mobile-view .hg-sec4-subtitle img {
-  max-width: 96vw;
-}
-
-.hg-mobile-view .hg-sec4-model {
-  bottom: 8%;
-}
-
-.hg-mobile-view .hg-sec3-sig {
-  bottom: 10%;
-  left: 24% !important;
-  transform: translateX(-50%) scale(0.82) !important;
-}
-
-.hg-mobile-view .hg-sec3-sig img {
-  width: min(34vw, 150px);
 }
 
 /* sec6 아이콘은 모바일에서 좌측 하단부터 가로로 순서 배치 */
@@ -449,71 +390,10 @@
   height: auto;
 }
 
-/* sec3 */
-.hg-sec3-layer {
-  position: absolute;
-}
-
-.hg-sec3-hand {
-  bottom: 0;
-  right: 10%;
-}
-
-.hg-sec3-sig {
-  bottom: 10%;
-  left: 10%;
-}
-
-.hg-sec3-text {
-  position: absolute;
-  top: 25%;
-  left: 50%;
-  transform: translateX(-50%) scale(1.5);
-  text-align: center;
-  color: #3b2c1b;
-  font-family: 'Caveat', 'Nanum Pen Script', cursive;
-  font-weight: 700;
-  font-size: 30px;
-  line-height: 1.7;
-  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.7);
-  white-space: nowrap;
-}
-
-.hg-sec3-text p+p {
-  margin-top: 6px;
-}
-
-/* sec4 */
-.hg-sec4-layer {
-  position: absolute;
-}
-
-.hg-sec4-title {
-  top: 10%;
-  left: 10%;
-  transform: scale(0.8);
-  transform-origin: top left;
-}
-
-.hg-sec4-title img {
-  max-width: 80%;
-}
-
-.hg-sec4-subtitle {
-  top: 22%;
-  left: 10%;
-}
-
-.hg-sec4-model {
-  display: none;
-  bottom: 0;
-  right: 5%;
-  max-width: 35%;
-}
-
-.hg-sec4-product {
-  bottom: 5%;
-  left: 15%;
+.hg-section-image {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 /* sec5 */

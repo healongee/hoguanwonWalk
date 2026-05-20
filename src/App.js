@@ -578,61 +578,19 @@ function App() {
       {/* sec3: 편지/손/시그 이미지 레이아웃 */}
       <section className="hg-section hg-sec3">
         <img
-          src="/hoguanwon.com/img/sec3_letter_form.png"
-          alt="호관원 편지 배경"
-          className="hg-sec-bg"
+          src="/hoguanwon.com/img/hoguanwon_walk_3.png"
+          alt="식약처 인정 기능성 소재 MSM"
+          className="hg-section-image"
         />
-        <div className="hg-sec3-text">
-          <p>당신이 환하게 웃을 수 있길</p>
-          <p>하루하루 활력이 가득하길</p>
-          <p>그리고</p>
-          <p>관절이 편안하기를...</p>
-        </div>
-        <div className="hg-sec3-layer hg-sec3-hand">
-          <img
-            src="/hoguanwon.com/img/sec3_hand.png"
-            alt="호관원 손 이미지"
-          />
-        </div>
-        <div className="hg-sec3-layer hg-sec3-sig">
-          <img
-            src="/hoguanwon.com/img/sec3_sig.png"
-            alt="호관원 서명 이미지"
-          />
-        </div>
       </section>
 
-      {/* sec4: 배경 + 타이틀 + 내용 + 모델 + 제품 */}
+      {/* sec4 */}
       <section className="hg-section hg-sec4">
         <img
-          src="/hoguanwon.com/img/sec4_bg.jpg"
-          alt="호관원 배경화면"
-          className="hg-sec-bg"
+          src="/hoguanwon.com/img/hoguanwon_walk_4.png"
+          alt="해조류에서 추출한 천연 칼슘 해조칼슘"
+          className="hg-section-image"
         />
-        <div className="hg-sec4-layer hg-sec4-title">
-          <img
-            src="/hoguanwon.com/img/sec4_hoguanwon.png"
-            alt="호관원 타이틀 이미지"
-          />
-        </div>
-        <div className="hg-sec4-layer hg-sec4-subtitle">
-          <img
-            src="/hoguanwon.com/img/sec4_hoguanwon2.png"
-            alt="호관원 내용 이미지"
-          />
-        </div>
-        <div className="hg-sec4-layer hg-sec4-model">
-          <img
-            src="/hoguanwon.com/img/sec4_model.png"
-            alt="호관원 모델 이미지"
-          />
-        </div>
-        <div className="hg-sec4-layer hg-sec4-product">
-          <img
-            src="/hoguanwon.com/img/sec4_product.png"
-            alt="호관원 제품 이미지"
-          />
-        </div>
       </section>
 
       {/* sec5: 효능 관련 섹션 */}
