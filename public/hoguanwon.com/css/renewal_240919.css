@@ -99,6 +99,12 @@ video{display:block; width:100%;}
 		width: 100%;
 		transform: translate(-50%);
 	}
+
+	.section2 .section2_image{
+	  display: block;
+	  width: 100%;
+	  height: auto;
+	}
 	
 	.section3 .on_contents_07{
 		top: 26%;

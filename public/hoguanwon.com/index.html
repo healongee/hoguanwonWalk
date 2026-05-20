@@ -323,68 +323,7 @@
 			<img class="hero_image" src="img/hoguanwon_walk_1.gif" alt="불편한 관절 통증 안내">
 		</section>
 		<section class="section section2">
-			<img src="img/sec2_bg.jpg" alt="호관원 배경화면">
-			<div class="on_contents_01" data-aos="fade-up">
-				<img src="img/sec2_left_info.png" alt="호관원 타이틀 이미지">
-			</div>
-			<div class="on_contents_02">
-				<img src="img/sec2_model.png" alt="호관원 모델 이미지">
-			</div>
-			<div class="on_contents_03 fill-text">
-                <p>
-                    <span class="base">당신이 환하게 웃을 수 있길</span>
-                    <span class="fill">당신이 환하게 웃을 수 있길</span>
-                </p>
-                <p>
-                    <span class="base">하루하루 활력이 가득하길</span>
-                    <span class="fill">하루하루 활력이 가득하길</span>
-                </p>
-                <p>
-                    <span class="base">그리고</span>
-                    <span class="fill">그리고</span>
-                </p>
-                <p>
-                    <span class="base">관절이 편안하기를...</span>
-                    <span class="fill">관절이 편안하기를...</span>
-                </p>
-            </div>
-            <script>
-			  const container = document.querySelector('.on_contents_03');
-			  let isActive = false;
-
-			  function onScroll(){
-				const rect = container.getBoundingClientRect();
-				const vh = window.innerHeight;
-
-				// 🔑 트리거 기준선 (화면 60%)
-				const triggerLine = vh * 0.6;
-
-				// 기준선 도달 여부
-				if(rect.top < triggerLine && !isActive){
-				  container.classList.add('is-active');
-				  isActive = true;
-				}
-
-				// 다시 위로 올라갔을 때
-				if(rect.top > triggerLine && isActive){
-				  container.classList.remove('is-active');
-				  isActive = false;
-				}
-			  }
-
-			  window.addEventListener('scroll', onScroll);
-			</script>
-
-
-			<div class="on_contents_04">
-				<img src="img/sec3_sig.png" alt="호관원 편지 이름 이미지">
-			</div>
-			<div class="on_contents_05">
-				<img src="img/sec3_hand.png" alt="호관원 손 이미지">
-			</div>
-			<div class="on_contents_06">
-				<img src="img/sec3_letter_form.png" alt="호관원 손 이미지">
-			</div>
+			<img class="section2_image" src="img/hoguanwon_walk_2.png" alt="호관원 프리미엄 골드">
 		</section>
 		<section class="section section3">
 			<img src="img/sec4_bg.jpg" alt="호관원 배경화면">

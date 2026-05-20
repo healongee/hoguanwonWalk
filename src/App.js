@@ -566,27 +566,13 @@ function App() {
 
       {/* sec2 ~ sec13 이미지 섹션들 (원본 PC 사이트 배치 기반) */}
 
-      {/* sec2: 배경 + 좌측 타이틀 + 우측 모델 */}
+      {/* sec2 */}
       <section className="hg-section hg-sec2">
         <img
-          src="/hoguanwon.com/img/sec2_bg.jpg"
-          alt="호관원 배경화면"
-          className="hg-sec-bg"
+          src="/hoguanwon.com/img/hoguanwon_walk_2.png"
+          alt="호관원 프리미엄 골드"
+          className="hg-sec2-image"
         />
-        <div className="hg-sec2-inner">
-          <div className="hg-sec2-left">
-            <img
-              src="/hoguanwon.com/img/sec2_left_info.png"
-              alt="호관원 타이틀 이미지"
-            />
-          </div>
-          <div className="hg-sec2-right">
-            <img
-              src="/hoguanwon.com/img/sec2_model.png"
-              alt="호관원 모델 이미지"
-            />
-          </div>
-        </div>
       </section>
 
       {/* sec3: 편지/손/시그 이미지 레이아웃 */}

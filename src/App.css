@@ -39,30 +39,6 @@
   height: auto;
 }
 
-.hg-mobile-view .hg-sec2-inner {
-  z-index: 1;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 28px 16px 40px;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.hg-mobile-view .hg-sec2-left,
-.hg-mobile-view .hg-sec2-right {
-  flex: 0 0 auto;
-  width: 100%;
-  justify-content: center;
-}
-
-.hg-mobile-view .hg-sec2-left img {
-  width: min(62vw, 240px);
-}
-
-.hg-mobile-view .hg-sec2-right img {
-  width: min(74vw, 300px);
-}
-
 .hg-mobile-view .hg-sec2 {
   z-index: 1;
 }
@@ -464,33 +440,13 @@
 
 /* sec2 레이아웃 */
 .hg-sec2 {
-  background: #000;
+  background: #ffffff;
 }
 
-.hg-sec2-inner {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 40px;
-}
-
-.hg-sec2-left,
-.hg-sec2-right {
-  flex: 1;
-}
-
-.hg-sec2-left {
-  display: flex;
-  justify-content: flex-start;
-}
-
-.hg-sec2-right {
-  display: flex;
-  justify-content: flex-end;
+.hg-sec2-image {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 /* sec3 */
