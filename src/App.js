@@ -483,7 +483,6 @@ function App() {
   const [scrollY, setScrollY] = useState(0);
   const [headerSolid, setHeaderSolid] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [sec12Index, setSec12Index] = useState(0);
 
   // 스크롤 애니메이션 refs
   const [trustRef, trustVisible] = useScrollAnimation();
@@ -503,14 +502,6 @@ function App() {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // sec12 이미지 순환 타이머 (2초 간격, 1→2→3→1...)
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setSec12Index((prev) => (prev + 1) % 3);
-    }, 2000);
-    return () => clearInterval(timer);
   }, []);
 
   // 모바일 메뉴 토글
@@ -601,125 +592,13 @@ function App() {
         />
       </section>
 
-      {/* sec10: MSM 이미지/비디오 섹션 */}
-      <section className="hg-section hg-sec10">
-        <img
-          src="/hoguanwon.com/img/sec10_bg.jpg"
-          alt="호관원 배경화면"
-          className="hg-sec-bg"
-        />
-        <div className="hg-sec10-layer hg-sec10-msm">
-          <div className="hg-sec10-msm-inner">
-            <img
-              src="/hoguanwon.com/img/sec10_msm.png"
-              alt="호관원 MSM 이미지"
-            />
-            <div className="hg-sec10-graphs">
-              <img
-                src="/hoguanwon.com/img/grhap_01.gif"
-                alt="호관원 그래프 이미지"
-              />
-              <img
-                src="/hoguanwon.com/img/grhap_02.gif"
-                alt="호관원 그래프 이미지2"
-              />
-            </div>
-          </div>
-        </div>
-        <div className="hg-sec10-layer hg-sec10-bottom">
-          <img
-            src="/hoguanwon.com/img/sec10_bottom.png"
-            alt="호관원 설명 이미지"
-          />
-        </div>
-      </section>
-
-      {/* sec11: 제품/타이틀 섹션 */}
-      <section className="hg-section hg-sec11">
-        <img
-          src="/hoguanwon.com/img/sec11_bg.jpg"
-          alt="호관원 배경화면"
-          className="hg-sec-bg"
-        />
-        <div className="hg-sec11-layer hg-sec11-title">
-          <img
-            src="/hoguanwon.com/img/sec11_title.png"
-            alt="호관원 타이틀 이미지"
-          />
-        </div>
-      </section>
-
-      {/* sec12: 인포/로고 섹션 */}
+      {/* sec12 */}
       <section className="hg-section hg-sec12">
         <img
-          src="/hoguanwon.com/img/sec12_bg.jpg"
-          alt="호관원 배경화면"
-          className="hg-sec-bg"
+          src="/hoguanwon.com/img/hoguanwon_walk_7.gif"
+          alt="호관원 프리미엄 골드 한정기간 혜택"
+          className="hg-section-image"
         />
-        <div className="hg-sec12-layer hg-sec12-title">
-          <img
-            src="/hoguanwon.com/img/sec12_title.png"
-            alt="호관원 타이틀 이미지"
-          />
-        </div>
-        <div className="hg-sec12-layer hg-sec12-info">
-          <img
-            src="/hoguanwon.com/img/sec12_info.png"
-            alt="호관원 인포 이미지"
-          />
-        </div>
-        <div className="hg-sec12-layer hg-sec12-logo">
-          <img
-            src="/hoguanwon.com/img/sec12_logo.png"
-            alt="호관원 로고 이미지"
-          />
-        </div>
-        <div className="hg-sec12-layer hg-sec12-img img-animated">
-          <img
-            className={`sec12-frame sec12-frame-${sec12Index}`}
-            src={
-              sec12Index === 0
-                ? "/hoguanwon.com/img/sec12_img01.png"
-                : sec12Index === 1
-                  ? "/hoguanwon.com/img/sec12_img02.png"
-                  : "/hoguanwon.com/img/sec12_img03.png"
-            }
-            alt="호관원 이미지"
-          />
-        </div>
-      </section>
-
-      {/* sec13: 최하단 상담/전화 섹션 (비주얼만, 실제 폼은 React ConsultationForm 사용) */}
-      <section className="hg-section hg-sec13">
-        <img
-          src="/hoguanwon.com/img/sec13_bg.jpg"
-          alt="호관원 하단 배경"
-          className="hg-sec-bg"
-        />
-        <div className="hg-sec13-layer hg-sec13-logo">
-          <img
-            src="/hoguanwon.com/img/sec13_logo.png"
-            alt="호관원 로고"
-          />
-        </div>
-        <div className="hg-sec13-layer hg-sec13-model">
-          <img
-            src="/hoguanwon.com/img/sec13_model.png"
-            alt="호관원 모델"
-          />
-        </div>
-        <div className="hg-sec13-layer hg-sec13-phone">
-          <img
-            src="/hoguanwon.com/img/sec13_phone.png"
-            alt="호관원 상담 전화"
-          />
-        </div>
-        <div className="hg-sec13-layer hg-sec13-writing">
-          <img
-            src="/hoguanwon.com/img/sec13_writing.png"
-            alt="호관원 문구 이미지"
-          />
-        </div>
       </section>
 
       {/* trust-badges, 인증, 효능 섹션 제거 (원본 이미지 섹션만 사용) */}
