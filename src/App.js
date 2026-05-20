@@ -483,7 +483,6 @@ function App() {
   const [scrollY, setScrollY] = useState(0);
   const [headerSolid, setHeaderSolid] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [sec6Alt, setSec6Alt] = useState(false);
   const [sec12Index, setSec12Index] = useState(0);
 
   // 스크롤 애니메이션 refs
@@ -504,15 +503,6 @@ function App() {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // sec6 아이콘은 2초 후 한 번만 교체
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setSec6Alt(true);
-    }, 2000);
-
-    return () => clearTimeout(timer);
   }, []);
 
   // sec12 이미지 순환 타이머 (2초 간격, 1→2→3→1...)
@@ -593,83 +583,13 @@ function App() {
         />
       </section>
 
-      {/* sec5: 효능 관련 섹션 */}
-      <section className="hg-section hg-sec5">
-        <img
-          src="/hoguanwon.com/img/sec5_bg.jpg"
-          alt="호관원 배경화면"
-          className="hg-sec-bg"
-        />
-        <div className="hg-sec5-layer hg-sec5-title">
-          <img
-            src="/hoguanwon.com/img/sec5_title.png"
-            alt="호관원 타이틀 이미지"
-          />
-        </div>
-        <div className="hg-sec5-layer hg-sec5-info">
-          <img
-            src="/hoguanwon.com/img/sec5_info.png"
-            alt="호관원 효과 인포 이미지"
-          />
-        </div>
-        <div className="hg-sec5-layer hg-sec5-img">
-          <img
-            src="/hoguanwon.com/img/sec5_img.png"
-            alt="호관원 효과 이미지"
-          />
-        </div>
-        <div className="hg-sec5-layer hg-sec5-product">
-          <img
-            src="/hoguanwon.com/img/sec5_product.png"
-            alt="호관원 제품 이미지"
-          />
-        </div>
-      </section>
-
-      {/* sec6: MSM/관절 설명 섹션 */}
+      {/* sec6 */}
       <section className="hg-section hg-sec6">
         <img
-          src="/hoguanwon.com/img/sec6_bg.jpg"
-          alt="호관원 MSM 배경"
-          className="hg-sec-bg"
+          src="/hoguanwon.com/img/hoguanwon_walk_5.png"
+          alt="호관원 프리미엄 생산 인증"
+          className="hg-section-image"
         />
-        <div className="hg-sec6-layer hg-sec6-title">
-          <img
-            src="/hoguanwon.com/img/sec6_title.png"
-            alt="호관원 MSM 타이틀"
-          />
-        </div>
-        <div className="hg-sec6-layer hg-sec6-con">
-          <img
-            src="/hoguanwon.com/img/sec6_con.png"
-            alt="호관원 MSM 내용"
-          />
-        </div>
-        {/* 세부 아이콘/그래픽들 */}
-        <div className="hg-sec6-layer hg-sec6-icon icon-1">
-          <img
-            src={sec6Alt ? "/hoguanwon.com/img/sec6_005.png" : "/hoguanwon.com/img/sec6_001.png"}
-            alt="아이콘1"
-          />
-        </div>
-        <div className="hg-sec6-layer hg-sec6-icon icon-2">
-          <img
-            src={sec6Alt ? "/hoguanwon.com/img/sec6_006.png" : "/hoguanwon.com/img/sec6_002.png"}
-            alt="아이콘2"
-          />
-        </div>
-        <div className="hg-sec6-layer hg-sec6-icon icon-3">
-          <img
-            src={sec6Alt ? "/hoguanwon.com/img/sec6_007.png" : "/hoguanwon.com/img/sec6_003.png"}
-            alt="아이콘3"
-          />
-        </div>
-        <div className="hg-sec6-layer hg-sec6-icon icon-4">
-          <img
-            src={sec6Alt ? "/hoguanwon.com/img/sec6_008.png" : "/hoguanwon.com/img/sec6_004.png"}
-            alt="아이콘4"
-          />
-        </div>
       </section>
 
       {/* sec7: 이중케어/케어 이미지 섹션 */}

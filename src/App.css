@@ -44,8 +44,6 @@
 }
 
 /* 모바일에서는 오버레이 이미지들이 겹치지 않게 크기 축소 + 중앙 기준 */
-.hg-mobile-view .hg-sec5-layer,
-.hg-mobile-view .hg-sec6-layer,
 .hg-mobile-view .hg-sec7-layer,
 .hg-mobile-view .hg-sec8-layer,
 .hg-mobile-view .hg-sec9-layer,
@@ -58,77 +56,6 @@
   left: 50% !important;
   right: auto !important;
   max-width: 96vw;
-}
-
-/* sec6 아이콘은 모바일에서 좌측 하단부터 가로로 순서 배치 */
-.hg-mobile-view .hg-sec6-icon {
-  top: auto !important;
-  bottom: 5.5%;
-  transform: none !important;
-  transform-origin: bottom left;
-  max-width: none;
-}
-
-.hg-mobile-view .hg-sec6-icon img {
-  width: min(23vw, 92px);
-  max-width: none;
-}
-
-.hg-mobile-view .hg-sec6-icon.icon-1 { left: 1% !important; }
-.hg-mobile-view .hg-sec6-icon.icon-2 { left: 26% !important; }
-.hg-mobile-view .hg-sec6-icon.icon-3 { left: 51% !important; }
-.hg-mobile-view .hg-sec6-icon.icon-4 { left: 76% !important; }
-
-/* 모바일 전반 레이아웃 정리 */
-.hg-mobile-view .hg-sec5-title {
-  top: 12%;
-  left: 50% !important;
-  transform: translateX(-50%) scale(0.92) !important;
-}
-
-.hg-mobile-view .hg-sec5-info {
-  top: 25%;
-  left: 50% !important;
-  transform: translateX(-50%) scale(0.88) !important;
-}
-
-.hg-mobile-view .hg-sec5-img {
-  top: 42%;
-  left: 50% !important;
-  width: min(94vw, 420px);
-  transform: translateX(-50%) scale(1) !important;
-}
-
-.hg-mobile-view .hg-sec5-img img {
-  width: 100%;
-  max-width: none;
-}
-
-.hg-mobile-view .hg-sec5-product {
-  bottom: 3%;
-  width: min(24vw, 108px);
-  transform: translateX(-50%) scale(1) !important;
-}
-
-.hg-mobile-view .hg-sec5-product img {
-  width: 100%;
-  max-width: none;
-}
-
-.hg-mobile-view .hg-sec6-title {
-  top: 9%;
-}
-
-.hg-mobile-view .hg-sec6-con {
-  top: 21%;
-  width: min(92vw, 520px);
-  max-width: none;
-  transform: translateX(-50%) scale(1.18) !important;
-}
-
-.hg-mobile-view .hg-sec6-con img {
-  width: 100%;
-  max-width: none;
 }
 
 .hg-mobile-view .hg-sec7-title,
@@ -394,72 +321,6 @@
   display: block;
   width: 100%;
   height: auto;
-}
-
-/* sec5 */
-.hg-sec5-layer {
-  position: absolute;
-}
-
-.hg-sec5-title {
-  top: 10%;
-  left: 10%;
-}
-
-.hg-sec5-info {
-  top: 25%;
-  left: 10%;
-}
-
-.hg-sec5-img {
-  bottom: 10%;
-  left: 10%;
-}
-
-.hg-sec5-product {
-  bottom: 8%;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-/* sec6 */
-.hg-sec6-layer {
-  position: absolute;
-}
-
-.hg-sec6-title {
-  top: 10%;
-  left: 10%;
-}
-
-.hg-sec6-con {
-  top: 25%;
-  left: 10%;
-}
-
-.hg-sec6-icon.icon-1 {
-  top: 50%;
-  left: 10%;
-}
-
-.hg-sec6-icon.icon-2 {
-  top: 50%;
-  left: 28%;
-}
-
-.hg-sec6-icon.icon-3 {
-  top: 50%;
-  left: 46%;
-}
-
-.hg-sec6-icon.icon-4 {
-  top: 50%;
-  left: 64%;
-}
-
-.hg-sec6-icon {
-  transform: scale(0.75);
-  transform-origin: center center;
 }
 
 /* sec7 */
