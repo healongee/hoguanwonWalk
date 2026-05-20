@@ -555,26 +555,13 @@ function App() {
 
       {/* 모바일 메뉴 오버레이 제거 */}
 
-      {/* 히어로 섹션 – 원본 사이트처럼 비디오 배너 사용 */}
+      {/* 히어로 섹션 */}
       <section className="hero-video-section">
-        <video
-          className="hero-video"
-          src="/hoguanwon.com/img/banner_video.mp4"
-          poster="/hoguanwon.com/img/poster.jpg"
-          autoPlay
-          muted
-          loop
-          playsInline
+        <img
+          className="hero-image"
+          src="/hoguanwon.com/img/hoguanwon_walk_1.gif"
+          alt="불편한 관절 통증 안내"
         />
-        <div className="hero-video-overlay">
-          <div className="hero-video-text">
-            <p className="hero-line hero-line-large">관절건강 대표주자</p>
-            <p className="hero-line hero-line-small">
-              제조원 (주)동진제약<br />
-              판매원 자연내림호관원(주)
-            </p>
-          </div>
-        </div>
       </section>
 
       {/* sec2 ~ sec13 이미지 섹션들 (원본 PC 사이트 배치 기반) */}
