@@ -568,6 +568,11 @@ function App() {
           alt="기능성 원료인 MSM의 인체시험 결과"
           className="hg-section-image"
         />
+        <img
+          src="/hoguanwon.com/img/3-1.gif"
+          alt="일일 섭취량 MSM 1,500mg 함유"
+          className="hg-section-image"
+        />
       </section>
 
       {/* sec4 */}
@@ -575,6 +580,21 @@ function App() {
         <img
           src="/hoguanwon.com/img/hoguanwon_walk_4.png"
           alt="해조류에서 추출한 천연 칼슘 해조칼슘"
+          className="hg-section-image"
+        />
+        <img
+          src="/hoguanwon.com/img/4-1.jpg"
+          alt="부원료도 관절을 위해 알차게 넣었습니다"
+          className="hg-section-image"
+        />
+        <img
+          src="/hoguanwon.com/img/4-2.jpg"
+          alt="간편하게 섭취하고 빠르게 흡수한다"
+          className="hg-section-image"
+        />
+        <img
+          src="/hoguanwon.com/img/4-3.jpg"
+          alt="8년 연속 관절건강기능식품 대상"
           className="hg-section-image"
         />
       </section>
