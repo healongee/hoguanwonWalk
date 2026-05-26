@@ -287,46 +287,17 @@
 
 <!-- 팝업 끝 -->
 
-	<!-- 픽스 버튼 시작 -->
-	
-	<div class="fixed_top go-db">
-		<a href="index.html#dbSection">
-			<img src="img/TOP.png" alt="">
-		</a>
-	</div>	
-	
-	<style>
-		.fixed_top{position:fixed; top:5%; right:1%; width:177px; z-index:10;}
-		.fixed_top a{display:block;}
-		.fixed_top a img{display:block; width:100%;}
-	</style>
-	
-	<script>
-	  document.querySelector('.go-db').addEventListener('click', function(e){
-		e.preventDefault();
-
-		const target = document.querySelector('.db_top');
-		if(!target) return;
-
-		target.scrollIntoView({
-		  behavior: 'smooth',
-		  block: 'start'
-		});
-	  });
-	</script>
-	
-	<!-- 픽스 버튼 제어는 최하단 풀페이지 제어에서 확인 가능 -->
-	<!-- 픽스 버튼 끝 -->
-
     <div id="wrapper">
 		<section class="section section1">
 			<img class="hero_image" src="img/hoguanwon_walk_1.gif" alt="불편한 관절 통증 안내">
 		</section>
 		<section class="section section2">
 			<img class="section2_image" src="img/hoguanwon_walk_2.png" alt="호관원 프리미엄 골드">
+			<img class="section_image" src="img/2-1.jpg" alt="MSM과 칼슘의 만남">
 		</section>
 		<section class="section section3_intro">
 			<img class="section_image" src="img/hoguanwon_walk_3.png" alt="식약처 인정 기능성 소재 MSM">
+			<img class="section_image" src="img/3-2.jpg" alt="기능성 원료인 MSM의 인체시험 결과">
 		</section>
 		<section class="section section3">
 			<img class="section_image" src="img/hoguanwon_walk_4.png" alt="해조류에서 추출한 천연 칼슘 해조칼슘">
@@ -450,37 +421,6 @@
 			</div>	
 		</footer>
 			
-		<!-- **기존 풀페이지 스크립트**
-		<script>
-			var fixedTop = document.querySelector('.fixed_top');
-			new fullpage('#fullpage', {
-				// 옵션 설정
-				sectionsColor: ['#f2f2f2', '#4BBFC3', '#7BAABE', 'whitesmoke'],
-				anchors: ['1Page', '2Page', '3Page', '4Page', '5Page', '6Page', '7Page', '8Page', '9Page', '10Page', 'footer'],
-				menu: '#menu',
-				sectionSelector: '.section',
-				scrollOverflow: true,
-				navigation: true,
-				scrollingSpeed: 1000,
-				afterLoad: function(origin, destination, direction) {
-					// destination.index는 현재 활성화된 섹션의 인덱스입니다.
-					// 0부터 시작하므로 #10Page가 두 번째 섹션이면 destination.index는 1입니다.
-					
-					// #10Page 섹션에 도달했을 때
-					if (destination.anchor === "10Page") {
-						fixedTop.style.display = 'none';  // fixed_top 숨기기
-					}
-					// #footer 섹션에 도달했을 때
-					else if (destination.anchor === "1Page") {
-						fixedTop.style.display = 'none';  // fixed_top 숨기기
-					}else if (destination.anchor === "footer") {
-						fixedTop.style.display = 'none';  // fixed_top 숨기기
-					} else {
-						fixedTop.style.display = 'block'; // 다른 섹션에서는 fixed_top 보이기
-					}
-				}
-			});
-		</script> -->
 </div>
 <script>
   AOS.init();

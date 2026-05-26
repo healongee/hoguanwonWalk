@@ -522,11 +522,6 @@ function App() {
 
   return (
     <div className={`landing-page ${isMobileView ? 'hg-mobile-view' : 'hg-pc-view'}`}>
-      {/* 언제든 상담 섹션으로 이동하는 고정 TOP 버튼 (원본 사이트 TOP.png 사용) */}
-      <a href="#consultation" className="fixed-top-button">
-        <img src="/hoguanwon.com/img/TOP.png" alt="무료 상담 바로가기" />
-      </a>
-
       {/* 헤더 */}
       <header className={`header ${headerSolid ? 'solid' : ''} ${mobileMenuOpen ? 'menu-open' : ''}`}>
         <div className="container">
@@ -554,6 +549,11 @@ function App() {
           alt="호관원 프리미엄 골드"
           className="hg-sec2-image"
         />
+        <img
+          src="/hoguanwon.com/img/2-1.jpg"
+          alt="MSM과 칼슘의 만남"
+          className="hg-section-image"
+        />
       </section>
 
       {/* sec3: 편지/손/시그 이미지 레이아웃 */}
@@ -561,6 +561,11 @@ function App() {
         <img
           src="/hoguanwon.com/img/hoguanwon_walk_3.png"
           alt="식약처 인정 기능성 소재 MSM"
+          className="hg-section-image"
+        />
+        <img
+          src="/hoguanwon.com/img/3-2.jpg"
+          alt="기능성 원료인 MSM의 인체시험 결과"
           className="hg-section-image"
         />
       </section>
