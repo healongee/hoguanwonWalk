@@ -1751,46 +1751,6 @@ body {
   min-height: 100px;
 }
 
-/* 주소 입력 그룹 */
-.address-input-group {
-  display: flex;
-  gap: 10px;
-}
-
-.address-input {
-  flex: 1;
-  cursor: pointer;
-  background: var(--bg-cream) !important;
-}
-
-.address-input:focus {
-  cursor: text;
-}
-
-.address-search-btn {
-  padding: 14px 24px;
-  background: var(--primary);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.address-search-btn:hover {
-  background: var(--primary-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(44, 85, 48, 0.25);
-}
-
-.address-search-btn:active {
-  transform: translateY(0);
-}
-
 .form-row {
   display: flex;
   gap: 16px;
@@ -1894,23 +1854,6 @@ body {
   margin-bottom: 28px;
   font-size: 15px;
   line-height: 1.6;
-}
-
-.btn-reset {
-  background: var(--primary);
-  color: white;
-  border: none;
-  padding: 14px 36px;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.btn-reset:hover {
-  background: var(--primary-dark);
-  transform: translateY(-2px);
 }
 
 /* ===========================
@@ -2536,16 +2479,6 @@ body {
   .form-row {
     flex-direction: column;
     gap: 0;
-  }
-
-  .address-input-group {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .address-search-btn {
-    width: 100%;
-    padding: 16px;
   }
 
   .phone-number-large {

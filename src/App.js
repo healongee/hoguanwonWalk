@@ -89,7 +89,6 @@ function ConsultationForm() {
     phone: '',
     age: '',
     sex: '',
-    address: '',
     remarks: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -191,54 +190,6 @@ function ConsultationForm() {
     return isMobile ? 'Mobile' : 'PC';
   };
 
-  // 카카오 우편번호 검색 팝업 열기
-  const openPostcode = () => {
-    if (window.daum && window.daum.Postcode) {
-      new window.daum.Postcode({
-        oncomplete: function (data) {
-          let addr = ''; // 주소 변수
-          let extraAddr = ''; // 참고항목 변수
-
-          // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-          if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-            addr = data.roadAddress;
-          } else { // 사용자가 지번 주소를 선택했을 경우(J)
-            addr = data.jibunAddress;
-          }
-
-          // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
-          if (data.userSelectedType === 'R') {
-            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-            if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
-              extraAddr += data.bname;
-            }
-            // 건물명이 있고, 공동주택일 경우 추가한다.
-            if (data.buildingName !== '' && data.apartment === 'Y') {
-              extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-            }
-            // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-            if (extraAddr !== '') {
-              extraAddr = ' (' + extraAddr + ')';
-            }
-          }
-
-          // 우편번호와 주소 정보를 해당 필드에 넣는다.
-          const fullAddress = `[${data.zonecode}] ${addr}${extraAddr}`;
-          setFormData(prev => ({
-            ...prev,
-            address: fullAddress
-          }));
-        },
-        width: '100%',
-        height: '100%',
-        maxSuggestItems: 5
-      }).open();
-    } else {
-      alert('주소 검색 서비스를 불러올 수 없습니다. 페이지를 새로고침해주세요.');
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -265,7 +216,7 @@ function ConsultationForm() {
         name: formData.name.trim(),
         age: formData.age || null,
         sex: formData.sex || null,
-        address: formData.address || null,
+        address: null,
         remarks: remarks || null,
         device: device,
         ip: 'client',
@@ -289,7 +240,7 @@ function ConsultationForm() {
           console.error('돈버는 미션 참여 완료 요청 오류:', rewardError);
         }
         setSubmitResult('success');
-        setFormData({ name: '', phone: '', age: '', sex: '', address: '', remarks: '' });
+        setFormData({ name: '', phone: '', age: '', sex: '', remarks: '' });
       }
     } catch (error) {
       setSubmitResult('error');
@@ -324,9 +275,6 @@ function ConsultationForm() {
           </div>
           <h3>상담 신청이 완료되었습니다!</h3>
           <p>영업일 기준 1~2일 내에<br />담당자가 연락드리겠습니다.</p>
-          <button className="btn-reset" onClick={() => setSubmitResult(null)}>
-            추가 신청하기
-          </button>
         </div>
       ) : (
         <form onSubmit={handleSubmit}>
@@ -392,30 +340,6 @@ function ConsultationForm() {
                 <option value="남성">남성</option>
                 <option value="여성">여성</option>
               </select>
-            </div>
-          </div>
-
-          <div className={`form-group ${focusedField === 'address' ? 'focused' : ''}`}>
-            <label>주소</label>
-            <div className="address-input-group">
-              <input
-                type="text"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                onFocus={() => setFocusedField('address')}
-                onBlur={() => setFocusedField(null)}
-                placeholder="주소를 검색해주세요"
-                readOnly
-                className="address-input"
-              />
-              <button
-                type="button"
-                onClick={openPostcode}
-                className="address-search-btn"
-              >
-                주소 검색
-              </button>
             </div>
           </div>
 
