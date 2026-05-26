@@ -369,28 +369,28 @@ function ConsultationForm() {
           <ul className="agree_wrap" style={{ listStyle: 'none', padding: '15px', margin: '20px 0', background: '#f9f9f9', border: '1px solid #ddd', fontSize: '13px', color: '#666' }}>
             <li style={{ marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <input type="checkbox" id="agree1-1" name="agree1-1" defaultChecked style={{ marginRight: '8px', width: '16px', height: '16px', accentColor: '#2C5530', cursor: 'pointer' }} />
+                <input type="checkbox" id="agree1-1" name="agree1-1" defaultChecked style={{ marginRight: '8px', width: '16px', height: '16px', accentColor: '#0057b8', cursor: 'pointer' }} />
                 <label htmlFor="agree1-1" style={{ cursor: 'pointer', lineHeight: '1.2' }}>개인정보 수집이용 동의(필수)</label>
               </div>
               <a href="/policy/index1.html" target="_blank" rel="noopener noreferrer" className="btn-example" style={{ textDecoration: 'none', color: '#888', cursor: 'pointer', whiteSpace: 'nowrap' }}>[약관보기]</a>
             </li>
             <li style={{ marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <input type="checkbox" id="agree1-2" name="agree1-2" defaultChecked style={{ marginRight: '8px', width: '16px', height: '16px', accentColor: '#2C5530', cursor: 'pointer' }} />
+                <input type="checkbox" id="agree1-2" name="agree1-2" defaultChecked style={{ marginRight: '8px', width: '16px', height: '16px', accentColor: '#0057b8', cursor: 'pointer' }} />
                 <label htmlFor="agree1-2" style={{ cursor: 'pointer', lineHeight: '1.2' }}>제 3자 정보 제공 동의(필수)</label>
               </div>
               <a href="/policy/index2.html" target="_blank" rel="noopener noreferrer" className="btn-example" style={{ textDecoration: 'none', color: '#888', cursor: 'pointer', whiteSpace: 'nowrap' }}>[약관보기]</a>
             </li>
             <li style={{ marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <input type="checkbox" id="agree1-3" name="agree1-3" defaultChecked style={{ marginRight: '8px', width: '16px', height: '16px', accentColor: '#2C5530', cursor: 'pointer' }} />
+                <input type="checkbox" id="agree1-3" name="agree1-3" defaultChecked style={{ marginRight: '8px', width: '16px', height: '16px', accentColor: '#0057b8', cursor: 'pointer' }} />
                 <label htmlFor="agree1-3" style={{ cursor: 'pointer', lineHeight: '1.2' }}>마케팅 정보 수신동의(선택)</label>
               </div>
               <a href="/policy/index3.html" target="_blank" rel="noopener noreferrer" className="btn-example" style={{ textDecoration: 'none', color: '#888', cursor: 'pointer', whiteSpace: 'nowrap' }}>[약관보기]</a>
             </li>
             <li style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <input type="checkbox" id="agree1-4" name="agree1-4" defaultChecked style={{ marginRight: '8px', width: '16px', height: '16px', accentColor: '#2C5530', cursor: 'pointer' }} />
+                <input type="checkbox" id="agree1-4" name="agree1-4" defaultChecked style={{ marginRight: '8px', width: '16px', height: '16px', accentColor: '#0057b8', cursor: 'pointer' }} />
                 <label htmlFor="agree1-4" style={{ cursor: 'pointer', lineHeight: '1.2' }}>개인정보 처리방침</label>
               </div>
               <a href="/policy/index4.html" target="_blank" rel="noopener noreferrer" className="btn-example" style={{ textDecoration: 'none', color: '#888', cursor: 'pointer', whiteSpace: 'nowrap' }}>[약관보기]</a>
