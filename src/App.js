@@ -117,38 +117,134 @@ function ConsultationForm() {
   }, [missionParams]);
   const hasMissionParams = Boolean(missionParams.uid && missionParams.cid);
 
-  const sendMissionReward = async () => {
-    if (!hasMissionParams) {
+  const writeIntegrationLog = async ({
+    event,
+    status = 'info',
+    phone = null,
+    name = null,
+    requestUrl = null,
+    requestPayload = null,
+    responseStatus = null,
+    responseBody = null,
+    errorMessage = null,
+    metadata = null,
+  }) => {
+    if (!supabase) {
       return;
     }
 
-    const response = await fetch(`${REWARD_API_BASE_URL}/rewards/custom`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        uid: missionParams.uid,
-        cid: missionParams.cid,
-        api_key: REWARD_API_KEY,
-      }),
+    try {
+      await supabase.from('log').insert({
+        event,
+        status,
+        uid: missionParams.uid || null,
+        cid: missionParams.cid || null,
+        adid: missionParams.adid || null,
+        phone,
+        name,
+        request_url: requestUrl,
+        request_payload: requestPayload,
+        response_status: responseStatus,
+        response_body: responseBody,
+        error_message: errorMessage,
+        metadata,
+      });
+    } catch (logError) {
+      console.warn('연동 로그 저장 실패:', logError);
+    }
+  };
+
+  const sendMissionReward = async () => {
+    const requestUrl = `${REWARD_API_BASE_URL}/rewards/custom`;
+    const requestPayload = {
+      uid: missionParams.uid,
+      cid: missionParams.cid,
+      api_key: REWARD_API_KEY,
+    };
+
+    if (!hasMissionParams) {
+      await writeIntegrationLog({
+        event: 'reward_skipped_missing_params',
+        status: 'skipped',
+        requestUrl,
+        requestPayload,
+        metadata: {
+          hasUid: Boolean(missionParams.uid),
+          hasCid: Boolean(missionParams.cid),
+          hasAdid: Boolean(missionParams.adid),
+        },
+      });
+      return;
+    }
+
+    await writeIntegrationLog({
+      event: 'reward_request_start',
+      status: 'pending',
+      requestUrl,
+      requestPayload,
     });
+
+    let response;
+    try {
+      response = await fetch(requestUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestPayload),
+      });
+    } catch (error) {
+      await writeIntegrationLog({
+        event: 'reward_request_exception',
+        status: 'error',
+        requestUrl,
+        requestPayload,
+        errorMessage: error.message,
+      });
+      throw error;
+    }
 
     if (response.status !== 201) {
       let message = `돈버는 미션 참여 완료 요청 실패 (${response.status})`;
+      let responseBody = null;
       try {
         const text = await response.text();
-        const data = text ? JSON.parse(text) : null;
-        if (data?.message) {
-          message = data.message;
-        } else if (text) {
-          message = text;
+        responseBody = text || null;
+        if (text) {
+          try {
+            const data = JSON.parse(text);
+            responseBody = data;
+            if (data?.message) {
+              message = data.message;
+            } else {
+              message = text;
+            }
+          } catch (_) {
+            message = text;
+          }
         }
       } catch (_) {
         // 기본 상태 코드 메시지를 사용합니다.
       }
+      await writeIntegrationLog({
+        event: 'reward_request_failed',
+        status: 'error',
+        requestUrl,
+        requestPayload,
+        responseStatus: response.status,
+        responseBody,
+        errorMessage: message,
+      });
       throw new Error(message);
     }
+
+    await writeIntegrationLog({
+      event: 'reward_request_success',
+      status: 'success',
+      requestUrl,
+      requestPayload,
+      responseStatus: response.status,
+    });
   };
 
   const handleChange = (e) => {
@@ -212,6 +308,17 @@ function ConsultationForm() {
     }
 
     try {
+      await writeIntegrationLog({
+        event: 'consultation_submit_start',
+        status: 'pending',
+        phone: phoneClean,
+        name: formData.name.trim(),
+        metadata: {
+          device,
+          hasMissionParams,
+        },
+      });
+
       const { error } = await supabase.from('info').insert({
         phone: phoneClean,
         name: formData.name.trim(),
@@ -227,6 +334,18 @@ function ConsultationForm() {
       });
 
       if (error) {
+        await writeIntegrationLog({
+          event: 'consultation_insert_failed',
+          status: 'error',
+          phone: phoneClean,
+          name: formData.name.trim(),
+          errorMessage: error.message,
+          metadata: {
+            code: error.code,
+            details: error.details,
+            hint: error.hint,
+          },
+        });
         if (error.code === '23505') {
           alert('이미 등록된 연락처입니다.');
         } else {
@@ -235,15 +354,35 @@ function ConsultationForm() {
         setSubmitResult('error');
         console.error('상담 신청 오류:', error);
       } else {
+        await writeIntegrationLog({
+          event: 'consultation_insert_success',
+          status: 'success',
+          phone: phoneClean,
+          name: formData.name.trim(),
+        });
+
         try {
           await sendMissionReward();
         } catch (rewardError) {
           console.error('돈버는 미션 참여 완료 요청 오류:', rewardError);
         }
+        await writeIntegrationLog({
+          event: 'consultation_submit_success',
+          status: 'success',
+          phone: phoneClean,
+          name: formData.name.trim(),
+        });
         setSubmitResult('success');
         setFormData({ name: '', phone: '', age: '', sex: '', remarks: '' });
       }
     } catch (error) {
+      await writeIntegrationLog({
+        event: 'consultation_submit_exception',
+        status: 'error',
+        phone: phoneClean,
+        name: formData.name.trim(),
+        errorMessage: error.message,
+      });
       setSubmitResult('error');
       alert('상담 신청에 실패했습니다. 잠시 후 다시 시도해주세요.');
       console.error('상담 신청 오류:', error);
