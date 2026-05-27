@@ -2,7 +2,7 @@ import './App.css';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { supabase } from './supabase';
 
-const REWARD_API_BASE_URL = process.env.REACT_APP_REWARD_API_BASE_URL || 'https://prod.xarvis.kr';
+const REWARD_API_BASE_URL = process.env.REACT_APP_REWARD_API_BASE_URL || 'https://dev.wallas.cc';
 
 function useIsMobile(breakpointPx = 768) {
   const query = useMemo(() => `(max-width: ${breakpointPx}px)`, [breakpointPx]);
