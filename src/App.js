@@ -496,9 +496,6 @@ function ConsultationForm() {
                 onBlur={() => setFocusedField(null)}
               >
                 <option value="">선택해 주세요</option>
-                <option value="20대">20대</option>
-                <option value="30대">30대</option>
-                <option value="40대">40대</option>
                 <option value="50대">50대</option>
                 <option value="60대">60대</option>
                 <option value="70대 이상">70대 이상</option>
