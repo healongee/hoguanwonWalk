@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { supabase } from './supabase';
 
 const REWARD_API_BASE_URL = process.env.REACT_APP_REWARD_API_BASE_URL || 'https://dev.wallas.cc';
+const REWARD_API_KEY = process.env.REACT_APP_REWARD_API_KEY || 'abcdefg';
 
 function useIsMobile(breakpointPx = 768) {
   const query = useMemo(() => `(max-width: ${breakpointPx}px)`, [breakpointPx]);
@@ -130,6 +131,7 @@ function ConsultationForm() {
         uid: missionParams.uid,
         cid: missionParams.cid,
         adid: missionParams.adid,
+        api_key: REWARD_API_KEY,
       }),
     });
 
