@@ -115,7 +115,7 @@ function ConsultationForm() {
 
     return entries.length ? `[돈버는미션] ${entries.join('&')}` : '';
   }, [missionParams]);
-  const hasMissionParams = Boolean(missionParams.uid && missionParams.cid && missionParams.adid);
+  const hasMissionParams = Boolean(missionParams.uid && missionParams.cid);
 
   const sendMissionReward = async () => {
     if (!hasMissionParams) {
@@ -130,7 +130,6 @@ function ConsultationForm() {
       body: JSON.stringify({
         uid: missionParams.uid,
         cid: missionParams.cid,
-        adid: missionParams.adid,
         api_key: REWARD_API_KEY,
       }),
     });
