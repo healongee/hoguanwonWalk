@@ -2,8 +2,26 @@ import './App.css';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { supabase } from './supabase';
 
-const REWARD_API_BASE_URL = process.env.REACT_APP_REWARD_API_BASE_URL || 'https://dev.wallas.cc';
-const REWARD_API_KEY = process.env.REACT_APP_REWARD_API_KEY || 'abcdefg';
+const REWARD_SYSTEMS = [
+  {
+    systemId: 'thezoom',
+    name: '더줌코리아',
+    baseUrl: process.env.REACT_APP_THEZOOM_REWARD_API_BASE_URL
+      || process.env.REACT_APP_REWARD_API_BASE_URL
+      || 'https://dev.wallas.cc',
+    endpoint: '/rewards/custom',
+    apiKey: process.env.REACT_APP_THEZOOM_REWARD_API_KEY
+      || process.env.REACT_APP_REWARD_API_KEY
+      || 'abcdefg',
+  },
+  {
+    systemId: 'oraclex',
+    name: '오라클X',
+    baseUrl: process.env.REACT_APP_ORACLEX_REWARD_API_BASE_URL || 'https://postback-api.oraclink.dev',
+    endpoint: '/direct/common',
+    apiKey: process.env.REACT_APP_ORACLEX_REWARD_API_KEY || 'abcdefg',
+  },
+];
 
 function useIsMobile(breakpointPx = 768) {
   const query = useMemo(() => `(max-width: ${breakpointPx}px)`, [breakpointPx]);
@@ -118,6 +136,7 @@ function ConsultationForm() {
   const hasMissionParams = Boolean(missionParams.uid && missionParams.cid);
 
   const writeIntegrationLog = async ({
+    systemId = 'landing',
     event,
     status = 'info',
     phone = null,
@@ -135,6 +154,7 @@ function ConsultationForm() {
 
     try {
       await supabase.from('log').insert({
+        system_id: systemId,
         event,
         status,
         uid: missionParams.uid || null,
@@ -154,34 +174,40 @@ function ConsultationForm() {
     }
   };
 
-  const sendMissionReward = async () => {
-    const requestUrl = `${REWARD_API_BASE_URL}/rewards/custom`;
+  const sendRewardPostback = async (system) => {
+    const requestUrl = `${system.baseUrl}${system.endpoint}`;
     const requestPayload = {
       uid: missionParams.uid,
       cid: missionParams.cid,
-      api_key: REWARD_API_KEY,
+      api_key: system.apiKey,
+    };
+    const metadata = {
+      systemName: system.name,
+      endpoint: system.endpoint,
+      hasUid: Boolean(missionParams.uid),
+      hasCid: Boolean(missionParams.cid),
+      hasAdid: Boolean(missionParams.adid),
     };
 
     if (!hasMissionParams) {
       await writeIntegrationLog({
+        systemId: system.systemId,
         event: 'reward_skipped_missing_params',
         status: 'skipped',
         requestUrl,
         requestPayload,
-        metadata: {
-          hasUid: Boolean(missionParams.uid),
-          hasCid: Boolean(missionParams.cid),
-          hasAdid: Boolean(missionParams.adid),
-        },
+        metadata,
       });
       return;
     }
 
     await writeIntegrationLog({
+      systemId: system.systemId,
       event: 'reward_request_start',
       status: 'pending',
       requestUrl,
       requestPayload,
+      metadata,
     });
 
     let response;
@@ -195,11 +221,13 @@ function ConsultationForm() {
       });
     } catch (error) {
       await writeIntegrationLog({
+        systemId: system.systemId,
         event: 'reward_request_exception',
         status: 'error',
         requestUrl,
         requestPayload,
         errorMessage: error.message,
+        metadata,
       });
       throw error;
     }
@@ -227,6 +255,7 @@ function ConsultationForm() {
         // 기본 상태 코드 메시지를 사용합니다.
       }
       await writeIntegrationLog({
+        systemId: system.systemId,
         event: 'reward_request_failed',
         status: 'error',
         requestUrl,
@@ -234,17 +263,30 @@ function ConsultationForm() {
         responseStatus: response.status,
         responseBody,
         errorMessage: message,
+        metadata,
       });
       throw new Error(message);
     }
 
     await writeIntegrationLog({
+      systemId: system.systemId,
       event: 'reward_request_success',
       status: 'success',
       requestUrl,
       requestPayload,
       responseStatus: response.status,
+      metadata,
     });
+  };
+
+  const sendMissionRewards = async () => {
+    for (const system of REWARD_SYSTEMS) {
+      try {
+        await sendRewardPostback(system);
+      } catch (rewardError) {
+        console.error(`${system.name} 참여 완료 요청 오류:`, rewardError);
+      }
+    }
   };
 
   const handleChange = (e) => {
@@ -361,11 +403,7 @@ function ConsultationForm() {
           name: formData.name.trim(),
         });
 
-        try {
-          await sendMissionReward();
-        } catch (rewardError) {
-          console.error('돈버는 미션 참여 완료 요청 오류:', rewardError);
-        }
+        await sendMissionRewards();
         await writeIntegrationLog({
           event: 'consultation_submit_success',
           status: 'success',
