@@ -1,768 +1,237 @@
 import './App.css';
-import { useState, useEffect, useRef, useMemo } from 'react';
-import { supabase } from './supabase';
 
-const REWARD_SYSTEMS = [
-  {
-    systemId: 'thezoom',
-    name: '더줌코리아',
-    baseUrl: process.env.REACT_APP_THEZOOM_REWARD_API_BASE_URL
-      || process.env.REACT_APP_REWARD_API_BASE_URL
-      || 'https://dev.wallas.cc',
-    endpoint: '/rewards/custom',
-    apiKey: process.env.REACT_APP_THEZOOM_REWARD_API_KEY
-      || process.env.REACT_APP_REWARD_API_KEY
-      || 'abcdefg',
-  },
-  {
-    systemId: 'oraclex',
-    name: '오라클X',
-    baseUrl: process.env.REACT_APP_ORACLEX_REWARD_API_BASE_URL || 'https://postback-api.oraclink.dev',
-    endpoint: '/direct/common',
-    apiKey: process.env.REACT_APP_ORACLEX_REWARD_API_KEY || 'abcdefg',
-  },
+const marketCards = [
+  { label: 'KOSPI', value: '2,684.42', change: '+0.84%', tone: 'up' },
+  { label: 'KOSDAQ', value: '861.09', change: '-0.21%', tone: 'down' },
+  { label: 'NASDAQ', value: '17,981.36', change: '+1.12%', tone: 'up' },
+  { label: 'USD/KRW', value: '1,365.20', change: '+3.40', tone: 'neutral' },
 ];
 
-function useIsMobile(breakpointPx = 768) {
-  const query = useMemo(() => `(max-width: ${breakpointPx}px)`, [breakpointPx]);
-  const [isMobile, setIsMobile] = useState(() => {
-    if (typeof window === 'undefined' || !window.matchMedia) return false;
-    return window.matchMedia(query).matches;
-  });
+const news = [
+  { tag: '속보', source: 'Market Wire', time: '1분 전', title: '반도체 대형주, 장중 외국인 순매수 확대' },
+  { tag: '국내', source: '증권가', time: '8분 전', title: '2차전지 소재주, 수주 기대감에 거래대금 증가' },
+  { tag: '외신', source: 'Global Desk', time: '14분 전', title: '미국 장기금리 하락, 성장주 밸류에이션 부담 완화' },
+  { tag: '공시', source: 'DART', time: '22분 전', title: '주요 상장사 자사주 취득 결정 공시 잇따라' },
+  { tag: '환율', source: 'FX Monitor', time: '31분 전', title: '원달러 환율, 위험선호 회복에도 제한적 상승' },
+];
 
-  useEffect(() => {
-    if (!window.matchMedia) return;
-    const mql = window.matchMedia(query);
-    const onChange = (e) => setIsMobile(e.matches);
-    onChange(mql);
+const insights = [
+  { category: '수급분석', title: '외국인 순매수 전환 구간에서 강한 업종 찾기', date: '5.30' },
+  { category: '리서치', title: 'AI 인프라 투자 사이클과 국내 밸류체인 점검', date: '5.30' },
+  { category: '전략', title: '월말 리밸런싱 전후 체크해야 할 지수 레벨', date: '5.29' },
+  { category: '종목노트', title: '실적 개선주와 낙폭과대주의 다른 접근법', date: '5.29' },
+];
 
-    if (mql.addEventListener) {
-      mql.addEventListener('change', onChange);
-      return () => mql.removeEventListener('change', onChange);
-    }
-    mql.addListener(onChange);
-    return () => mql.removeListener(onChange);
-  }, [query]);
+const calendar = [
+  { time: '09:00', event: '한국 산업생산 발표', region: 'KR' },
+  { time: '11:00', event: '중국 제조업 PMI', region: 'CN' },
+  { time: '21:30', event: '미국 PCE 물가지수', region: 'US' },
+  { time: '23:00', event: '미시간대 소비심리', region: 'US' },
+];
 
-  return isMobile;
-}
+const sectors = [
+  { name: '반도체', value: '+2.4', size: 'large', tone: 'hot' },
+  { name: '바이오', value: '+1.1', size: 'medium', tone: 'warm' },
+  { name: '은행', value: '-0.4', size: 'small', tone: 'cool' },
+  { name: '자동차', value: '+0.7', size: 'medium', tone: 'warm' },
+  { name: '게임', value: '-1.3', size: 'small', tone: 'cold' },
+  { name: '조선', value: '+1.8', size: 'medium', tone: 'hot' },
+];
 
-// 스크롤 애니메이션 훅
-function useScrollAnimation() {
-  const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef(null);
+const smartMoney = [
+  { label: '외국인', value: '+3,482억', trend: '순매수' },
+  { label: '기관', value: '+1,126억', trend: '순매수' },
+  { label: '개인', value: '-4,238억', trend: '순매도' },
+];
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
-    );
-
-    const element = ref.current;
-    if (element) {
-      observer.observe(element);
-    }
-
-    return () => {
-      if (element) {
-        observer.unobserve(element);
-      }
-    };
-  }, []);
-
-  return [ref, isVisible];
-}
-
-// 카운터 애니메이션 컴포넌트
-function AnimatedCounter({ end, duration = 2000, suffix = '', isVisible }) {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (!isVisible) return;
-
-    let startTime;
-    const animate = (currentTime) => {
-      if (!startTime) startTime = currentTime;
-      const progress = Math.min((currentTime - startTime) / duration, 1);
-
-      setCount(Math.floor(progress * end));
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      }
-    };
-
-    requestAnimationFrame(animate);
-  }, [end, duration, isVisible]);
-
-  return <span>{count.toLocaleString()}{suffix}</span>;
-}
-
-function ConsultationForm() {
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    age: '',
-    sex: '',
-    remarks: ''
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitResult, setSubmitResult] = useState(null);
-  const [focusedField, setFocusedField] = useState(null);
-  const missionParams = useMemo(() => {
-    if (typeof window === 'undefined') {
-      return { uid: '', cid: '', adid: '' };
-    }
-
-    const params = new URLSearchParams(window.location.search);
-    return {
-      uid: params.get('uid') || '',
-      cid: params.get('cid') || '',
-      adid: params.get('adid') || '',
-    };
-  }, []);
-
-  const missionTrackingNote = useMemo(() => {
-    const entries = Object.entries(missionParams)
-      .filter(([, value]) => value)
-      .map(([key, value]) => `${key}=${value}`);
-
-    return entries.length ? `[돈버는미션] ${entries.join('&')}` : '';
-  }, [missionParams]);
-  const hasMissionParams = Boolean(missionParams.uid && missionParams.cid);
-
-  const writeIntegrationLog = async ({
-    systemId = 'landing',
-    event,
-    status = 'info',
-    phone = null,
-    name = null,
-    requestUrl = null,
-    requestPayload = null,
-    responseStatus = null,
-    responseBody = null,
-    errorMessage = null,
-    metadata = null,
-  }) => {
-    if (!supabase) {
-      return;
-    }
-
-    try {
-      await supabase.from('log').insert({
-        system_id: systemId,
-        event,
-        status,
-        uid: missionParams.uid || null,
-        cid: missionParams.cid || null,
-        adid: missionParams.adid || null,
-        phone,
-        name,
-        request_url: requestUrl,
-        request_payload: requestPayload,
-        response_status: responseStatus,
-        response_body: responseBody,
-        error_message: errorMessage,
-        metadata,
-      });
-    } catch (logError) {
-      console.warn('연동 로그 저장 실패:', logError);
-    }
-  };
-
-  const sendRewardPostback = async (system) => {
-    const requestUrl = `${system.baseUrl}${system.endpoint}`;
-    const requestPayload = {
-      uid: missionParams.uid,
-      cid: missionParams.cid,
-      api_key: system.apiKey,
-    };
-    const metadata = {
-      systemName: system.name,
-      endpoint: system.endpoint,
-      hasUid: Boolean(missionParams.uid),
-      hasCid: Boolean(missionParams.cid),
-      hasAdid: Boolean(missionParams.adid),
-    };
-
-    if (!hasMissionParams) {
-      await writeIntegrationLog({
-        systemId: system.systemId,
-        event: 'reward_skipped_missing_params',
-        status: 'skipped',
-        requestUrl,
-        requestPayload,
-        metadata,
-      });
-      return;
-    }
-
-    await writeIntegrationLog({
-      systemId: system.systemId,
-      event: 'reward_request_start',
-      status: 'pending',
-      requestUrl,
-      requestPayload,
-      metadata,
-    });
-
-    let response;
-    try {
-      response = await fetch(requestUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestPayload),
-      });
-    } catch (error) {
-      await writeIntegrationLog({
-        systemId: system.systemId,
-        event: 'reward_request_exception',
-        status: 'error',
-        requestUrl,
-        requestPayload,
-        errorMessage: error.message,
-        metadata,
-      });
-      throw error;
-    }
-
-    if (response.status !== 201) {
-      let message = `돈버는 미션 참여 완료 요청 실패 (${response.status})`;
-      let responseBody = null;
-      try {
-        const text = await response.text();
-        responseBody = text || null;
-        if (text) {
-          try {
-            const data = JSON.parse(text);
-            responseBody = data;
-            if (data?.message) {
-              message = data.message;
-            } else {
-              message = text;
-            }
-          } catch (_) {
-            message = text;
-          }
-        }
-      } catch (_) {
-        // 기본 상태 코드 메시지를 사용합니다.
-      }
-      await writeIntegrationLog({
-        systemId: system.systemId,
-        event: 'reward_request_failed',
-        status: 'error',
-        requestUrl,
-        requestPayload,
-        responseStatus: response.status,
-        responseBody,
-        errorMessage: message,
-        metadata,
-      });
-      throw new Error(message);
-    }
-
-    await writeIntegrationLog({
-      systemId: system.systemId,
-      event: 'reward_request_success',
-      status: 'success',
-      requestUrl,
-      requestPayload,
-      responseStatus: response.status,
-      metadata,
-    });
-  };
-
-  const sendMissionRewards = async () => {
-    for (const system of REWARD_SYSTEMS) {
-      try {
-        await sendRewardPostback(system);
-      } catch (rewardError) {
-        console.error(`${system.name} 참여 완료 요청 오류:`, rewardError);
-      }
-    }
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  // 전화번호 포맷팅 (01099998888 -> 010-9999-8888)
-  const formatPhoneNumber = (value) => {
-    const numbers = value.replace(/\D/g, '');
-    if (numbers.length <= 3) return numbers;
-    if (numbers.startsWith('02')) {
-      if (numbers.length <= 5) return `${numbers.slice(0, 2)}-${numbers.slice(2)}`;
-      return `${numbers.slice(0, 2)}-${numbers.slice(2, -4)}-${numbers.slice(-4)}`;
-    }
-    if (numbers.length <= 7) return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
-    return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7, 11)}`;
-  };
-
-  const handlePhoneChange = (e) => {
-    const raw = e.target.value.replace(/\D/g, '');
-    const formatted = formatPhoneNumber(raw);
-    setFormData(prev => ({
-      ...prev,
-      phone: formatted
-    }));
-  };
-
-  // 디바이스 타입 감지 함수 (PC 또는 Mobile)
-  const detectDevice = () => {
-    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-    const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-
-    // 모바일 기기 감지
-    const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase()) || width <= 768;
-
-    return isMobile ? 'Mobile' : 'PC';
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!formData.name || !formData.phone) {
-      alert('이름과 연락처는 필수 입력 항목입니다.');
-      return;
-    }
-
-    setIsSubmitting(true);
-    const device = detectDevice();
-    const phoneClean = formData.phone.replace(/\D/g, '');
-    const remarks = [formData.remarks.trim(), missionTrackingNote].filter(Boolean).join('\n');
-
-    if (!supabase) {
-      setSubmitResult('error');
-      alert('Supabase가 설정되지 않았습니다. .env 파일을 확인하세요.');
-      setIsSubmitting(false);
-      return;
-    }
-
-    try {
-      await writeIntegrationLog({
-        event: 'consultation_submit_start',
-        status: 'pending',
-        phone: phoneClean,
-        name: formData.name.trim(),
-        metadata: {
-          device,
-          hasMissionParams,
-        },
-      });
-
-      const { error } = await supabase.from('info').insert({
-        phone: phoneClean,
-        name: formData.name.trim(),
-        age: formData.age || null,
-        sex: formData.sex || null,
-        address: null,
-        remarks: remarks || null,
-        device: device,
-        ip: 'client',
-        ifflag: 'N',
-        blacklist: 'N',
-        dbflag: 'wa',
-      });
-
-      if (error) {
-        await writeIntegrationLog({
-          event: 'consultation_insert_failed',
-          status: 'error',
-          phone: phoneClean,
-          name: formData.name.trim(),
-          errorMessage: error.message,
-          metadata: {
-            code: error.code,
-            details: error.details,
-            hint: error.hint,
-          },
-        });
-        if (error.code === '23505') {
-          alert('이미 등록된 연락처입니다.');
-        } else {
-          alert('상담 신청에 실패했습니다. 잠시 후 다시 시도해주세요.');
-        }
-        setSubmitResult('error');
-        console.error('상담 신청 오류:', error);
-      } else {
-        await writeIntegrationLog({
-          event: 'consultation_insert_success',
-          status: 'success',
-          phone: phoneClean,
-          name: formData.name.trim(),
-        });
-
-        await sendMissionRewards();
-        await writeIntegrationLog({
-          event: 'consultation_submit_success',
-          status: 'success',
-          phone: phoneClean,
-          name: formData.name.trim(),
-        });
-        setSubmitResult('success');
-        setFormData({ name: '', phone: '', age: '', sex: '', remarks: '' });
-      }
-    } catch (error) {
-      await writeIntegrationLog({
-        event: 'consultation_submit_exception',
-        status: 'error',
-        phone: phoneClean,
-        name: formData.name.trim(),
-        errorMessage: error.message,
-      });
-      setSubmitResult('error');
-      alert('상담 신청에 실패했습니다. 잠시 후 다시 시도해주세요.');
-      console.error('상담 신청 오류:', error);
-    }
-
-    setIsSubmitting(false);
-  };
+function MiniChart() {
+  const points = '0,118 42,104 84,110 126,82 168,88 210,62 252,70 294,38 336,46 378,24 420,30';
 
   return (
-    <div className="consultation-form-container">
-      <div className="form-header-icon">📞</div>
-      <h2 className="form-title">
-        <span className="title-accent">무료</span> 상담 신청
-      </h2>
-      <p className="form-subtitle">
-        친절한 상담원이 <strong>직접 전화</strong>로 안내해 드립니다
-      </p>
-
-      <div className="form-trust-badges">
-        <span>✓ 강압적 권유 없음</span>
-        <span>✓ 부담 없는 상담</span>
-      </div>
-
-      {submitResult === 'success' ? (
-        <div className="success-message">
-          <div className="success-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-          </div>
-          <h3>상담 신청이 완료되었습니다!</h3>
-          <p>영업일 기준 1~2일 내에<br />담당자가 연락드리겠습니다.</p>
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit}>
-          <div className={`form-group ${focusedField === 'name' ? 'focused' : ''}`}>
-            <label>성함 <span className="required">*</span></label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              onFocus={() => setFocusedField('name')}
-              onBlur={() => setFocusedField(null)}
-              placeholder="성함을 입력해 주세요"
-              required
-            />
-          </div>
-
-          <div className={`form-group ${focusedField === 'phone' ? 'focused' : ''}`}>
-            <label>연락처 <span className="required">*</span></label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handlePhoneChange}
-              onFocus={() => setFocusedField('phone')}
-              onBlur={() => setFocusedField(null)}
-              placeholder="010-0000-0000"
-              maxLength={13}
-              required
-            />
-          </div>
-
-          <div className="form-row">
-            <div className={`form-group half ${focusedField === 'age' ? 'focused' : ''}`}>
-              <label>연령대</label>
-              <select
-                name="age"
-                value={formData.age}
-                onChange={handleChange}
-                onFocus={() => setFocusedField('age')}
-                onBlur={() => setFocusedField(null)}
-              >
-                <option value="">선택해 주세요</option>
-                <option value="50대">50대</option>
-                <option value="60대">60대</option>
-                <option value="70대 이상">70대 이상</option>
-              </select>
-            </div>
-
-            <div className={`form-group half ${focusedField === 'sex' ? 'focused' : ''}`}>
-              <label>성별</label>
-              <select
-                name="sex"
-                value={formData.sex}
-                onChange={handleChange}
-                onFocus={() => setFocusedField('sex')}
-                onBlur={() => setFocusedField(null)}
-              >
-                <option value="">선택해 주세요</option>
-                <option value="남성">남성</option>
-                <option value="여성">여성</option>
-              </select>
-            </div>
-          </div>
-
-          <div className={`form-group ${focusedField === 'remarks' ? 'focused' : ''}`}>
-            <label>상담 내용 (선택)</label>
-            <textarea
-              name="remarks"
-              value={formData.remarks}
-              onChange={handleChange}
-              onFocus={() => setFocusedField('remarks')}
-              onBlur={() => setFocusedField(null)}
-              placeholder="궁금하신 점을 자유롭게 적어주세요"
-              rows="3"
-            />
-          </div>
-
-          <button type="submit" className="btn-submit" disabled={isSubmitting}>
-            <span className="btn-text">{isSubmitting ? '신청 중...' : '무료 상담 신청하기'}</span>
-            <span className="btn-icon">→</span>
-          </button>
-
-          <p className="privacy-notice">
-            <span className="privacy-icon">🔒</span>
-            입력하신 개인정보는 상담 목적으로만 사용되며,<br />
-            제3자에게 절대 제공되지 않습니다.
-          </p>
-          <ul className="agree_wrap" style={{ listStyle: 'none', padding: '15px', margin: '20px 0', background: '#f9f9f9', border: '1px solid #ddd', fontSize: '13px', color: '#666' }}>
-            <li style={{ marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <input type="checkbox" id="agree1-1" name="agree1-1" defaultChecked style={{ marginRight: '8px', width: '16px', height: '16px', accentColor: '#0057b8', cursor: 'pointer' }} />
-                <label htmlFor="agree1-1" style={{ cursor: 'pointer', lineHeight: '1.2' }}>개인정보 수집이용 동의(필수)</label>
-              </div>
-              <a href="/policy/index1.html" target="_blank" rel="noopener noreferrer" className="btn-example" style={{ textDecoration: 'none', color: '#888', cursor: 'pointer', whiteSpace: 'nowrap' }}>[약관보기]</a>
-            </li>
-            <li style={{ marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <input type="checkbox" id="agree1-2" name="agree1-2" defaultChecked style={{ marginRight: '8px', width: '16px', height: '16px', accentColor: '#0057b8', cursor: 'pointer' }} />
-                <label htmlFor="agree1-2" style={{ cursor: 'pointer', lineHeight: '1.2' }}>제 3자 정보 제공 동의(필수)</label>
-              </div>
-              <a href="/policy/index2.html" target="_blank" rel="noopener noreferrer" className="btn-example" style={{ textDecoration: 'none', color: '#888', cursor: 'pointer', whiteSpace: 'nowrap' }}>[약관보기]</a>
-            </li>
-            <li style={{ marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <input type="checkbox" id="agree1-3" name="agree1-3" defaultChecked style={{ marginRight: '8px', width: '16px', height: '16px', accentColor: '#0057b8', cursor: 'pointer' }} />
-                <label htmlFor="agree1-3" style={{ cursor: 'pointer', lineHeight: '1.2' }}>마케팅 정보 수신동의(선택)</label>
-              </div>
-              <a href="/policy/index3.html" target="_blank" rel="noopener noreferrer" className="btn-example" style={{ textDecoration: 'none', color: '#888', cursor: 'pointer', whiteSpace: 'nowrap' }}>[약관보기]</a>
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <input type="checkbox" id="agree1-4" name="agree1-4" defaultChecked style={{ marginRight: '8px', width: '16px', height: '16px', accentColor: '#0057b8', cursor: 'pointer' }} />
-                <label htmlFor="agree1-4" style={{ cursor: 'pointer', lineHeight: '1.2' }}>개인정보 처리방침</label>
-              </div>
-              <a href="/policy/index4.html" target="_blank" rel="noopener noreferrer" className="btn-example" style={{ textDecoration: 'none', color: '#888', cursor: 'pointer', whiteSpace: 'nowrap' }}>[약관보기]</a>
-            </li>
-          </ul>
-        </form>
-      )}
+    <div className="chart-panel" aria-label="시장 추세 차트">
+      <svg viewBox="0 0 420 140" role="img" aria-hidden="true">
+        <defs>
+          <linearGradient id="area" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#2f8a6f" stopOpacity="0.28" />
+            <stop offset="100%" stopColor="#2f8a6f" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <path d={`M ${points} L 420,140 L 0,140 Z`} fill="url(#area)" />
+        <polyline points={points} fill="none" stroke="#1f7a5f" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+        {[0, 1, 2, 3].map((line) => (
+          <line key={line} x1="0" x2="420" y1={24 + line * 30} y2={24 + line * 30} />
+        ))}
+      </svg>
     </div>
   );
 }
 
 function App() {
-  const isMobileView = useIsMobile(768);
-  const [scrollY, setScrollY] = useState(0);
-  const [headerSolid, setHeaderSolid] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // 스크롤 애니메이션 refs
-  const [trustRef, trustVisible] = useScrollAnimation();
-  const [certRef, certVisible] = useScrollAnimation();
-  const [benefitsRef, benefitsVisible] = useScrollAnimation();
-  const [ingredientsRef, ingredientsVisible] = useScrollAnimation();
-  const [giftRef, giftVisible] = useScrollAnimation();
-  const [testimonialsRef, testimonialsVisible] = useScrollAnimation();
-  const [guaranteeRef, guaranteeVisible] = useScrollAnimation();
-  const [consultationRef, consultationVisible] = useScrollAnimation();
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-      setHeaderSolid(window.scrollY > 50);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // 모바일 메뉴 토글
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-    if (!mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-  };
-
-  // 메뉴 아이템 클릭 시 메뉴 닫기
-  const handleMenuClick = () => {
-    setMobileMenuOpen(false);
-    document.body.style.overflow = 'unset';
-  };
-
   return (
-    <div className={`landing-page ${isMobileView ? 'hg-mobile-view' : 'hg-pc-view'}`}>
-      {/* 헤더 */}
-      <header className={`header ${headerSolid ? 'solid' : ''} ${mobileMenuOpen ? 'menu-open' : ''}`}>
-        <div className="container">
-          {/* 상단 내비게이션/버튼 제거 (디자인 단순화) */}
+    <div className="stock-app">
+      <header className="topbar">
+        <div className="brand">
+          <span className="brand-mark">S</span>
+          <span>StockPulse</span>
         </div>
+        <nav className="nav-links" aria-label="주요 메뉴">
+          <a href="#market">시장</a>
+          <a href="#news">뉴스</a>
+          <a href="#calendar">일정</a>
+          <a href="#insight">인사이트</a>
+          <a href="#flow">수급</a>
+        </nav>
+        <button className="ghost-button" type="button">텔레그램</button>
       </header>
 
-      {/* 모바일 메뉴 오버레이 제거 */}
+      <main>
+        <section className="ticker-strip" aria-label="주요 시세">
+          {marketCards.map((item) => (
+            <article className="ticker-card" key={item.label}>
+              <span>{item.label}</span>
+              <strong>{item.value}</strong>
+              <em className={item.tone}>{item.change}</em>
+            </article>
+          ))}
+        </section>
 
-      {/* 히어로 섹션 */}
-      <section className="hero-video-section">
-        <img
-          className="hero-image"
-          src="/hoguanwon.com/img/hoguanwon_walk_1.gif"
-          alt="불편한 관절 통증 안내"
-        />
-      </section>
-
-      {/* sec2 ~ sec13 이미지 섹션들 (원본 PC 사이트 배치 기반) */}
-
-      {/* sec2 */}
-      <section className="hg-section hg-sec2">
-        <img
-          src="/hoguanwon.com/img/hoguanwon_walk_2.png"
-          alt="호관원 프리미엄 골드"
-          className="hg-sec2-image"
-        />
-        <img
-          src="/hoguanwon.com/img/2-1.jpg"
-          alt="MSM과 칼슘의 만남"
-          className="hg-section-image"
-        />
-      </section>
-
-      {/* sec3: 편지/손/시그 이미지 레이아웃 */}
-      <section className="hg-section hg-sec3">
-        <img
-          src="/hoguanwon.com/img/hoguanwon_walk_3.png"
-          alt="식약처 인정 기능성 소재 MSM"
-          className="hg-section-image"
-        />
-        <img
-          src="/hoguanwon.com/img/3-2.jpg"
-          alt="기능성 원료인 MSM의 인체시험 결과"
-          className="hg-section-image"
-        />
-        <img
-          src="/hoguanwon.com/img/3-1.gif"
-          alt="일일 섭취량 MSM 1,500mg 함유"
-          className="hg-section-image"
-        />
-      </section>
-
-      {/* sec4 */}
-      <section className="hg-section hg-sec4">
-        <img
-          src="/hoguanwon.com/img/hoguanwon_walk_4.png"
-          alt="해조류에서 추출한 천연 칼슘 해조칼슘"
-          className="hg-section-image"
-        />
-        <img
-          src="/hoguanwon.com/img/4-1.jpg"
-          alt="부원료도 관절을 위해 알차게 넣었습니다"
-          className="hg-section-image"
-        />
-        <img
-          src="/hoguanwon.com/img/4-2.jpg"
-          alt="간편하게 섭취하고 빠르게 흡수한다"
-          className="hg-section-image"
-        />
-        <img
-          src="/hoguanwon.com/img/4-3.jpg"
-          alt="8년 연속 관절건강기능식품 대상"
-          className="hg-section-image"
-        />
-      </section>
-
-      {/* sec6 */}
-      <section className="hg-section hg-sec6">
-        <img
-          src="/hoguanwon.com/img/hoguanwon_walk_5.png"
-          alt="호관원 프리미엄 생산 인증"
-          className="hg-section-image"
-        />
-      </section>
-
-      {/* sec9 */}
-      <section className="hg-section hg-sec9">
-        <img
-          src="/hoguanwon.com/img/hoguanwon_walk_6.png"
-          alt="호관원 프리미엄 골드 효과 후기"
-          className="hg-section-image"
-        />
-      </section>
-
-      {/* sec12 */}
-      <section className="hg-section hg-sec12">
-        <img
-          src="/hoguanwon.com/img/hoguanwon_walk_7.gif"
-          alt="호관원 프리미엄 골드 한정기간 혜택"
-          className="hg-section-image"
-        />
-      </section>
-
-      {/* trust-badges, 인증, 효능 섹션 제거 (원본 이미지 섹션만 사용) */}
-
-      {/* 상담 신청 섹션 */}
-      <section id="consultation" className="consultation" ref={consultationRef}>
-        <div className="consultation-bg">
-          <div className="bg-shape shape-1"></div>
-          <div className="bg-shape shape-2"></div>
-          <div className="bg-shape shape-3"></div>
-        </div>
-        <div className={`container ${consultationVisible ? 'animate-in' : ''}`}>
-          <div className="consultation-wrapper">
-            <div className="consultation-info">
-              <h2 className="consultation-title">
-                지금 바로<br />
-                <span className="accent">무료 상담</span> 받아보세요
-              </h2>
-              <p className="consultation-desc">
-                강압적인 권유 없이 친절하게 상담해 드립니다.<br />
-                궁금한 점이 있으시면 부담 없이 문의해 주세요.
-              </p>
-              <div className="consultation-phone">
-                <span className="phone-label">전화 상담</span>
-                <a href="tel:1661-3352" className="phone-number-large">
-                  1661-3352
-                </a>
-                <span className="phone-time">평일 09:00 - 18:00</span>
+        <section className="dashboard-grid" id="market">
+          <article className="market-hero">
+            <div className="section-heading">
+              <p>시장 한눈에</p>
+              <h1>오늘의 흐름은 반도체와 AI 인프라가 주도합니다</h1>
+            </div>
+            <MiniChart />
+            <div className="hero-stats">
+              <div>
+                <span>시장 온도</span>
+                <strong>68</strong>
+              </div>
+              <div>
+                <span>상승 종목</span>
+                <strong>1,324</strong>
+              </div>
+              <div>
+                <span>하락 종목</span>
+                <strong>892</strong>
               </div>
             </div>
-            <ConsultationForm />
-          </div>
-        </div>
-      </section>
+          </article>
 
-      {/* 플로팅 전화 버튼 (모바일) */}
-      <a href="tel:1661-3352" className={`floating-phone ${scrollY > 500 ? 'visible' : ''}`}>
-        <span className="phone-icon-float">📞</span>
-        <span className="phone-text-float">전화하기</span>
-      </a>
+          <aside className="context-panel">
+            <div className="section-title">
+              <h2>시장 컨텍스트</h2>
+              <span>장중 업데이트</span>
+            </div>
+            <ul className="context-list">
+              <li><strong>금리</strong><span>미국 10년물 4.41%, 성장주 부담 완화</span></li>
+              <li><strong>환율</strong><span>달러 강세 제한, 수출주 영향 중립</span></li>
+              <li><strong>원자재</strong><span>유가 반등, 에너지 업종 거래 증가</span></li>
+            </ul>
+          </aside>
+        </section>
+
+        <section className="content-grid">
+          <article className="panel news-panel" id="news">
+            <div className="section-title">
+              <h2>실시간 뉴스</h2>
+              <button type="button">전체</button>
+            </div>
+            <div className="news-list">
+              {news.map((item) => (
+                <a href="#news" className="news-item" key={item.title}>
+                  <span className="news-meta"><b>{item.tag}</b>{item.source} · {item.time}</span>
+                  <strong>{item.title}</strong>
+                </a>
+              ))}
+            </div>
+          </article>
+
+          <article className="panel" id="insight">
+            <div className="section-title">
+              <h2>인사이트</h2>
+              <button type="button">더 보기</button>
+            </div>
+            <div className="insight-list">
+              {insights.map((item) => (
+                <a href="#insight" className="insight-item" key={item.title}>
+                  <span>{item.category}</span>
+                  <strong>{item.title}</strong>
+                  <em>{item.date}</em>
+                </a>
+              ))}
+            </div>
+          </article>
+
+          <article className="panel" id="calendar">
+            <div className="section-title">
+              <h2>오늘 경제일정</h2>
+              <button type="button">캘린더</button>
+            </div>
+            <div className="calendar-list">
+              {calendar.map((item) => (
+                <div className="calendar-item" key={`${item.time}-${item.event}`}>
+                  <time>{item.time}</time>
+                  <strong>{item.event}</strong>
+                  <span>{item.region}</span>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article className="panel heatmap-panel">
+            <div className="section-title">
+              <h2>섹터 히트맵</h2>
+              <button type="button">코스피</button>
+            </div>
+            <div className="sector-grid">
+              {sectors.map((item) => (
+                <div className={`sector-tile ${item.size} ${item.tone}`} key={item.name}>
+                  <strong>{item.name}</strong>
+                  <span>{item.value}%</span>
+                </div>
+              ))}
+            </div>
+          </article>
+        </section>
+
+        <section className="bottom-grid" id="flow">
+          <article className="panel">
+            <div className="section-title">
+              <h2>투자자 동향</h2>
+              <span>거래소 기준</span>
+            </div>
+            <div className="flow-list">
+              {smartMoney.map((item) => (
+                <div className="flow-item" key={item.label}>
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
+                  <em>{item.trend}</em>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article className="panel fear-panel">
+            <div className="section-title">
+              <h2>공포·탐욕 지수</h2>
+              <span>중립 상단</span>
+            </div>
+            <div className="gauge">
+              <div className="gauge-track">
+                <span style={{ width: '64%' }} />
+              </div>
+              <strong>64</strong>
+              <p>위험선호가 회복됐지만 실적 확인 전까지 변동성 관리가 필요합니다.</p>
+            </div>
+          </article>
+        </section>
+      </main>
+
+      <footer className="site-footer">
+        <strong>StockPulse</strong>
+        <span>투자 정보 제공용 화면이며 매매 추천이 아닙니다.</span>
+      </footer>
     </div>
   );
 }
